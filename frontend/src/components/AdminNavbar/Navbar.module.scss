@@ -1,0 +1,79 @@
+$primary-color: #0583f2;
+$hover-color: #3aa3ff;
+
+.navbar {
+  &.collapsed {
+    width: 82px;
+  }
+
+  &.expanded {
+    width: 200px;
+  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: $primary-color;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+}
+
+.logo {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.navList {
+  list-style: none;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.navItem {
+  width: 100%;
+}
+
+.icon {
+  margin-right: 10px;
+}
+
+ul {
+  list-style: none; // This removes the bullet points
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+li {
+  width: 100%;
+  // Additional styling for list items if needed
+}
+
+a {
+  display: flex;
+  align-items: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+
+  color: white;
+  text-decoration: none;
+  width: 100%;
+
+  &:hover {
+    background-color: $hover-color; // Example hover effect
+  }
+}
+
+img {
+  margin-left: 15px;
+  margin-right: 10px; // Margin to space out icons from text
+}

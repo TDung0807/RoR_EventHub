@@ -4,5 +4,6 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAccountAuthetication } from "../../store";
 export const PrivateRoutes = () => {
   let auth = useAccountAuthetication((state) => state.isAdmin);
+  console.log(auth);
   return auth ? <Outlet /> : <Navigate to="/login" />;
 };

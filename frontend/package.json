@@ -5,7 +5,9 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.3.0",
     "@mui/material": "^6.2.0",
+    "@mui/x-data-grid": "^7.23.3",
     "@types/react": "^19.0.1",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.7.9",

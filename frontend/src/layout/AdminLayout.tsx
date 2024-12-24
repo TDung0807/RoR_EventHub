@@ -1,3 +1,4 @@
+import { AdminNavbar } from "../components";
 import React from "react";
 
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
@@ -7,7 +8,10 @@ const queryClient = new QueryClient();
 function AdminLayout() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <AdminNavbar></AdminNavbar>
+      <div style={{ marginLeft: 126 }}>
+        <Outlet />
+      </div>
     </QueryClientProvider>
   );
 }

@@ -1,6 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { AdminHomePage, LoginPage, UserHomePage } from "./pages";
+import {
+  AdminHomePage,
+  LoginPage,
+  UserHomePage,
+  AdminGuestPage,
+  GuessGroupPage,
+} from "./pages";
 import { PrivateRoutes } from "./components";
 import AdminLayout from "./layout/AdminLayout";
 import UserLayout from "./layout/UserLayout";
@@ -13,6 +19,8 @@ const App: React.FC = () => {
           <Route path="/admin" element={<PrivateRoutes />}>
             <Route element={<AdminLayout />}>
               <Route path="homepage" element={<AdminHomePage />}></Route>
+              <Route path="guests" element={<AdminGuestPage />}></Route>
+              <Route path="guests/:id" element={<GuessGroupPage />}></Route>
             </Route>
           </Route>
           <Route path="/user" element={<UserLayout />}>
