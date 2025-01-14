@@ -5,3 +5,5 @@ export { AdminNavbar } from "./AdminNavbar";
 export { MyDataTable } from "./MyDataTable";
 export { DisplayCardGuestGroup } from "./DisplayCardGuestGroup";
 export { DisplayGuestListGroup } from "./DisplayGuestListGroup";
+export { ModalGuestList } from "./Modal/ModalGuessList";
+export { DisplayGuessEmail } from "./DisplayGuessEmail";
