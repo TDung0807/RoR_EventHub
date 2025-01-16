@@ -25,7 +25,6 @@ export const useLogin = () => {
       setIsUser();
       return { isAdmin: false, isUser: true };
     } else {
-      // Invalid credentials
       return { isAdmin: false, isUser: false };
     }
   };

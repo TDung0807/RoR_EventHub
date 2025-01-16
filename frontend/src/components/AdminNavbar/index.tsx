@@ -41,7 +41,7 @@ export const AdminNavbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/calendar">
+            <Link to="/admin/calendar">
               <img
                 src={navbarImage.calendarImg}
                 alt="Calendar"
@@ -71,7 +71,7 @@ export const AdminNavbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/books">
+            <Link to="/admin/utility">
               <img
                 src={navbarImage.transportImg}
                 alt="Transport"

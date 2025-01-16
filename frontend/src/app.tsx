@@ -6,6 +6,8 @@ import {
   UserHomePage,
   AdminGuestPage,
   GuessGroupPage,
+  UtilityPage,
+  CalendarPage,
 } from "./pages";
 import { PrivateRoutes } from "./components";
 import AdminLayout from "./layout/AdminLayout";
@@ -22,6 +24,8 @@ const App: React.FC = () => {
               <Route path="homepage" element={<AdminHomePage />}></Route>
               <Route path="guests" element={<AdminGuestPage />}></Route>
               <Route path="guests/:id" element={<GuessGroupPage />}></Route>
+              <Route path="utility" element={<UtilityPage />}></Route>
+              <Route path="calendar" element={<CalendarPage />}></Route>
             </Route>
           </Route>
           <Route path="/user" element={<UserLayout />}>
