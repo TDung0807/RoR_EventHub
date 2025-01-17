@@ -11,7 +11,15 @@ import {
 } from "@mui/material";
 import { NestedRow } from "../NestedRow";
 // Main Table Component
-export function MainTable({ utilityRows, utilityData, sideData = null }) {
+export function MainTable({
+  utilityRows,
+  utilityData,
+  sideData = null,
+  editRef = false,
+  editPre = "",
+  action = [],
+  editEvent = (item) => {},
+}) {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
@@ -32,7 +40,15 @@ export function MainTable({ utilityRows, utilityData, sideData = null }) {
         </TableHead>
         <TableBody>
           {utilityData.map((utility) => (
-            <NestedRow sideData={sideData} key={utility.id} row={utility} />
+            <NestedRow
+              editRef={editRef}
+              editPre={editPre}
+              sideData={sideData}
+              key={utility.id}
+              row={utility}
+              action={action}
+              editEvent={editEvent}
+            />
           ))}
         </TableBody>
       </Table>

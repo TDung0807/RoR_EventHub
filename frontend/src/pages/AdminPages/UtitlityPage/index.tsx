@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import { Box, Typography } from "@mui/material";
 import { GroupChoosingButton, MainTable } from "../../../components";
@@ -15,16 +16,18 @@ export function UtilityPage() {
   const handleExpand = () => {
     setExpand(!expand);
   };
+  const location = useLocation();
 
   const changingBtn = ["Fnb", "Hotel", "Transport"];
 
-  const hotelRows = ["Hotel", "Address", "Star", "Distance", "Contact"];
+  const hotelRows = ["Hotel", "Address", "Star", "Distance", "Contact", ""];
   const transportRows = [
     "Transport vendor name",
     "Service type",
     "Distance Limit ",
     "Time Limit ",
     "Contact",
+    "",
   ];
   const FnbRows = [
     "Restaurant",
@@ -33,6 +36,7 @@ export function UtilityPage() {
     "No. dishes ",
     "Main ingredient",
     "Contact",
+    "",
   ];
   const [activeButton, setActiveButton] = useState(changingBtn[0]);
   return (
@@ -57,6 +61,7 @@ export function UtilityPage() {
             utilityRows={hotelRows}
             utilityData={fakeHotelsData}
             sideData="roomTypes"
+            action={["edit", "delete"]}
           />
         </Box>
       ) : (
@@ -71,6 +76,7 @@ export function UtilityPage() {
             utilityRows={transportRows}
             utilityData={fakeTransportData}
             sideData="transportTypes"
+            action={["edit", "delete"]}
           />
         </Box>
       ) : (
@@ -81,7 +87,13 @@ export function UtilityPage() {
           <Typography variant="h4" sx={{ marginBottom: 2 }}>
             Fnb Management
           </Typography>
-          <MainTable utilityRows={FnbRows} utilityData={fakeRestaurantData} />
+          <MainTable
+            editPre={`${location.pathname}/dished`}
+            editRef={true}
+            utilityRows={FnbRows}
+            utilityData={fakeRestaurantData}
+            action={["edit", "delete"]}
+          />
         </Box>
       ) : (
         <div></div>

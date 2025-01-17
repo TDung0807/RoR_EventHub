@@ -1,0 +1,28 @@
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  padding-left: 0;
+  color: #000;
+}
+.backButton {
+  background: none;
+  border: none;
+  color: #005fb3;
+  font-weight: 700;
+  font-size: 24px;
+  cursor: pointer;
+}
+.publishButton {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-size: 16px;
+  cursor: pointer;
+}
+a:hover {
+  background-color: transparent;
+}

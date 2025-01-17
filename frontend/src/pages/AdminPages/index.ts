@@ -3,3 +3,4 @@ export { AdminGuestPage } from "./GuessPage";
 export { GuessGroupPage } from "./GuessGroupPage";
 export { UtilityPage } from "./UtitlityPage";
 export { CalendarPage } from "./CalendarPage";
+export { DishedPage } from "./DishedPage";

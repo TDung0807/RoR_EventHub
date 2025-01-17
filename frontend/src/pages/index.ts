@@ -6,4 +6,5 @@ export {
   AdminHomePage,
   UtilityPage,
   CalendarPage,
+  DishedPage,
 } from "./AdminPages";

@@ -14,7 +14,16 @@ import {
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-export function NestedRow({ row, sideData }) {
+import EditIcon from "@mui/icons-material/Edit";
+import { Link } from "react-router-dom";
+export function NestedRow({
+  row,
+  sideData,
+  editRef = false,
+  editPre = "",
+  action,
+  editEvent = (item) => {},
+}) {
   const [open, setOpen] = useState(false);
   const itemSide = sideData == null ? 0 : row[sideData];
   const sizeOfItemSide = sideData == null ? 0 : Object.keys(itemSide[0]).length;
@@ -36,29 +45,81 @@ export function NestedRow({ row, sideData }) {
         )}
 
         {sideData != null
-          ? Object.keys(row).map(
-              (item) =>
-                item != sideData &&
-                item != "id" && (
-                  <TableCell align="center">{row[item]}</TableCell>
-                )
+          ? Object.keys(row).map((item) =>
+              item != sideData && item != "id" ? (
+                <TableCell align="center">{row[item]}</TableCell>
+              ) : item != "id" && Array.isArray(action) ? (
+                <TableCell align="center">
+                  {editRef ? (
+                    <div style={{ cursor: "pointer" }}>
+                      <Link
+                        to={`${editPre}/${row[item]}`}
+                        style={{ color: "black" }}
+                      >
+                        <EditIcon></EditIcon>
+                      </Link>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => editEvent(item)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <EditIcon></EditIcon>
+                    </div>
+                  )}
+                </TableCell>
+              ) : (
+                ""
+              )
             )
-          : Object.keys(row).map(
-              (item) =>
-                item != sideData && (
-                  <TableCell align="center">
-                    {Array.isArray(row[item]) == true
-                      ? row[item].map((item) => (
-                          <Chip
-                            label={`${item}`}
-                            style={{ marginLeft: 9 }}
-                            color="primary"
-                          />
-                        ))
-                      : row[item]}
-                  </TableCell>
-                )
-            )}
+          : Object.keys(row).map((key, index) => {
+              if (key === sideData) return null;
+
+              const isLastColumn = index + 2 > Object.keys(row).length;
+              const isArray = Array.isArray(row[key]);
+
+              return (
+                <>
+                  {isArray ? (
+                    <TableCell align="center" key={key}>
+                      {row[key].map((value, chipIndex) => (
+                        <Chip
+                          key={chipIndex}
+                          label={value}
+                          style={{ marginLeft: 9 }}
+                          color="primary"
+                        />
+                      ))}
+                    </TableCell>
+                  ) : isLastColumn && Array.isArray(action) ? (
+                    <>
+                      <TableCell align="center">{row[key]}</TableCell>
+                      <TableCell align="center">
+                        {editRef ? (
+                          <div style={{ cursor: "pointer" }}>
+                            <Link
+                              to={`${editPre}/${row["id"]}`}
+                              style={{ color: "black" }}
+                            >
+                              <EditIcon />
+                            </Link>
+                          </div>
+                        ) : (
+                          <div
+                            style={{ cursor: "pointer" }}
+                            onClick={() => editEvent(row)}
+                          >
+                            <EditIcon />
+                          </div>
+                        )}
+                      </TableCell>
+                    </>
+                  ) : (
+                    <TableCell align="center">{row[key]}</TableCell>
+                  )}
+                </>
+              );
+            })}
       </TableRow>
       {sideData != null ? (
         <TableRow sx={{ marginLeft: 80 }}>
