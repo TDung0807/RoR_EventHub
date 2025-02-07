@@ -7,12 +7,24 @@ import { MyButton, MyTextFields, DisplayGuessEmail } from "../../index";
 export function ModalGuestList({
   open,
   handleClose,
-  style,
   isCreated,
   handleCreated = () => {},
   urlBack = "",
   ...props
 }) {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 506,
+    borderRadius: "30px",
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    pt: 2,
+    px: 4,
+    pb: 3,
+  };
   const usersArr = [
     { id: 1, email: "Jack97@gmail.com" },
     { id: 2, email: "Jack97@gmail.com" },
@@ -70,6 +82,19 @@ export function ModalGuestList({
           <MyTextFields
             id="outlined-password-input"
             label="Guess Email"
+            type="email"
+            variant="outlined"
+            style={{
+              marginLeft: "auto",
+              marginRight: "auto",
+              marginBottom: "20px",
+            }}
+            sx={{ width: "100%" }}
+            {...props}
+          ></MyTextFields>
+          <MyTextFields
+            id="outlined-password-input"
+            label="Guess Name"
             type="email"
             variant="outlined"
             style={{

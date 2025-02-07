@@ -9,7 +9,7 @@ export { DisplayGuestListGroup } from "./DisplayGuestListGroup";
 export { ModalGuestList } from "./Modal/ModalGuessList";
 export { ModalEvent } from "./Modal/ModalEvent";
 export { ModalDished } from "./Modal/ModalDished";
-
+export { GuessGroupModal } from "./Modal/GuessGroupModal";
 export { DisplayGuessEmail } from "./DisplayGuessEmail";
 export { GroupChoosingButton } from "./GroupChoosingButton";
 export { DisplayGuessGroupSideInfo } from "./DisplayGuessGroupSideInfo";

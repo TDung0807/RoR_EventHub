@@ -14,19 +14,6 @@ export const DisplayGuestListGroup: React.FC<DisplayGuestListGroupProps> = ({
   paginationModel,
   ...props
 }) => {
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 506,
-    borderRadius: "30px",
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    pt: 2,
-    px: 4,
-    pb: 3,
-  };
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -47,7 +34,6 @@ export const DisplayGuestListGroup: React.FC<DisplayGuestListGroupProps> = ({
       <ModalGuestList
         open={open}
         handleClose={handleClose}
-        style={style}
         isCreated={false}
       ></ModalGuestList>
       <div

@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Box, Typography, Button } from "@mui/material";
-import { GroupChoosingButton, MainTable, MyButton } from "../../../components";
+import {
+  GroupChoosingButton,
+  MainTable,
+  MyButton,
+  ModalSideGuessinfo,
+} from "../../../components";
 import styles from "./UtilityPage.module.scss";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import {
   fakeHotelsData,
   fakeTransportData,
@@ -39,22 +44,78 @@ export function UtilityPage() {
     "",
   ];
   const [activeButton, setActiveButton] = useState(changingBtn[0]);
+  const [openSideModal, setOpenSideModal] = useState(false);
+  const [actionSideModal, setActionSideModal] = useState("Add");
+
   return (
     <div>
-      <div
-        className={styles.flexingChanging}
-        style={{ marginLeft: "0", marginTop: 37 }}
-      >
-        <GroupChoosingButton
-          changingBtn={changingBtn}
-          activeButton={activeButton}
-          setActiveButton={setActiveButton}
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <ModalSideGuessinfo
+          open={openSideModal}
+          handleClose={() => {
+            setOpenSideModal(false);
+          }}
+          option={activeButton}
+          action={actionSideModal}
         />
-      </div>
+        <div
+          className={styles.flexingChanging}
+          style={{ marginLeft: "0", marginTop: 37 }}
+        >
+          <GroupChoosingButton
+            changingBtn={changingBtn}
+            activeButton={activeButton}
+            setActiveButton={setActiveButton}
+          />
+        </div>
 
-      {activeButton == "Hotel" ? (
-        <Box sx={{ display: "flex" }}>
-          <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+        {activeButton == "Hotel" ? (
+          <Box sx={{ display: "flex" }}>
+            <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: 2,
+                }}
+              >
+                <Typography
+                  fontWeight={700}
+                  fontFamily={"Montserrat"}
+                  color="#005FB3"
+                  variant="h4"
+                  marginBottom={0}
+                >
+                  Hotel Management
+                </Typography>
+                <MyButton
+                  style={{ marginRight: 20 }}
+                  label=" + Create Hotel"
+                  variant="contained"
+                  onClick={() => {
+                    setOpenSideModal(true);
+                    setActionSideModal("Add");
+                  }}
+                ></MyButton>
+              </Box>
+              <MainTable
+                utilityRows={hotelRows}
+                utilityData={fakeHotelsData}
+                sideData="roomTypes"
+                action={["edit", "delete"]}
+                editEvent={() => {
+                  setOpenSideModal(true);
+                  setActionSideModal("Edit");
+                }}
+              />
+            </Box>
+          </Box>
+        ) : (
+          <div></div>
+        )}
+        {activeButton == "Transport" ? (
+          <Box sx={{ padding: 2 }}>
             <Box
               sx={{
                 display: "flex",
@@ -70,96 +131,73 @@ export function UtilityPage() {
                 variant="h4"
                 marginBottom={0}
               >
-                Hotel Management
+                Transport Vendor Managment
               </Typography>
               <MyButton
                 style={{ marginRight: 20 }}
-                label=" + Create Hotel"
+                label=" + Create Transport"
                 variant="contained"
+                onClick={() => {
+                  setOpenSideModal(true);
+                  setActionSideModal("Add");
+                }}
               ></MyButton>
             </Box>
             <MainTable
-              utilityRows={hotelRows}
-              utilityData={fakeHotelsData}
-              sideData="roomTypes"
+              editEvent={() => {
+                setOpenSideModal(true);
+                setActionSideModal("Edit");
+              }}
+              utilityRows={transportRows}
+              utilityData={fakeTransportData}
+              sideData="transportTypes"
               action={["edit", "delete"]}
             />
           </Box>
-        </Box>
-      ) : (
-        <div></div>
-      )}
-      {activeButton == "Transport" ? (
-        <Box sx={{ padding: 2 }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: 2,
-            }}
-          >
-            <Typography
-              fontWeight={700}
-              fontFamily={"Montserrat"}
-              color="#005FB3"
-              variant="h4"
-              marginBottom={0}
+        ) : (
+          <div></div>
+        )}
+        {activeButton == "Fnb" ? (
+          <Box sx={{ padding: 2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: 2,
+              }}
             >
-              Transport Vendor Managment
-            </Typography>
-            <MyButton
-              style={{ marginRight: 20 }}
-              label=" + Create Transport"
-              variant="contained"
-            ></MyButton>
+              <Typography
+                fontWeight={700}
+                fontFamily={"Montserrat"}
+                color="#005FB3"
+                variant="h4"
+                marginBottom={0}
+              >
+                FNB Management
+              </Typography>
+              <MyButton
+                style={{ marginRight: 20 }}
+                label=" + Create Restaurant"
+                variant="contained"
+                onClick={() => {
+                  setOpenSideModal(true);
+                  setActionSideModal("Add");
+                }}
+              ></MyButton>
+            </Box>
+            <MainTable
+              editPre={`${location.pathname}/dished`}
+              editRef={true}
+              utilityRows={FnbRows}
+              utilityData={fakeRestaurantData}
+              action={["edit", "delete"]}
+            />
           </Box>
-          <MainTable
-            utilityRows={transportRows}
-            utilityData={fakeTransportData}
-            sideData="transportTypes"
-            action={["edit", "delete"]}
-          />
-        </Box>
-      ) : (
-        <div></div>
-      )}
-      {activeButton == "Fnb" ? (
-        <Box sx={{ padding: 2 }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: 2,
-            }}
-          >
-            <Typography
-              fontWeight={700}
-              fontFamily={"Montserrat"}
-              color="#005FB3"
-              variant="h4"
-              marginBottom={0}
-            >
-              FNB Management
-            </Typography>
-            <MyButton
-              style={{ marginRight: 20 }}
-              label=" + Create Restaurant"
-              variant="contained"
-            ></MyButton>
-          </Box>
-          <MainTable
-            editPre={`${location.pathname}/dished`}
-            editRef={true}
-            utilityRows={FnbRows}
-            utilityData={fakeRestaurantData}
-            action={["edit", "delete"]}
-          />
-        </Box>
-      ) : (
-        <div></div>
-      )}
+        ) : (
+          <div></div>
+        )}
+      </LocalizationProvider>
     </div>
   );
 }
