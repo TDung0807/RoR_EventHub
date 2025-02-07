@@ -33,3 +33,40 @@ export const fakeEventsData = [
     description: "",
   },
 ];
+export const upcomingEvent = [
+  {
+    id: 1,
+    name: "Nhung thanh pho mo mang music show",
+    duration: "9:00 - 18:00",
+    location: "9:00 - 18:00",
+    participant: "Gem Ga",
+  },
+  {
+    id: 2,
+    name: "Nhung thanh pho mo mang music show",
+    duration: "9:00 - 18:00",
+    location: "9:00 - 18:00",
+    participant: "Gem Ga",
+  },
+  {
+    id: 3,
+    name: "Nhung thanh pho mo mang music show",
+    duration: "9:00 - 18:00",
+    location: "9:00 - 18:00",
+    participant: "Dung Ngu",
+  },
+  {
+    id: 4,
+    name: "Nhung thanh pho mo mang music show",
+    duration: "9:00 - 18:00",
+    location: "9:00 - 18:00",
+    participant: "Dung Ngu",
+  },
+  {
+    id: 5,
+    name: "Nhung thanh pho mo mang music show",
+    duration: "Lunchbox 9:00 - 18:00",
+    location: "Lunchbox 9:00 - 18:00",
+    participant: "Dung Ngu",
+  },
+];

@@ -18,7 +18,10 @@ export function MainTable({
   editRef = false,
   editPre = "",
   action = [],
+  addingSideData = false,
+  addingSideDataFunc = () => {},
   editEvent = (item) => {},
+  sideDataName = "",
 }) {
   return (
     <TableContainer component={Paper}>
@@ -48,6 +51,9 @@ export function MainTable({
               row={utility}
               action={action}
               editEvent={editEvent}
+              addingSideDataFunc={addingSideDataFunc}
+              addingSideData={addingSideData}
+              sideDataName={sideDataName}
             />
           ))}
         </TableBody>

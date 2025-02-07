@@ -1,0 +1,78 @@
+// Dashboard.module.scss
+
+$primary-color: #007bff;
+$sidebar-bg: #f8f9fa;
+$table-border: #ddd;
+
+.container {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+// Sidebar
+.sidebar {
+  width: 250px;
+  background: $sidebar-bg;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  nav {
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+}
+
+// Main Content
+.main {
+  flex: 1;
+  padding: 20px;
+}
+
+// Events Section
+.eventsSection {
+  margin-top: 20px;
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+
+    th,
+    td {
+      border: 1px solid $table-border;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background: $primary-color;
+      color: white;
+    }
+  }
+}

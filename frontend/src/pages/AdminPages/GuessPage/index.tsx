@@ -26,7 +26,7 @@ export const AdminGuestPage = () => {
   const [openGuessListModal, setOpenGuessListModal] = useState(false);
 
   return (
-    <div className={styles.topDivided}>
+    <div>
       {openGuessGroupModal == true ? (
         <GuessGroupModal
           open={openGuessGroupModal}

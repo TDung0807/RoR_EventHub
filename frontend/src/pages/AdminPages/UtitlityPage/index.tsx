@@ -7,6 +7,7 @@ import {
   MainTable,
   MyButton,
   ModalSideGuessinfo,
+  OtherSideModal,
 } from "../../../components";
 import styles from "./UtilityPage.module.scss";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -47,6 +48,9 @@ export function UtilityPage() {
   const [openSideModal, setOpenSideModal] = useState(false);
   const [actionSideModal, setActionSideModal] = useState("Add");
 
+  const [openOtherSideModal, setOpenOtherSideModal] = useState(false);
+  const [actionOtherSideModal, setActionOtherSideModal] = useState("Add");
+
   return (
     <div>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -57,6 +61,14 @@ export function UtilityPage() {
           }}
           option={activeButton}
           action={actionSideModal}
+        />
+        <OtherSideModal
+          open={openOtherSideModal}
+          handleClose={() => {
+            setOpenOtherSideModal(false);
+          }}
+          option={activeButton}
+          action={actionOtherSideModal}
         />
         <div
           className={styles.flexingChanging}
@@ -108,6 +120,12 @@ export function UtilityPage() {
                   setOpenSideModal(true);
                   setActionSideModal("Edit");
                 }}
+                addingSideData={true}
+                addingSideDataFunc={() => {
+                  setOpenOtherSideModal(true);
+                  setActionOtherSideModal("Add");
+                }}
+                sideDataName="Hotel Type"
               />
             </Box>
           </Box>
@@ -152,6 +170,12 @@ export function UtilityPage() {
               utilityData={fakeTransportData}
               sideData="transportTypes"
               action={["edit", "delete"]}
+              addingSideData={true}
+              addingSideDataFunc={() => {
+                setOpenOtherSideModal(true);
+                setActionOtherSideModal("Add");
+              }}
+              sideDataName="Transport Type"
             />
           </Box>
         ) : (

@@ -6,6 +6,10 @@ import guestImg from "./NavbarIcon/guest.png";
 import infoImg from "./NavbarIcon/info.png";
 import transportImg from "./NavbarIcon/transport.png";
 import homeImg from "./NavbarIcon/home.png";
+import bannerHomePage from "./BannerCover/Banner.png";
+
+export const bannerBackGround = { bannerHomePage };
+
 export const logo = {
   MediumLogoWithType,
   SmallLogoWithoutType,

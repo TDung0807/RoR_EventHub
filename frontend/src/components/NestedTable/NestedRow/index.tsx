@@ -23,6 +23,9 @@ export function NestedRow({
   editPre = "",
   action,
   editEvent = (item) => {},
+  addingSideData = false,
+  addingSideDataFunc = () => {},
+  sideDataName = "",
 }) {
   const [open, setOpen] = useState(false);
   const itemSide = sideData == null ? 0 : row[sideData];
@@ -161,6 +164,25 @@ export function NestedRow({
                     </TableBody>
                   </Table>
                 </div>
+                {addingSideData && (
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={addingSideDataFunc}
+                  >
+                    <p
+                      style={{
+                        fontSize: 14,
+                        fontFamily: "Montserrat",
+                        fontWeight: 600,
+                        marginTop: 12,
+                        marginBottom: 0,
+                        color: "#0062B8",
+                      }}
+                    >
+                      {`+ Creating ${sideDataName}`}
+                    </p>
+                  </div>
+                )}
               </Box>
             </Collapse>
           </TableCell>
