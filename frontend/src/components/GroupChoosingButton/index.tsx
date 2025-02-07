@@ -13,8 +13,9 @@ export function GroupChoosingButton({
     fontSize: "16px",
     cursor: "pointer",
     outline: "none",
-    backgroundColor: isActive ? "#007bff" : "white",
-    color: isActive ? "white" : "black",
+    fontWeight: 700,
+    backgroundColor: isActive ? "#007bff" : "#EDEDED",
+    color: isActive ? "white" : "#0583F2",
     borderRadius: "0", // Adjust this if you want rounded edges.
   });
 
@@ -24,12 +25,13 @@ export function GroupChoosingButton({
         display: "flex",
         alignItems: "center",
         marginBottom: 20,
-        marginLeft: 80,
+        marginLeft: 20,
         border: "1px solid #ccc",
         borderRadius: 10,
         overflow: "hidden",
         width: "fit-content",
       }}
+      {...props}
     >
       {changingBtn.map((button) => (
         <button

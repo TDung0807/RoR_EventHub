@@ -55,7 +55,13 @@ export function CalendarPage() {
               borderBottom: "1px solid #ddd",
             }}
           >
-            <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+            <Typography
+              fontWeight={700}
+              fontFamily={"Montserrat"}
+              color="#005FB3"
+              variant="h4"
+              marginBottom={0}
+            >
               Calendar
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center" }}>

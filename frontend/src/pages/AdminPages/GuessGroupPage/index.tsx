@@ -12,10 +12,12 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { useNavigate } from "react-router-dom";
 
 export function GuessGroupPage() {
   const [serviceSignal, setServiceSignal] = useState(true);
   const [informationSignal, setInformationSignal] = useState(false);
+  const navigate = useNavigate();
 
   const changeServiceTabs = () => {
     setServiceSignal(true);
@@ -77,7 +79,14 @@ export function GuessGroupPage() {
           action={actionSideModal}
         />
         <div className={styles.headerContainer}>
-          <button className={styles.backButton}>&lt; Group 1</button>
+          <button
+            onClick={() => {
+              navigate("/admin/guests");
+            }}
+            className={styles.backButton}
+          >
+            &lt;
+          </button>
           <MyButton
             label="Publish"
             className={styles.publishButton}
@@ -128,6 +137,16 @@ export function GuessGroupPage() {
               <div className={styles.cardSection}>
                 <div className={styles.flexingChanging}>
                   <GroupChoosingButton
+                    style={{
+                      marginLeft: 80,
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: 20,
+                      border: "1px solid #ccc",
+                      borderRadius: 10,
+                      overflow: "hidden",
+                      width: "fit-content",
+                    }}
                     changingBtn={changingBtn}
                     activeButton={activeButton}
                     setActiveButton={setActiveButton}

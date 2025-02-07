@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import { Box, Typography } from "@mui/material";
-import { GroupChoosingButton, MainTable } from "../../../components";
+import { Box, Typography, Button } from "@mui/material";
+import { GroupChoosingButton, MainTable, MyButton } from "../../../components";
 import styles from "./UtilityPage.module.scss";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
@@ -53,25 +53,67 @@ export function UtilityPage() {
       </div>
 
       {activeButton == "Hotel" ? (
-        <Box sx={{ padding: 2 }}>
-          <Typography variant="h4" sx={{ marginBottom: 2 }}>
-            Hotel Management
-          </Typography>
-          <MainTable
-            utilityRows={hotelRows}
-            utilityData={fakeHotelsData}
-            sideData="roomTypes"
-            action={["edit", "delete"]}
-          />
+        <Box sx={{ display: "flex" }}>
+          <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: 2,
+              }}
+            >
+              <Typography
+                fontWeight={700}
+                fontFamily={"Montserrat"}
+                color="#005FB3"
+                variant="h4"
+                marginBottom={0}
+              >
+                Hotel Management
+              </Typography>
+              <MyButton
+                style={{ marginRight: 20 }}
+                label=" + Create Hotel"
+                variant="contained"
+              ></MyButton>
+            </Box>
+            <MainTable
+              utilityRows={hotelRows}
+              utilityData={fakeHotelsData}
+              sideData="roomTypes"
+              action={["edit", "delete"]}
+            />
+          </Box>
         </Box>
       ) : (
         <div></div>
       )}
       {activeButton == "Transport" ? (
         <Box sx={{ padding: 2 }}>
-          <Typography variant="h4" sx={{ marginBottom: 2 }}>
-            Transport Management
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: 2,
+            }}
+          >
+            <Typography
+              fontWeight={700}
+              fontFamily={"Montserrat"}
+              color="#005FB3"
+              variant="h4"
+              marginBottom={0}
+            >
+              Transport Vendor Managment
+            </Typography>
+            <MyButton
+              style={{ marginRight: 20 }}
+              label=" + Create Transport"
+              variant="contained"
+            ></MyButton>
+          </Box>
           <MainTable
             utilityRows={transportRows}
             utilityData={fakeTransportData}
@@ -84,9 +126,29 @@ export function UtilityPage() {
       )}
       {activeButton == "Fnb" ? (
         <Box sx={{ padding: 2 }}>
-          <Typography variant="h4" sx={{ marginBottom: 2 }}>
-            Fnb Management
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: 2,
+            }}
+          >
+            <Typography
+              fontWeight={700}
+              fontFamily={"Montserrat"}
+              color="#005FB3"
+              variant="h4"
+              marginBottom={0}
+            >
+              FNB Management
+            </Typography>
+            <MyButton
+              style={{ marginRight: 20 }}
+              label=" + Create Restaurant"
+              variant="contained"
+            ></MyButton>
+          </Box>
           <MainTable
             editPre={`${location.pathname}/dished`}
             editRef={true}
