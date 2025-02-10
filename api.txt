@@ -1,96 +1,87 @@
-User APIs
-    POST /api/v1/users → Create a user
-    GET /api/v1/users → List all users
-    POST /api/v1/login → Authenticate a user
+# API Documentation
 
+## User APIs
+- **POST /users** → Create a user
+- **GET /users** → List all users
+- **POST /login** → Authenticate a user
 
-Event APIs
-    POST /api/v1/events → Create an event
-    GET /api/v1/events → List all events
-    GET /api/v1/events/:id/edit → Edit an event (not RESTful, consider using show)
-    PUT/PATCH /api/v1/events/:id → Update an event
-    DELETE /api/v1/events/:id → Delete an event
+## Event APIs
+- **POST /events** → Create an event
+- **GET /events** → List all events
+- **GET /events/:id/edit** → Edit an event (not RESTful, consider using show instead)
+- **PUT/PATCH /events/:id** → Update an event
+- **DELETE /events/:id** → Delete an event
 
+## Transport APIs
+- **POST /transports** → Create a transport
+- **GET /transports** → List all transports
+- **PUT/PATCH /transports/:id** → Update a transport
+- **DELETE /transports/:id** → Delete a transport
 
-Transport APIs
-    POST /api/v1/transports → Create a transport
-    GET /api/v1/transports → List all transports
-    PUT/PATCH /api/v1/transports/:id → Update a transport
-    DELETE /api/v1/transports/:id → Delete a transport
+## Vendor APIs
+- **POST /vendors** → Create a vendor
+- **GET /vendors** → List all vendors
+- **PUT/PATCH /vendors/:id** → Update a vendor
+- **DELETE /vendors/:id** → Delete a vendor
 
+## Hotel & Room APIs
+- **POST /hotels** → Create a hotel
+- **GET /hotels** → List all hotels
+- **GET /hotels/:id** → Get details of a specific hotel
+- **PUT/PATCH /hotels/:id** → Update a hotel
+- **DELETE /hotels/:id** → Delete a hotel
 
-Vendor APIs
-    POST /api/v1/vendors → Create a vendor
-    GET /api/v1/vendors → List all vendors
-    PUT/PATCH /api/v1/vendors/:id → Update a vendor
-    DELETE /api/v1/vendors/:id → Delete a vendor
+### Room APIs (Nested under hotels)
+- **POST /hotels/:hotel_id/rooms** → Create a room in a hotel
+- **GET /hotels/:hotel_id/rooms** → List all rooms in a hotel
+- **GET /hotels/:hotel_id/rooms/:id** → Get details of a specific room
+- **PUT/PATCH /hotels/:hotel_id/rooms/:id** → Update a room
+- **DELETE /hotels/:hotel_id/rooms/:id** → Delete a room
 
+## Group & Quest APIs
+- **POST /groups** → Create a group
+- **GET /groups** → List all groups
+- **GET /groups/:id** → Get details of a specific group
+- **PUT/PATCH /groups/:id** → Update a group
+- **DELETE /groups/:id** → Delete a group
 
-Hotel & Room APIs
-    POST /api/v1/hotels → Create a hotel
-    GET /api/v1/hotels → List all hotels
-    GET /api/v1/hotels/:id → Get details of a specific hotel
-    PUT/PATCH /api/v1/hotels/:id → Update a hotel
-    DELETE /api/v1/hotels/:id → Delete a hotel
+### Group Quest Management
+- **POST /groups/:id/quests** → Add quests to a group
+- **DELETE /groups/:id/quests/:quest_id** → Remove a quest from a group
+- **GET /groups/:id/quests** → List all quests in a group
 
+## Quest APIs
+- **POST /quests** → Create a quest
+- **GET /quests** → List all quests
+- **GET /quests/:id** → Get details of a specific quest
+- **PUT/PATCH /quests/:id** → Update a quest
+- **DELETE /quests/:id** → Delete a quest
 
-Room APIs (Nested under hotels)
-    POST /api/v1/hotels/:hotel_id/rooms → Create a room in a hotel
-    GET /api/v1/hotels/:hotel_id/rooms → List all rooms in a hotel
-    GET /api/v1/hotels/:hotel_id/rooms/:id → Get details of a specific room
-    PUT/PATCH /api/v1/hotels/:hotel_id/rooms/:id → Update a room
-    DELETE /api/v1/hotels/:hotel_id/rooms/:id → Delete a room
+### Quest Group Management
+- **GET /quests/:id/groups** → List all groups associated with a quest
 
+## Restaurant & Dish APIs
+- **POST /restaurants** → Create a restaurant
+- **GET /restaurants** → List all restaurants
+- **GET /restaurants/:id** → Get details of a specific restaurant
+- **PUT/PATCH /restaurants/:id** → Update a restaurant
+- **DELETE /restaurants/:id** → Delete a restaurant
 
-Group & Quest APIs
-    POST /api/v1/groups → Create a group
-    GET /api/v1/groups → List all groups
-    GET /api/v1/groups/:id → Get details of a specific group
-    PUT/PATCH /api/v1/groups/:id → Update a group
-    DELETE /api/v1/groups/:id → Delete a group
+### Dish APIs (Nested under restaurants)
+- **POST /restaurants/:restaurant_id/dishes** → Create a dish in a restaurant
+- **GET /restaurants/:restaurant_id/dishes** → List all dishes in a restaurant
 
+## Dish & Ingredient APIs
+- **GET /dishes/:id** → Get details of a specific dish
+- **PUT/PATCH /dishes/:id** → Update a dish
+- **DELETE /dishes/:id** → Delete a dish
 
-Group Quest Management
-    POST /api/v1/groups/:id/quests → Add quests to a group
-    DELETE /api/v1/groups/:id/quests/:quest_id → Remove a quest from a group
-    GET /api/v1/groups/:id/quests → List all quests in a group
+### Ingredient APIs (Nested under dishes)
+- **GET /dishes/:dish_id/ingredients** → List all ingredients of a dish
 
-
-Quest APIs
-    POST /api/v1/quests → Create a quest
-    GET /api/v1/quests → List all quests
-    GET /api/v1/quests/:id → Get details of a specific quest
-    PUT/PATCH /api/v1/quests/:id → Update a quest
-    DELETE /api/v1/quests/:id → Delete a quest
-
-
-Quest Group Management
-    GET /api/v1/quests/:id/groups → List all groups associated with a quest
-
-
-Restaurant & Dish APIs
-    POST /api/v1/restaurants → Create a restaurant
-    GET /api/v1/restaurants → List all restaurants
-    GET /api/v1/restaurants/:id → Get details of a specific restaurant
-    PUT/PATCH /api/v1/restaurants/:id → Update a restaurant
-    DELETE /api/v1/restaurants/:id → Delete a restaurant
-    Dish APIs (Nested under restaurants)
-    POST /api/v1/restaurants/:restaurant_id/dishes → Create a dish in a restaurant
-    GET /api/v1/restaurants/:restaurant_id/dishes → List all dishes in a restaurant
-
-
-Dish & Ingredient APIs
-    GET /api/v1/dishes/:id → Get details of a specific dish
-    PUT/PATCH /api/v1/dishes/:id → Update a dish
-    DELETE /api/v1/dishes/:id → Delete a dish
-
-
-Ingredient APIs (Nested under dishes)
-    GET /api/v1/dishes/:dish_id/ingredients → List all ingredients of a dish
-
-Ingredient APIs
-    POST /api/v1/ingredients → Create an ingredient
-    GET /api/v1/ingredients → List all ingredients
-    GET /api/v1/ingredients/:id → Get details of a specific ingredient
-    PUT/PATCH /api/v1/ingredients/:id → Update an ingredient
-    DELETE /api/v1/ingredients/:id → Delete an ingredient
+## Ingredient APIs
+- **POST /ingredients** → Create an ingredient
+- **GET /ingredients** → List all ingredients
+- **GET /ingredients/:id** → Get details of a specific ingredient
+- **PUT/PATCH /ingredients/:id** → Update an ingredient
+- **DELETE /ingredients/:id** → Delete an ingredient
