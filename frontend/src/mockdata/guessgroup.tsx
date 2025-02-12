@@ -3,15 +3,15 @@ export const fakeGuessGroupData = [
     id: 1,
     group: 1,
     groupStatus: "Snow",
-    dateCreated: "Jon",
+    dateCreated: "Jon",    //created_At: date
     quantity: 35,
-    lastUpdate: "1/1/2023",
+    lastUpdate: "1/1/2023",   //updated_at: date
   },
   {
     id: 2,
     group: 2,
-    groupStatus: "Lannister",
-    dateCreated: "Cersei",
+    groupStatus: "Lannister",  
+    dateCreated: "Cersei",  
     quantity: 42,
     lastUpdate: "1/1/2023",
   },
