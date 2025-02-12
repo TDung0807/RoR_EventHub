@@ -3,12 +3,12 @@ export const fakeEventsData = [
     id: "1",
     label: "Event 1 & 4:00 - 5:00",
     groupLabel: "Event",
-    user: "Admin",
     startHour: "04:00 AM",
     endHour: "05:00 AM",
     date: "2024-01-17",
     location: "A",
     description: "",
+    user: "Admin",
   },
   {
     id: "2",
