@@ -13,30 +13,38 @@ import {
 import { PrivateRoutes } from "./components";
 import AdminLayout from "./layout/AdminLayout";
 import UserLayout from "./layout/UserLayout";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const App: React.FC = () => {
-  return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/admin" element={<PrivateRoutes />}>
-            <Route element={<AdminLayout />}>
-              <Route path="homepage" element={<AdminHomePage />}></Route>
-              <Route path="guests" element={<AdminGuestPage />}></Route>
-              <Route path="guests/:id" element={<GuessGroupPage />}></Route>
-              <Route path="utility/dished/:id" element={<DishedPage />}></Route>
+  const queryClient = new QueryClient();
 
-              <Route path="utility" element={<UtilityPage />}></Route>
-              <Route path="calendar" element={<CalendarPage />}></Route>
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/admin" element={<PrivateRoutes />}>
+              <Route element={<AdminLayout />}>
+                <Route path="homepage" element={<AdminHomePage />}></Route>
+                <Route path="guests" element={<AdminGuestPage />}></Route>
+                <Route path="guests/:id" element={<GuessGroupPage />}></Route>
+                <Route
+                  path="utility/dished/:id"
+                  element={<DishedPage />}
+                ></Route>
+
+                <Route path="utility" element={<UtilityPage />}></Route>
+                <Route path="calendar" element={<CalendarPage />}></Route>
+              </Route>
             </Route>
-          </Route>
-          <Route path="/user" element={<UserLayout />}>
-            <Route path="homepage" element={<UserHomePage />}></Route>
-          </Route>
-        </Routes>
-      </div>
-    </Router>
+            <Route path="/user" element={<UserLayout />}>
+              <Route path="homepage" element={<UserHomePage />}></Route>
+            </Route>
+          </Routes>
+        </div>
+      </Router>
+    </QueryClientProvider>
   );
 };
 

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Navbar.module.scss"; // Make sure the path is correct
 import { navbarImage } from "../../assets"; // Adjust the path based on your project structure
-
+import BookIcon from "@mui/icons-material/Book";
 export const AdminNavbar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -67,22 +67,21 @@ export const AdminNavbar = () => {
                   marginRight: 16,
                 }}
               />
-              {isExpanded && <span>Guest</span>}
+              {isExpanded && <span>Guest Management</span>}
             </Link>
           </li>
           <li>
             <Link to="/admin/utility">
-              <img
-                src={navbarImage.transportImg}
-                alt="Transport"
+              <BookIcon
                 style={{
-                  width: 41,
-                  height: 41,
+                  width: 28,
+                  height: 28,
                   marginLeft: 15,
                   marginRight: 18,
                 }}
-              />
-              {isExpanded && <span>Transport</span>}
+              ></BookIcon>
+
+              {isExpanded && <span>Service Provider</span>}
             </Link>
           </li>
           <li>

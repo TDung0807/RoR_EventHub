@@ -1,4 +1,4 @@
-$primary-color: #0583f2;
+$primary-color: #fff;
 $hover-color: #3aa3ff;
 
 .navbar {
@@ -7,7 +7,7 @@ $hover-color: #3aa3ff;
   }
 
   &.expanded {
-    width: 200px;
+    width: 240px;
   }
   position: fixed;
   top: 0;
@@ -65,7 +65,7 @@ a {
   padding-top: 15px;
   padding-bottom: 15px;
 
-  color: white;
+  color: black;
   text-decoration: none;
   width: 100%;
 
