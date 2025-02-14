@@ -1,8 +1,9 @@
 class EventsController < ApplicationController
-  before_action :authenticate, only: [:create, :index, :update, :destroy]
+  before_action :authenticate, only: [:create, :index, :update, :destroy, :upcoming]
+
   def create
     if current_user
-      @event = current_user.events.build(event_params) 
+      @event = current_user.events.build(event_params)
       if @event.save
         render json: @event.as_json, status: :ok
       else
@@ -46,9 +47,14 @@ class EventsController < ApplicationController
       render json: { error: "Unauthorized" }, status: :unauthorized
     end
   end
+
+  def upcoming
+    upcoming_events = Event.where("date >= ?", Date.today).order(:date)
+    render json: { events: upcoming_events.map(&:as_json) }, status: :ok
+  end
   
   private
   def event_params
-    params.required(:event).permit(:label, :date, :description, :duration,:location, :participants, :startHour,:endHour,:groupLabel)
+    params.required(:event).permit(:label, :date, :description, :duration, :location, :participants, :startHour, :endHour, :groupLabel)
   end
 end

@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   resources :users, only: [:create, :index]
   post 'login', to: "authentication#login"
   
-  resources :events, only: [:create, :index, :edit, :update, :destroy]
+  resources :events, only: [:create, :index, :edit, :update, :destroy] do
+    collection do
+      get :upcoming
+    end
+  end
   resources :transports, only: [:create, :index, :update, :destroy]
   resources :vendors, only: [:create, :index, :update, :destroy]
   resources :hotels, only: [:create, :index, :show, :update, :destroy] do
