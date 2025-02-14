@@ -2,8 +2,8 @@ import { client } from "../http-common";
 export const addHotel = async (hotelData) => {
   return client.post(`/hotels`, hotelData);
 };
-export const getRoomByHotelId = async () => {
-  return client.get(`/hotels/`);
+export const getHotels = async () => {
+  return client.get(`/hotels`);
 };
 export const getHotelById = async (hotelId) => {
   return client.get(`/hotels/${hotelId}`);

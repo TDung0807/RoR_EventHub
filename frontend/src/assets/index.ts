@@ -7,9 +7,9 @@ import infoImg from "./NavbarIcon/info.png";
 import transportImg from "./NavbarIcon/transport.png";
 import homeImg from "./NavbarIcon/home.png";
 import bannerHomePage from "./BannerCover/Banner.png";
-
+import noData from "./SideIcon/NoData.png";
 export const bannerBackGround = { bannerHomePage };
-
+export const sideIcon = { noData };
 export const logo = {
   MediumLogoWithType,
   SmallLogoWithoutType,

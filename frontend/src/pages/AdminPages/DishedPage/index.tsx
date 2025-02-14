@@ -5,11 +5,20 @@ import { Box, Typography } from "@mui/material";
 import { ModalDished, MainTable, MyButton } from "../../../components";
 import { fakeDishedData } from "../../../mockdata";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { getAllDishedFromRestaurant } from "../../../service/Dish";
 export function DishedPage() {
+  const { id } = useParams();
   const [modalOpen, setModalopen] = useState(false);
   const [detailDished, setDetailDished] = useState(null);
   const [action, setAction] = useState("");
-
+  const {
+    data: dishedRawsData,
+    error: dishedError,
+    isError: dishedIsError,
+    isLoading: dishedIsLoading,
+  } = useQuery(["dished", id], getAllDishedFromRestaurant);
   const handleOpen = () => setModalopen(true);
   const onEditModal = (item) => {
     handleOpen();
@@ -21,10 +30,14 @@ export function DishedPage() {
     setDetailDished(null);
     setAction("add");
   };
-  const FnbRows = ["Dish", "Type ", "Main Ingredient ", "Price", ""];
+  const dishedRows = ["Dish", "Price", "Type ", "Main Ingredient ", ""];
+  const dishedRenderData = dishedRawsData.data.dishes.map(
+    ({ description, created_at, updated_at, ...rest }) => rest
+  );
   return (
     <div>
       <ModalDished
+        restaurant_id={id}
         detailDishedData={detailDished}
         action={action}
         setOpen={setModalopen}
@@ -33,7 +46,7 @@ export function DishedPage() {
       <Box sx={{ padding: 2 }}>
         <div className={styles.headerContainer}>
           <Link to="/admin/utility" style={{ width: "fit-content" }}>
-            <button className={styles.backButton}>&lt; Group 1</button>
+            <button className={styles.backButton}>&lt;</button>
           </Link>
 
           <MyButton
@@ -46,8 +59,8 @@ export function DishedPage() {
         </div>
         <MainTable
           editEvent={onEditModal}
-          utilityRows={FnbRows}
-          utilityData={fakeDishedData}
+          utilityRows={dishedRows}
+          utilityData={dishedRenderData}
         />
       </Box>
     </div>

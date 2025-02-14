@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   Box,
@@ -13,30 +13,25 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MyButton, MyTextFields } from "../../index";
-import { DateTimeField } from "@mui/x-date-pickers/DateTimeField";
 export function TransportModal({ action, handleClose, data, ...props }) {
-  const [vendorName, setVendorName] = useState(
-    data != null && data.vendorName != null ? data.vendorName : ""
-  );
-  const [transportType, setTransportType] = useState(
-    data != null && data.transportType != null ? data.transportType : ""
-  );
-  const [hotelTime, setHotelTime] = useState(
-    data != null && data.hotelTime != null ? data.hotelTime : null
-  );
-  const [officeTime, setOfficeTime] = useState(
-    data != null && data.officeTime != null ? data.officeTime : null
-  );
-  const [remark, setRemark] = useState(
-    data != null && data.remark ? data.remark : ""
-  );
+  const [type, setType] = useState("");
+  const [brand, setBrand] = useState("");
+  const [price, setPrice] = useState("");
+  const [remark, setRemark] = useState("");
 
-  const handleVendorNameChange = (event) => setVendorName(event.target.value);
-  const handleTransportTypeChange = (event) =>
-    setTransportType(event.target.value);
+  useEffect(() => {
+    if (data) {
+      setType(data.type || "");
+      setBrand(data.brand || "");
+      setPrice(data.price || "");
+      setRemark(data.remark || "");
+    }
+  }, [data]); // Runs when `data` changes
 
+  const handleTypeChange = (event) => setType(event.target.value);
+  const handleBrandChange = (event) => setBrand(event.target.value);
+  const handlePriceChange = (event) => setPrice(event.target.value);
   const handleRemarkChange = (event) => setRemark(event.target.value);
-
   return (
     <div>
       <Box
@@ -48,18 +43,14 @@ export function TransportModal({ action, handleClose, data, ...props }) {
         }}
       >
         <Typography style={{ fontSize: 30 }} color="#4C4A4A" fontWeight="bold">
-          {action} Transport
+          {action} Transport Type
         </Typography>
       </Box>
 
       {/* Form */}
       <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel id="vendor-label">Vendor</InputLabel>
-        <Select
-          labelId="vendor-label"
-          value={vendorName}
-          onChange={handleVendorNameChange}
-        >
+        <InputLabel id="vendor-label">Type</InputLabel>
+        <Select labelId="vendor-label" value={type} onChange={handleTypeChange}>
           <MenuItem value="Vendor A">Vendor A</MenuItem>
           <MenuItem value="Vendor B">Vendor B</MenuItem>
           <MenuItem value="Vendor C">Vendor C</MenuItem>
@@ -68,7 +59,7 @@ export function TransportModal({ action, handleClose, data, ...props }) {
 
       <MyTextFields
         id="outlined-password-input"
-        label="Transport Type"
+        label="Transport Brand"
         type="text"
         variant="outlined"
         style={{
@@ -76,28 +67,25 @@ export function TransportModal({ action, handleClose, data, ...props }) {
           marginRight: "auto",
           marginBottom: "20px",
         }}
-        value={transportType}
-        onChange={handleTransportTypeChange}
+        value={brand}
+        onChange={handleBrandChange}
         sx={{ width: "100%" }}
       ></MyTextFields>
 
-      <div style={{ display: "flex", marginBottom: 24 }}>
-        <div style={{ width: 187, marginRight: 24 }}>
-          <DateTimeField
-            label="Hotel pickup time"
-            value={hotelTime}
-            onChange={setHotelTime}
-          />
-        </div>
-
-        <div style={{ width: 187 }}>
-          <DateTimeField
-            label="Office pickup time"
-            value={officeTime}
-            onChange={setOfficeTime}
-          />
-        </div>
-      </div>
+      <MyTextFields
+        id="outlined-password-input"
+        label="Price"
+        type="number"
+        variant="outlined"
+        style={{
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginBottom: "20px",
+        }}
+        value={price}
+        onChange={handlePriceChange}
+        sx={{ width: "100%" }}
+      ></MyTextFields>
       <TextField
         fullWidth
         label="Remark"

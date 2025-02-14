@@ -10,23 +10,57 @@ import {
   InputLabel,
   FormControl,
   IconButton,
+  Rating,
+  Stack,
 } from "@mui/material";
 import { MyButton } from "../../index";
+import { addHotel } from "../../../service/Hotel";
+import { useMutation } from "@tanstack/react-query";
 export function HotelModal({ action, handleClose, data, ...props }) {
-  const [roomType, setRoomType] = useState(
-    data != null && data.roomType != null ? data.roomType : ""
+  const [address, setAddress] = useState(
+    data != null && data.address != null ? data.address : ""
   );
   const [hotelName, setHotelName] = useState(
-    data != null && data.hotelName != null ? data.hotelName : ""
+    data != null && data.name != null ? data.name : ""
   );
   const [remark, setRemark] = useState(
     data != null && data.remark ? data.remark : ""
   );
-
+  const [distant, setDistant] = useState(
+    data != null && data.distant ? data.distant : ""
+  );
+  const [starValue, setStarValue] = useState(
+    data != null && data.star ? data.star : ""
+  );
+  const [checkinTime, setCheckinTime] = useState(
+    data != null && data.checkin_time != null ? data.checkin_time : ""
+  );
+  const [checkoutTime, setCheckoutTime] = useState(
+    data != null && data.checkout_time != null ? data.checkout_time : ""
+  );
+  const [contact, setContact] = useState(
+    data != null && data.contact != null ? data.contact : ""
+  );
   const handleHotelNameChange = (event) => setHotelName(event.target.value);
-  const handleRoomTypeChange = (event) => setRoomType(event.target.value);
+  const handleAddressChange = (event) => setAddress(event.target.value);
   const handleRemarkChange = (event) => setRemark(event.target.value);
+  const handleStarChange = (event) => setStarValue(event.target.value);
+  const handleDistantChange = (event) => setDistant(event.target.value);
+  const handleContactChange = (event) => setContact(event.target.value);
 
+  const { mutateAsync } = useMutation({ mutationFn: addHotel });
+  const addingHotels = async () => {
+    const result = await mutateAsync({
+      name: hotelName,
+      address: address,
+      rating: starValue,
+      star: starValue,
+      distance: distant,
+      contact: contact,
+      checkin_time: checkinTime,
+      checkout_time: checkoutTime,
+    });
+  };
   return (
     <div>
       <Box
@@ -42,32 +76,68 @@ export function HotelModal({ action, handleClose, data, ...props }) {
         </Typography>
       </Box>
 
-      {/* Form */}
-      <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel id="hotel-label">Hotel</InputLabel>
-        <Select
-          labelId="hotel-label"
-          value={hotelName}
-          onChange={handleHotelNameChange}
-        >
-          <MenuItem value="Hotel A">Hotel A</MenuItem>
-          <MenuItem value="Hotel B">Hotel B</MenuItem>
-          <MenuItem value="Hotel C">Hotel C</MenuItem>
-        </Select>
-      </FormControl>
+      <TextField
+        fullWidth
+        label="Hotel Name"
+        value={hotelName}
+        onChange={handleHotelNameChange}
+        sx={{ mb: 3 }}
+      />
 
-      <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel id="roomtype-label">Room type</InputLabel>
-        <Select
-          labelId="roomtype-label"
-          value={roomType}
-          onChange={handleRoomTypeChange}
-        >
-          <MenuItem value="2">2</MenuItem>
-          <MenuItem value="4">4</MenuItem>
-          <MenuItem value="6">6</MenuItem>
-        </Select>
-      </FormControl>
+      <TextField
+        fullWidth
+        label="Address"
+        value={address}
+        onChange={handleAddressChange}
+        sx={{ mb: 3 }}
+      />
+      <TextField
+        fullWidth
+        label="Distant"
+        value={distant}
+        type="number"
+        onChange={handleDistantChange}
+        sx={{ mb: 3 }}
+      />
+      <TextField
+        fullWidth
+        label="Contact"
+        value={contact}
+        onChange={handleContactChange}
+        sx={{ mb: 3 }}
+      />
+      <Box sx={{ display: "flex", gap: 2 }}>
+        <TextField
+          value={checkinTime}
+          placeholder="Check in"
+          type="time"
+          required
+          fullWidth
+          onChange={(e) => {
+            setCheckinTime(e.target.value);
+          }}
+        />
+        <TextField
+          value={checkoutTime}
+          placeholder="Check out"
+          type="time"
+          required
+          fullWidth
+          onChange={(e) => {
+            setCheckoutTime(e.target.value);
+          }}
+        />
+      </Box>
+      <Typography sx={{ mb: 1, mt: 1, ml: 0.5 }}>Rating</Typography>
+      <Rating
+        sx={{ mb: 2 }}
+        name="half-rating"
+        defaultValue={2.5}
+        precision={0.5}
+        size="large"
+        value={starValue}
+        onChange={handleStarChange}
+      />
 
       <TextField
         fullWidth
@@ -104,7 +174,7 @@ export function HotelModal({ action, handleClose, data, ...props }) {
               label="Add"
               variant="contained"
               sx={{ width: 120, height: "40px" }}
-              onClick={handleClose}
+              onClick={addingHotels}
             ></MyButton>
           ) : (
             <MyButton
