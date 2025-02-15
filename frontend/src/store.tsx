@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
 type AccountAuthetication = {
-  isAdmin: boolean;
-  isUser: boolean;
+  isAdmin: any;
+  isUser: any;
   setIsAdmin: () => void;
   unsetIsAdmin: () => void;
   setIsUser: () => void;

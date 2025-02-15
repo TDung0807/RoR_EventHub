@@ -9,6 +9,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { sideIcon } from "../../../assets";
 import { NestedRow } from "../NestedRow";
 // Main Table Component
 export function MainTable({
@@ -41,22 +42,28 @@ export function MainTable({
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>
-          {utilityData.map((utility) => (
-            <NestedRow
-              editRef={editRef}
-              editPre={editPre}
-              sideData={sideData}
-              key={utility.id}
-              row={utility}
-              action={action}
-              editEvent={editEvent}
-              addingSideDataFunc={addingSideDataFunc}
-              addingSideData={addingSideData}
-              sideDataName={sideDataName}
-            />
-          ))}
-        </TableBody>
+        {utilityData == undefined || utilityData.length == 0 ? (
+          <TableCell colSpan={utilityRows.length + 1} align="center">
+            <img width={150} height={150} src={sideIcon.noData}></img>
+          </TableCell>
+        ) : (
+          <TableBody>
+            {utilityData.map((utility) => (
+              <NestedRow
+                editRef={editRef}
+                editPre={editPre}
+                sideData={sideData}
+                key={utility.id}
+                row={utility}
+                action={action}
+                editEvent={editEvent}
+                addingSideDataFunc={addingSideDataFunc}
+                addingSideData={addingSideData}
+                sideDataName={sideDataName}
+              />
+            ))}
+          </TableBody>
+        )}
       </Table>
     </TableContainer>
   );

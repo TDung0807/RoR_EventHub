@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   Box,
@@ -13,25 +13,39 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MyButton, MyTextFields } from "../../index";
-
+import { addRestaurant } from "../../../service/Restaurant";
+import { useMutation } from "@tanstack/react-query";
 export function RestaurantModal({ action, handleClose, data, ...props }) {
-  const [restaurant, setRestaurant] = useState(
-    data != null && data.restaurantName != null ? data.restaurantName : ""
-  );
-  const [address, setAddress] = useState(
-    data != null && data.address != null ? data.address : ""
-  );
-  const [cuisine, setCuisine] = useState(
-    data != null && data.cuisine ? data.cuisine : ""
-  );
-  const [contact, setContact] = useState(
-    data != null && data.contact ? data.contact : ""
-  );
+  const [restaurant, setRestaurant] = useState("");
+  const [address, setAddress] = useState("");
+  const [cuisine, setCuisine] = useState("");
+  const [contact, setContact] = useState("");
+
+  useEffect(() => {
+    if (data) {
+      setRestaurant(data.restaurantName || "");
+      setAddress(data.address || "");
+      setCuisine(data.cuisine || "");
+      setContact(data.contact || "");
+    }
+  }, [data]); // Runs when `data` changes
+
   const handleRestaurantChange = (event) => setRestaurant(event.target.value);
   const handleAddressChange = (event) => setAddress(event.target.value);
   const handleCuisineChange = (event) => setCuisine(event.target.value);
   const handleContactChange = (event) => setContact(event.target.value);
 
+  const { mutateAsync } = useMutation({ mutationFn: addRestaurant });
+
+  const addingRestaurant = async () => {
+    const result = await mutateAsync({
+      name: restaurant,
+      address: address,
+      contact: contact,
+      cuisine: cuisine,
+    });
+    console.log(result);
+  };
   return (
     <div>
       <Box
@@ -133,7 +147,7 @@ export function RestaurantModal({ action, handleClose, data, ...props }) {
               label="Add"
               variant="contained"
               sx={{ width: 120, height: "40px" }}
-              onClick={handleClose}
+              onClick={addingRestaurant}
             ></MyButton>
           ) : (
             <MyButton

@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Box } from "@mui/material";
-import { TransportTypeModal } from "../TransportTypeModal";
+import { VendorModal } from "../VendorModal";
 import { HotelTypeModal } from "../HotelTypeModal";
 
 export function OtherSideModal({
@@ -31,12 +31,12 @@ export function OtherSideModal({
             handleClose={handleClose}
           ></HotelTypeModal>
         )}
-        {option == "Transport" && (
-          <TransportTypeModal
+        {option == "Vendor" && (
+          <VendorModal
             data={null}
             action={action}
             handleClose={handleClose}
-          ></TransportTypeModal>
+          ></VendorModal>
         )}
       </Box>
     </Modal>

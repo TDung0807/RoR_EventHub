@@ -1,6 +1,8 @@
 import { useAccountAuthetication } from "../../store";
 import { useMutation } from "@tanstack/react-query";
 import { loginFunc } from "../../service/User";
+import { client } from "../../http-common";
+
 export const useLogin = () => {
   const isAdmin = useAccountAuthetication((state) => state.isAdmin);
   const isUser = useAccountAuthetication((state) => state.isUser);
@@ -8,18 +10,16 @@ export const useLogin = () => {
   const setIsAdmin = useAccountAuthetication((state) => state.setIsAdmin);
   const setIsUser = useAccountAuthetication((state) => state.setIsUser);
 
-  const { mutate } = useMutation({ mutationFn: loginFunc });
+  const { mutateAsync } = useMutation({ mutationFn: loginFunc });
   // Return a function for logging in
-  return (account, password) => {
+  return async (account, password) => {
     // Mock Data for Authentication
-    const result = mutate({ username: account, password });
-    console.log(result);
-    if (
-      account === "john.doe@example.com" &&
-      password === "password123" &&
-      isAdmin == false
-    ) {
+    const result = await mutateAsync({ username: account, password });
+    if (result.data.token) {
       setIsAdmin();
+      client.defaults.headers.common = {
+        Authorization: `Bearer ${result.data.token}`,
+      };
       return { isAdmin: true, isUser: false };
     } else if (
       account === "jane.smith@example.com" &&

@@ -14,7 +14,13 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { CalendarView, ModalEvent } from "../../../components";
 import { fakeEventsData } from "../../../mockdata";
+import { useQuery } from "react-query";
+import { getAllEvent } from "../../../service/Event";
+
 export function CalendarPage() {
+  const { data, error, isError, isLoading } = useQuery(["events"], getAllEvent);
+  let eventsData = data.data.events;
+
   const [open, setOpen] = useState(false);
   const [detailEventData, setDetailEventData] = useState(null);
   const [action, setAction] = useState("");
@@ -72,7 +78,7 @@ export function CalendarPage() {
           </Box>
           <CalendarView
             onClickEventFunc={onClickEventFunc}
-            events={fakeEventsData}
+            events={eventsData}
           />
         </Box>
       </Box>

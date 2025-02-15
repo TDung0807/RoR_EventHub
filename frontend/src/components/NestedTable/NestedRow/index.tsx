@@ -28,8 +28,15 @@ export function NestedRow({
   sideDataName = "",
 }) {
   const [open, setOpen] = useState(false);
-  const itemSide = sideData == null ? 0 : row[sideData];
-  const sizeOfItemSide = sideData == null ? 0 : Object.keys(itemSide[0]).length;
+  const itemSide = sideData == null ? null : row[sideData];
+  let sizeOfItemSide = 0;
+  try {
+    sizeOfItemSide =
+      !sideData || sideData == undefined ? 0 : Object.keys(itemSide[0]).length;
+  } catch {
+    sideData = null;
+    sizeOfItemSide = 0;
+  }
   return (
     <>
       <TableRow>
