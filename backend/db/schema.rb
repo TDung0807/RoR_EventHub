@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_13_042619) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_15_100033) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -93,11 +93,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_13_042619) do
     t.string "address"
     t.float "rating"
     t.float "star"
-    t.float "checkout_time"
-    t.float "checkin_time"
+    t.datetime "checkout_time"
+    t.datetime "checkin_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.float "distance"
+    t.string "distance"
     t.string "contact"
   end
 
