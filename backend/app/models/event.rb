@@ -6,7 +6,7 @@ class Event < ApplicationRecord
   
     validate :start_and_end_hour_are_valid_times
   
-    before_save :calculate_duration
+    before_save :parse_and_calculate_duration
   
     belongs_to :user
     has_and_belongs_to_many :groups
@@ -14,17 +14,29 @@ class Event < ApplicationRecord
     private
   
     def start_and_end_hour_are_valid_times
-      if startHour && !startHour.is_a?(Time)
-        errors.add(:startHour, "must be a valid time")
+      if startHour.present?
+        begin
+          Time.parse(startHour.to_s) 
+        rescue ArgumentError
+          errors.add(:startHour, "must be a valid time")
+        end
       end
-      if endHour && !endHour.is_a?(Time)
-        errors.add(:endHour, "must be a valid time")
+  
+      if endHour.present?
+        begin
+          Time.parse(endHour.to_s)
+        rescue ArgumentError
+          errors.add(:endHour, "must be a valid time")
+        end
       end
     end
   
-    def calculate_duration
+    def parse_and_calculate_duration
       if startHour.present? && endHour.present?
-        self.duration = ((endHour - startHour) / 1.hour).round(2)
+        start_time = Time.parse(startHour.to_s)
+        end_time = Time.parse(endHour.to_s)      
+  
+        self.duration = ((end_time - start_time) / 1.hour).round(2)
       end
     end
   end
