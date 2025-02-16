@@ -4,6 +4,8 @@ class EventsController < ApplicationController
   def create
     if current_user
       @event = current_user.events.build(event_params)
+      calculate_duration(@event)
+      
       if @event.save
         render json: @event.as_json, status: :ok
       else
@@ -14,15 +16,13 @@ class EventsController < ApplicationController
     end
   end
 
-  def index
-    render json: { events: Event.all.map(&:as_json) }
-  end
-  
   def update
     if current_user
       @event = current_user.events.find_by(id: params[:id])
       if @event
         if @event.update(event_params)
+          calculate_duration(@event)
+          
           render json: @event.as_json, status: :ok
         else
           render json: { message: "Error updating event", errors: @event.errors.full_messages }, status: :unprocessable_entity
@@ -66,9 +66,19 @@ class EventsController < ApplicationController
       render json: { error: "Unauthorized" }, status: :unauthorized
     end
   end
-  
+
   private
+
   def event_params
-    params.required(:event).permit(:label, :date, :description, :duration, :location, :participants, :startHour, :endHour, :groupLabel)
+    params.required(:event).permit(:label, :date, :description, :location, :participants, :startHour, :endHour, :groupLabel)
+  end
+
+  def calculate_duration(event)
+    if event.startHour.present? && event.endHour.present?
+      start_time = event.startHour
+      end_time = event.endHour
+      duration = ((end_time - start_time) / 1.hour).round(2) 
+      event.duration = duration
+    end
   end
 end
