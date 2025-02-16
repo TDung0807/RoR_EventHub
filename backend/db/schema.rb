@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_15_100033) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_16_084112) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -36,15 +36,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_15_100033) do
     t.string "label"
     t.datetime "date"
     t.string "description"
-    t.float "duration"
+    t.time "duration"
     t.string "location"
     t.integer "participants"
-    t.float "startHour"
+    t.time "startHour"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.string "groupLabel"
-    t.float "endHour"
+    t.time "endHour"
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
