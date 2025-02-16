@@ -1,9 +1,14 @@
 class EventsController < ApplicationController
   before_action :authenticate, only: [:create, :index, :update, :destroy, :upcoming, :events_by_user]
-
+  def index
+    @events = Event.all
+    render json: @events.as_json, status: :ok
+  end
+  
   def create
     if current_user
       @event = current_user.events.build(event_params)
+      
       calculate_duration(@event)
       
       if @event.save
