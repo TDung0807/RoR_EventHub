@@ -32,12 +32,12 @@ class Event < ApplicationRecord
     end
   
     def parse_and_calculate_duration
-      if startHour.present? && endHour.present?
-        start_time = Time.parse(startHour.to_s)
-        end_time = Time.parse(endHour.to_s)      
-  
-        self.duration = ((end_time - start_time) / 1.hour).round(2)
+        if startHour.present? && endHour.present?
+          start_time = Time.parse(startHour.to_s)
+          end_time = Time.parse(endHour.to_s)
+      
+          self.duration = ((end_time - start_time) / 1.hour).to_f.round(2) # Ensure it's a float
+        end
       end
-    end
   end
   
