@@ -12,6 +12,7 @@ import { fakeGuessGroupData } from "../../../mockdata";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { getAllGroup } from "../../../service/GuessGroup";
+
 export const AdminGuestPage = () => {
   const { data, error, isError, isLoading } = useQuery(
     ["guessgroups"],
@@ -19,10 +20,10 @@ export const AdminGuestPage = () => {
   );
   const [openGuessGroupModal, setOpenGuessGroupModal] = useState(false);
   const [openGuessListModal, setOpenGuessListModal] = useState(false);
+  const [guessListData, setGuessListData] = useState({});
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
   let groupData = !data ? [] : data.data.groups;
 
   const guessGroupRows = [
@@ -43,7 +44,7 @@ export const AdminGuestPage = () => {
             setOpenGuessGroupModal(false);
           }}
           data={null}
-          handleChangingGuessList={() => {
+          handleChangingGuessList={(guessListData) => {
             setOpenGuessGroupModal(false);
             setOpenGuessListModal(true);
           }}

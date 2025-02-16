@@ -132,7 +132,7 @@ export function NestedRow({
             })}
       </TableRow>
       {sideData != null ? (
-        <TableRow sx={{ marginLeft: 80 }}>
+        <TableRow>
           <TableCell colSpan={6} style={{ padding: 0 }}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box

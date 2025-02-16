@@ -242,7 +242,7 @@ export function UtilityPage() {
                 variant="h4"
                 marginBottom={0}
               >
-                FNB Management
+                FnB Management
               </Typography>
               <MyButton
                 style={{ marginRight: 20 }}
