@@ -11,7 +11,12 @@ class AuthenticationController < ApplicationController
       render json: { 
         token: token, 
         expires_at: exp, 
-        user: { id: user.id, username: user.username, role: user.role } 
+        user: { 
+          id: user.id, 
+          username: user.username, 
+          role: user.role,
+          email: user.email 
+        } 
       }, status: :ok
     else
       render json: { error: 'unauthorized' }, status: :unauthorized
