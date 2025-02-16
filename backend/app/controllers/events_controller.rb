@@ -8,10 +8,8 @@ class EventsController < ApplicationController
   def create
     if current_user
       @event = current_user.events.build(event_params)
-      
-      calculate_duration(@event)
-      
-      if @event.save
+  
+      if @event.save # This automatically triggers all model validations
         render json: @event.as_json, status: :ok
       else
         render json: { message: "Error creating event", errors: @event.errors.full_messages }, status: :unprocessable_entity
@@ -24,10 +22,9 @@ class EventsController < ApplicationController
   def update
     if current_user
       @event = current_user.events.find_by(id: params[:id])
+      
       if @event
-        if @event.update(event_params)
-          calculate_duration(@event)
-          
+        if @event.update(event_params) # Validations are triggered automatically here
           render json: @event.as_json, status: :ok
         else
           render json: { message: "Error updating event", errors: @event.errors.full_messages }, status: :unprocessable_entity
@@ -76,14 +73,5 @@ class EventsController < ApplicationController
 
   def event_params
     params.required(:event).permit(:label, :date, :description, :location, :participants, :startHour, :endHour, :groupLabel)
-  end
-
-  def calculate_duration(event)
-    if event.startHour.present? && event.endHour.present?
-      start_time = Time.parse(event.startHour)
-      end_time = Time.parse(event.endHour)
-      duration = ((end_time - start_time) / 1.hour).round(2)
-      event.duration = duration
-    end
   end
 end
