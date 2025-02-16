@@ -16,7 +16,23 @@ class RestaurantsController < ApplicationController
 
   def index
     if current_user
-      render json: { restaurants: Restaurant.all.map(&:as_json) }, status: :ok
+      restaurants = Restaurant.all.map do |restaurant|
+        restaurant_data(restaurant)
+      end
+      render json: { restaurants: restaurants }, status: :ok
+    else
+      render json: { error: "Unauthorized" }, status: :unauthorized
+    end
+  end
+
+  def show
+    if current_user
+      restaurant = Restaurant.find_by(id: params[:id])
+      if restaurant
+        render json: restaurant_data(restaurant), status: :ok
+      else
+        render json: { message: "Restaurant not found" }, status: :not_found
+      end
     else
       render json: { error: "Unauthorized" }, status: :unauthorized
     end
@@ -57,7 +73,25 @@ class RestaurantsController < ApplicationController
   end
 
   private
+
   def restaurant_params
     params.require(:restaurant).permit(:name, :address, :contact, :cuisine)
+  end
+
+  def restaurant_data(restaurant)
+    dishes = restaurant.dishes
+    dish_total = dishes.count
+
+    main_ingredient = dishes.joins(:ingredients)
+                            .group('ingredients.name')
+                            .order('COUNT(ingredients.id) DESC')
+                            .limit(1)
+                            .pluck('ingredients.name')
+                            .first
+
+    restaurant.as_json.merge({
+      dish_total: dish_total,
+      main_ingredient: main_ingredient
+    })
   end
 end
