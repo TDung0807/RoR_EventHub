@@ -80,9 +80,9 @@ class EventsController < ApplicationController
 
   def calculate_duration(event)
     if event.startHour.present? && event.endHour.present?
-      start_time = event.startHour
-      end_time = event.endHour
-      duration = ((end_time - start_time) / 1.hour).round(2) 
+      start_time = Time.parse(event.startHour)
+      end_time = Time.parse(event.endHour)
+      duration = ((end_time - start_time) / 1.hour).round(2)
       event.duration = duration
     end
   end
