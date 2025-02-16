@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :events, only: [:create, :index, :edit, :update, :destroy] do
     collection do
       get :upcoming
+      get 'user_events/:user_id', to: 'events#events_by_user', on: :collection
     end
   end
   resources :transports, only: [:create, :index, :update, :destroy]
@@ -21,6 +22,8 @@ Rails.application.routes.draw do
   end
   resources :quests, only: [:create, :index, :show, :update, :destroy] do
     get 'groups', to: 'quests#groups'
+    get 'find_by_name/:name', to: 'quests#find_by_name', on: :collection
+    get 'find_by_email/:email', to: 'quests#find_by_email', on: :collection
   end
   resources :restaurants, only: [:create, :index, :show, :update, :destroy] do
     resources :dishes, only: [:create, :index]

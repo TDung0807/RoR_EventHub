@@ -1,6 +1,6 @@
 class QuestsController < ApplicationController
   # Skipping authentication for all actions
-  skip_before_action :authenticate, only: [:create, :index, :show, :update, :destroy]
+  skip_before_action :authenticate, only: [:create, :index, :show, :update, :destroy, :find_by_name, :find_by_email]
 
   private
 
@@ -82,8 +82,31 @@ class QuestsController < ApplicationController
       render json: { message: "Deletion failed" }, status: :unprocessable_entity
     end
   end
+
   def groups
     @quest = Quest.find(params[:quest_id])
     render json: { groups: @quest.groups.as_json }, status: :ok
+  end
+
+  # ✅ Find Quest by Name
+  def find_by_name
+    @quest = Quest.find_by(name: params[:name])
+
+    if @quest
+      render json: { quest: @quest.as_json }, status: :ok
+    else
+      render json: { message: "Quest not found with this name" }, status: :not_found
+    end
+  end
+
+  # ✅ Find Quest by Email
+  def find_by_email
+    @quest = Quest.find_by(email: params[:email])
+
+    if @quest
+      render json: { quest: @quest.as_json }, status: :ok
+    else
+      render json: { message: "Quest not found with this email" }, status: :not_found
+    end
   end
 end

@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :authenticate, only: [:create, :index, :update, :destroy, :upcoming]
+  before_action :authenticate, only: [:create, :index, :update, :destroy, :upcoming, :events_by_user]
 
   def create
     if current_user
@@ -51,6 +51,20 @@ class EventsController < ApplicationController
   def upcoming
     upcoming_events = Event.where("date >= ?", Date.today).order(:date)
     render json: { events: upcoming_events.map(&:as_json) }, status: :ok
+  end
+
+  def events_by_user
+    if current_user
+      @user = User.find_by(id: params[:user_id])
+      if @user
+        @events = @user.events
+        render json: { events: @events.map(&:as_json) }, status: :ok
+      else
+        render json: { error: "User not found" }, status: :not_found
+      end
+    else
+      render json: { error: "Unauthorized" }, status: :unauthorized
+    end
   end
   
   private
