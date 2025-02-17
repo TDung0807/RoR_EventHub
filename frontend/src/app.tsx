@@ -9,6 +9,7 @@ import {
   UtilityPage,
   CalendarPage,
   DishedPage,
+  UserCalendar,
 } from "./pages";
 import { PrivateRoutes } from "./components";
 import AdminLayout from "./layout/AdminLayout";
@@ -40,6 +41,7 @@ const App: React.FC = () => {
             </Route>
             <Route path="/user" element={<UserLayout />}>
               <Route path="homepage" element={<UserHomePage />}></Route>
+              <Route path="calendar" element={<UserCalendar />}></Route>
             </Route>
           </Routes>
         </div>

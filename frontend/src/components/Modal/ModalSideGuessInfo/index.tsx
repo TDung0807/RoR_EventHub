@@ -1,14 +1,16 @@
 import React from "react";
 import { Modal, Box } from "@mui/material";
-import { TransportModal } from "../TransportModal";
+import { VendorModal } from "../VendorModal";
 import { HotelModal } from "../HotelModal";
 import { LunchBoxModal } from "../LunchBoxModal";
 import { RestaurantModal } from "../RestaurantModal";
+import { TransportModal } from "../TransportModal";
 export const ModalSideGuessinfo = ({
   open,
   handleClose,
   option = "Transport",
   action = "Add",
+  data = null,
 }) => {
   const modalStyle = {
     position: "absolute",
@@ -28,28 +30,35 @@ export const ModalSideGuessinfo = ({
         {/* Header */}
         {option == "Lunchbox" && (
           <LunchBoxModal
-            data={null}
+            data={data}
             action={action}
             handleClose={handleClose}
           />
         )}
         {option == "Hotel" && (
           <HotelModal
-            data={null}
+            data={data}
             action={action}
             handleClose={handleClose}
           ></HotelModal>
         )}
         {option == "Transport" && (
           <TransportModal
-            data={null}
+            data={data}
             action={action}
             handleClose={handleClose}
           ></TransportModal>
         )}
+        {option == "Vendor" && (
+          <VendorModal
+            data={data}
+            action={action}
+            handleClose={handleClose}
+          ></VendorModal>
+        )}
         {option == "Fnb" && (
           <RestaurantModal
-            data={null}
+            data={data}
             action={action}
             handleClose={handleClose}
           />

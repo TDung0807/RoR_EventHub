@@ -59,6 +59,8 @@
 
 ### Quest Group Management
 - **GET /quests/:id/groups** → List all groups associated with a quest
+- **GET /quests/find_by_name/John Doe
+- **GET /quests/find_by_email/John Doe
 
 ## Restaurant & Dish APIs
 - **POST /restaurants** → Create a restaurant

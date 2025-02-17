@@ -3,32 +3,32 @@ export const fakeGuessGroupData = [
     id: 1,
     group: 1,
     groupStatus: "Snow",
-    dateCreated: "Jon",    //created_At: date
+    created_At: "Jon", //created_At: date
     quantity: 35,
-    lastUpdate: "1/1/2023",   //updated_at: date
+    updated_at: "1/1/2023", //updated_at: date
   },
   {
     id: 2,
     group: 2,
-    groupStatus: "Lannister",  
-    dateCreated: "Cersei",  
+    groupStatus: "Lannister",
+    created_At: "Cersei",
     quantity: 42,
-    lastUpdate: "1/1/2023",
+    updated_at: "1/1/2023",
   },
   {
     id: 3,
     group: 3,
     groupStatus: "Lannister",
-    dateCreated: "Jaime",
+    created_At: "Jaime",
     quantity: 45,
-    lastUpdate: "1/1/2023",
+    updated_at: "1/1/2023",
   },
   {
     id: 4,
     group: 4,
     groupStatus: "Stark",
-    dateCreated: "Arya",
+    created_At: "Arya",
     quantity: 16,
-    lastUpdate: "1/1/2023",
+    updated_at: "1/1/2023",
   },
 ];

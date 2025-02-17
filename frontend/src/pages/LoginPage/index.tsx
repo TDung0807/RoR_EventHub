@@ -13,8 +13,10 @@ export const LoginPage: React.FC = () => {
 
   const login = useLogin();
 
-  const onLogin = () => {
-    const { isAdmin, isUser } = login(email, password);
+  const onLogin = async () => {
+    const { isAdmin, isUser } = await login(email, password);
+    console.log(isUser);
+
     if (isAdmin) {
       navigate("/admin/homepage");
     } else if (isUser) {

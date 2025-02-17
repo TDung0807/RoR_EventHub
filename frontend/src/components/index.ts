@@ -17,3 +17,5 @@ export { DisplayGuessGroupSideInfo } from "./DisplayGuessGroupSideInfo";
 export { ModalSideGuessinfo } from "./Modal/ModalSideGuessInfo";
 export { MainTable } from "./NestedTable/MainTable";
 export { CalendarView } from "./CalendarViews";
+export { UserNavbar } from "./UserNavbar";
+export { UserHeader } from "./UserHeader";
