@@ -15,9 +15,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useNavigate } from "react-router-dom";
 
 export function GuessGroupPage() {
+  const navigate = useNavigate();
   const [serviceSignal, setServiceSignal] = useState(true);
   const [informationSignal, setInformationSignal] = useState(false);
-  const navigate = useNavigate();
 
   const changeServiceTabs = () => {
     setServiceSignal(true);

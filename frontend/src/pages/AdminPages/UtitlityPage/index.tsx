@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Rating } from "@mui/material";
 import {
   GroupChoosingButton,
   MainTable,
@@ -12,49 +12,91 @@ import {
 import styles from "./UtilityPage.module.scss";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import {
-  fakeHotelsData,
-  fakeTransportData,
-  fakeRestaurantData,
-} from "../../../mockdata";
+
+import { useQuery } from "react-query";
+import { getHotels } from "../../../service/Hotel";
+import { getAllVendor } from "../../../service/Vendor";
+import { getRestaurants } from "../../../service/Restaurant";
+
 export function UtilityPage() {
   const [expand, setExpand] = useState(false);
   const handleExpand = () => {
     setExpand(!expand);
   };
-  const location = useLocation();
+  const {
+    data: hotelsRawsData,
+    error: hotelError,
+    isError: hotelIsError,
+    isLoading: hotelIsLoading,
+  } = useQuery(["hotels"], getHotels);
 
-  const changingBtn = ["Fnb", "Hotel", "Transport"];
+  const {
+    data: vendorsRawsData,
+    error: vendorsError,
+    isError: vendorsIsError,
+    isLoading: vendorsIsLoading,
+  } = useQuery(["vendors"], getAllVendor);
+  const {
+    data: FnbRawsData,
+    error: FnbError,
+    isError: FnbIsError,
+    isLoading: FnbIsLoading,
+  } = useQuery(["Fnb"], getRestaurants);
+  const changingBtn = ["Fnb", "Hotel", "Vendor"];
 
-  const hotelRows = ["Hotel", "Address", "Star", "Distance", "Contact", ""];
-  const transportRows = [
-    "Transport vendor name",
-    "Service type",
-    "Distance Limit ",
-    "Time Limit ",
-    "Contact",
-    "",
-  ];
-  const FnbRows = [
-    "Restaurant",
-    "Address",
-    "Cuisine type ",
-    "No. dishes ",
-    "Main ingredient",
-    "Contact",
-    "",
-  ];
   const [activeButton, setActiveButton] = useState(changingBtn[0]);
   const [openSideModal, setOpenSideModal] = useState(false);
   const [actionSideModal, setActionSideModal] = useState("Add");
 
   const [openOtherSideModal, setOpenOtherSideModal] = useState(false);
   const [actionOtherSideModal, setActionOtherSideModal] = useState("Add");
+  const [currentSideData, setCurrentSideData] = useState({});
+  if (hotelIsLoading || vendorsIsLoading || FnbIsLoading) {
+    return <div>Loading...</div>;
+  }
+  const hotelsRawsDatas = hotelsRawsData.data.hotels;
+
+  const hotelsData = hotelsRawsDatas.map(
+    ({
+      checkin_time,
+      checkout_time,
+      created_at,
+      updated_at,
+      rating,
+      ...rest
+    }) => rest
+  );
+
+  const vendorsData = vendorsRawsData.data.vendors;
+  const FnbData = FnbRawsData.data.restaurants;
+  const location = useLocation();
+
+  const hotelRows = ["Hotel", "Address", "Star", "Distance", "Contact", ""];
+  const transportRows = [
+    "Transport vendor name",
+    "Contact",
+    "Distance Limit ",
+    "Time Limit ",
+    "Service type",
+    "Created At",
+    "Update At",
+    "",
+  ];
+  const FnbRows = [
+    "Restaurant",
+    "Address",
+    "Contact",
+    "Cuisine type ",
+    "No. dishes ",
+    "Main ingredient",
+    "",
+  ];
 
   return (
     <div>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <ModalSideGuessinfo
+          data={currentSideData}
           open={openSideModal}
           handleClose={() => {
             setOpenSideModal(false);
@@ -113,10 +155,11 @@ export function UtilityPage() {
               </Box>
               <MainTable
                 utilityRows={hotelRows}
-                utilityData={fakeHotelsData}
+                utilityData={hotelsData}
                 sideData="roomTypes"
                 action={["edit", "delete"]}
-                editEvent={() => {
+                editEvent={(item) => {
+                  setCurrentSideData(item);
                   setOpenSideModal(true);
                   setActionSideModal("Edit");
                 }}
@@ -132,7 +175,7 @@ export function UtilityPage() {
         ) : (
           <div></div>
         )}
-        {activeButton == "Transport" ? (
+        {activeButton == "Vendor" ? (
           <Box sx={{ padding: 2 }}>
             <Box
               sx={{
@@ -153,7 +196,7 @@ export function UtilityPage() {
               </Typography>
               <MyButton
                 style={{ marginRight: 20 }}
-                label=" + Create Transport"
+                label=" + Create Vendor"
                 variant="contained"
                 onClick={() => {
                   setOpenSideModal(true);
@@ -162,12 +205,13 @@ export function UtilityPage() {
               ></MyButton>
             </Box>
             <MainTable
-              editEvent={() => {
+              editEvent={(item) => {
+                setCurrentSideData(item);
                 setOpenSideModal(true);
                 setActionSideModal("Edit");
               }}
               utilityRows={transportRows}
-              utilityData={fakeTransportData}
+              utilityData={vendorsData}
               sideData="transportTypes"
               action={["edit", "delete"]}
               addingSideData={true}
@@ -198,7 +242,7 @@ export function UtilityPage() {
                 variant="h4"
                 marginBottom={0}
               >
-                FNB Management
+                FnB Management
               </Typography>
               <MyButton
                 style={{ marginRight: 20 }}
@@ -214,7 +258,7 @@ export function UtilityPage() {
               editPre={`${location.pathname}/dished`}
               editRef={true}
               utilityRows={FnbRows}
-              utilityData={fakeRestaurantData}
+              utilityData={FnbData}
               action={["edit", "delete"]}
             />
           </Box>

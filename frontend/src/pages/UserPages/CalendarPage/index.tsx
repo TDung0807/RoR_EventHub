@@ -17,7 +17,7 @@ import { fakeEventsData } from "../../../mockdata";
 import { useQuery } from "react-query";
 import { getAllEvent } from "../../../service/Event";
 
-export function CalendarPage() {
+export function UserCalendar() {
   const { data, error, isError, isLoading } = useQuery(["events"], getAllEvent);
   let eventsData = data.data.events;
 
@@ -70,11 +70,6 @@ export function CalendarPage() {
             >
               Calendar
             </Typography>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Button variant="contained" onClick={onCreatedModal}>
-                + Create Event
-              </Button>
-            </Box>
           </Box>
           <CalendarView
             onClickEventFunc={onClickEventFunc}

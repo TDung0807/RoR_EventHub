@@ -1,6 +1,6 @@
 import { client } from "../http-common";
 export const getAllGroup = async () => {
-  return client.get(`/groups/quests`);
+  return client.get(`/groups`);
 };
 export const getGroupById = async (id) => {
   return client.get(`/groups/${id}`);

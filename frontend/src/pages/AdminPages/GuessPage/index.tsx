@@ -10,9 +10,21 @@ import { useNavigate } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
 import { fakeGuessGroupData } from "../../../mockdata";
 import React, { useState } from "react";
+import { useQuery } from "react-query";
+import { getAllGroup } from "../../../service/GuessGroup";
 
 export const AdminGuestPage = () => {
-  const navigate = useNavigate();
+  const { data, error, isError, isLoading } = useQuery(
+    ["guessgroups"],
+    getAllGroup
+  );
+  const [openGuessGroupModal, setOpenGuessGroupModal] = useState(false);
+  const [openGuessListModal, setOpenGuessListModal] = useState(false);
+  const [guessListData, setGuessListData] = useState({});
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  let groupData = !data ? [] : data.data.groups;
 
   const guessGroupRows = [
     "Group",
@@ -22,8 +34,6 @@ export const AdminGuestPage = () => {
     "Last Update",
     "",
   ];
-  const [openGuessGroupModal, setOpenGuessGroupModal] = useState(false);
-  const [openGuessListModal, setOpenGuessListModal] = useState(false);
 
   return (
     <div>
@@ -34,7 +44,7 @@ export const AdminGuestPage = () => {
             setOpenGuessGroupModal(false);
           }}
           data={null}
-          handleChangingGuessList={() => {
+          handleChangingGuessList={(guessListData) => {
             setOpenGuessGroupModal(false);
             setOpenGuessListModal(true);
           }}
@@ -89,7 +99,7 @@ export const AdminGuestPage = () => {
             editPre={`${location.pathname}`}
             editRef={true}
             utilityRows={guessGroupRows}
-            utilityData={fakeGuessGroupData}
+            utilityData={groupData}
             action={["edit", "delete"]}
           />
         </Box>

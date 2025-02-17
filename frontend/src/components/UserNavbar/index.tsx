@@ -10,8 +10,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import HomeIcon from "@mui/icons-material/Home";
 import InfoIcon from "@mui/icons-material/Info";
 import MenuIcon from "@mui/icons-material/Menu";
-
-export const AdminNavbar = () => {
+export const UserNavbar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleNavbar = () => setIsExpanded(!isExpanded);
@@ -38,7 +37,7 @@ export const AdminNavbar = () => {
             ></MenuIcon>
           </li>
           <li>
-            <Link to="/admin/homepage">
+            <Link to="/user/homepage">
               <HomeIcon
                 style={{
                   width: 28,
@@ -51,7 +50,7 @@ export const AdminNavbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/admin/calendar">
+            <Link to="/user/calendar">
               <CalendarMonthIcon
                 style={{
                   width: 28,
@@ -61,46 +60,6 @@ export const AdminNavbar = () => {
                 }}
               ></CalendarMonthIcon>
               {isExpanded && <span>Calendar</span>}
-            </Link>
-          </li>
-          <li>
-            <Link to="/admin/guests">
-              <PeopleAltIcon
-                style={{
-                  width: 28,
-                  height: 28,
-                  marginLeft: 15,
-                  marginRight: 18,
-                }}
-              ></PeopleAltIcon>
-              {isExpanded && <span>Guest Management</span>}
-            </Link>
-          </li>
-          <li>
-            <Link to="/admin/utility">
-              <BookIcon
-                style={{
-                  width: 28,
-                  height: 28,
-                  marginLeft: 15,
-                  marginRight: 18,
-                }}
-              ></BookIcon>
-
-              {isExpanded && <span>Service Provider</span>}
-            </Link>
-          </li>
-          <li>
-            <Link to="/info">
-              <InfoIcon
-                style={{
-                  width: 28,
-                  height: 28,
-                  marginLeft: 15,
-                  marginRight: 18,
-                }}
-              ></InfoIcon>
-              {isExpanded && <span>Info</span>}
             </Link>
           </li>
         </ul>

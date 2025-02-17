@@ -1,15 +1,24 @@
 import { upcomingEvent } from "../../../mockdata/event";
 import { bannerBackGround } from "../../../assets";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./HomePage.module.scss";
 import { MainTable } from "../../../components";
+import { useQuery } from "react-query";
+import { getAllEvent } from "../../../service/Event";
 export function AdminHomePage() {
+  const { data, error, isError, isLoading } = useQuery(["events"], getAllEvent);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  let upcomingEventRender = data.data.length;
+
   const upcomingEventsRows = [
     "Event",
     "Duration",
     "Location ",
     "Participants ",
   ];
+
   return (
     <div>
       <main className={styles.main}>
@@ -37,7 +46,7 @@ export function AdminHomePage() {
           <h2>Upcoming event</h2>
           <MainTable
             utilityRows={upcomingEventsRows}
-            utilityData={upcomingEvent}
+            utilityData={upcomingEventRender}
             action={null}
           />
         </section>

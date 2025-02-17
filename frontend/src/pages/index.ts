@@ -1,5 +1,5 @@
 export { LoginPage } from "./LoginPage";
-export { UserHomePage } from "./UserPages";
+export { UserHomePage, UserCalendar } from "./UserPages";
 export {
   AdminGuestPage,
   GuessGroupPage,

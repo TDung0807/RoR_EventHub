@@ -1,12 +1,12 @@
 import React from "react";
-import styles from "./AdminHeader.module.scss";
+import styles from "./UserHeader.module.scss";
 import { logo } from "../../assets"; // Adjust the path based on your project structure
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { useLogout } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import { useAccountAuthetication } from "../../store";
 
-export function AdminHeader() {
+export function UserHeader() {
   const email = useAccountAuthetication((state) => state.email);
   const name = useAccountAuthetication((state) => state.name);
   const navigate = useNavigate();

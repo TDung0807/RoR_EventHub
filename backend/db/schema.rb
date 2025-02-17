@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_12_100514) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_16_112842) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -39,12 +39,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_12_100514) do
     t.float "duration"
     t.string "location"
     t.integer "participants"
-    t.float "startHour"
+    t.time "startHour"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.string "groupLabel"
-    t.float "endHour"
+    t.time "endHour"
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
@@ -93,11 +93,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_12_100514) do
     t.string "address"
     t.float "rating"
     t.float "star"
-    t.float "checkout_time"
-    t.float "checkin_time"
+    t.datetime "checkout_time"
+    t.datetime "checkin_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.float "distance"
+    t.string "distance"
     t.string "contact"
   end
 
@@ -153,6 +153,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_12_100514) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "username"
+    t.integer "role", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

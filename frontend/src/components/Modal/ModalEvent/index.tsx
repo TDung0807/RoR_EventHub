@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   Box,
@@ -6,10 +6,13 @@ import {
   IconButton,
   TextField,
   Button,
+  Input,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
+import { addEvent } from "../../../service/Event";
+import { useMutation } from "@tanstack/react-query";
 
 export const ModalEvent = ({
   open,
@@ -18,9 +21,41 @@ export const ModalEvent = ({
   action = "detail",
   onEditModal,
 }) => {
+  const [eventName, setEventName] = useState("");
+  const [eventFrom, setEventFrom] = useState("");
+  const [eventTo, setEventTo] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [eventParticipants, setEventParticipants] = useState(1);
+  const [eventLocation, setEventLocation] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
+
+  useEffect(() => {
+    if (detailEventData) {
+      setEventName(detailEventData.label || "");
+      setEventFrom(detailEventData.startHour || "");
+      setEventTo(detailEventData.endHour || "");
+      setEventDate(detailEventData.date || "");
+      setEventParticipants(detailEventData.participants ?? 1); // Ensuring 1 as default
+      setEventLocation(detailEventData.location || "");
+      setEventDescription(detailEventData.description || "");
+    }
+  }, [detailEventData]); // Runs when `detailEventData` changes
+
   const handleClose = () => setOpen(false);
   const handleEditButton = () => {
     onEditModal(detailEventData);
+  };
+  const { mutateAsync: addingEventSer } = useMutation({ mutationFn: addEvent });
+  const addingEvent = async () => {
+    const result = await addingEventSer({
+      label: eventName,
+      startHour: eventFrom,
+      endHour: eventTo,
+      date: eventDate,
+      participants: eventParticipants,
+      location: eventLocation,
+      description: eventDescription,
+    });
   };
   return (
     <>
@@ -117,55 +152,78 @@ export const ModalEvent = ({
             >
               <TextField
                 label="Event Name"
-                defaultValue={detailEventData.label}
                 required
                 fullWidth
                 variant="outlined"
+                value={eventName}
+                onChange={(e) => {
+                  setEventName(e.target.value);
+                }}
               />
               <Box sx={{ display: "flex", gap: 2 }}>
                 <TextField
-                  label="From"
+                  value={eventFrom}
+                  placeholder="From"
                   type="time"
-                  defaultValue={detailEventData.startHour.split(" ")[0]}
                   required
                   fullWidth
+                  onChange={(e) => {
+                    setEventFrom(e.target.value);
+                  }}
                 />
                 <TextField
-                  label="To"
+                  value={eventTo}
+                  placeholder="To"
                   type="time"
-                  defaultValue={detailEventData.endHour.split(" ")[0]}
                   required
                   fullWidth
+                  onChange={(e) => {
+                    setEventTo(e.target.value);
+                  }}
                 />
               </Box>
               <TextField
-                label="Date"
+                value={eventDate}
+                placeholder="Date"
                 type="date"
-                defaultValue={detailEventData.date}
                 required
                 fullWidth
+                onChange={(e) => {
+                  setEventDate(e.target.value);
+                }}
               />
               <TextField
+                value={eventParticipants}
+                type="number"
                 label="Participants"
-                placeholder="Enter event title"
+                placeholder="Enter Number of Participants"
                 fullWidth
-                defaultValue={detailEventData.user}
                 variant="outlined"
+                onChange={(e) => {
+                  setEventParticipants(Number.parseInt(e.target.value));
+                }}
               />
               <TextField
+                value={eventLocation}
                 label="Location"
-                placeholder="Enter event title"
+                placeholder="Enter event Location"
                 fullWidth
-                defaultValue={detailEventData.location}
                 variant="outlined"
+                onChange={(e) => {
+                  setEventLocation(e.target.value);
+                }}
               />
               <TextField
+                value={eventDescription}
                 label="Description"
                 placeholder="Enter Description"
                 multiline
                 rows={3}
                 fullWidth
                 variant="outlined"
+                onChange={(e) => {
+                  setEventDescription(e.target.value);
+                }}
               />
               <Box
                 sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
@@ -174,7 +232,7 @@ export const ModalEvent = ({
                   Cancel
                 </Button>
                 <Button variant="contained" color="primary">
-                  Save
+                  Edit
                 </Button>
               </Box>
             </Box>
@@ -222,31 +280,75 @@ export const ModalEvent = ({
                 required
                 fullWidth
                 variant="outlined"
+                value={eventName}
+                onChange={(e) => {
+                  setEventName(e.target.value);
+                }}
               />
               <Box sx={{ display: "flex", gap: 2 }}>
-                <TextField label="From" type="time" required fullWidth />
-                <TextField label="To" type="time" required fullWidth />
+                <TextField
+                  value={eventFrom}
+                  placeholder="From"
+                  type="time"
+                  required
+                  fullWidth
+                  onChange={(e) => {
+                    setEventFrom(e.target.value);
+                  }}
+                />
+                <TextField
+                  value={eventTo}
+                  placeholder="To"
+                  type="time"
+                  required
+                  fullWidth
+                  onChange={(e) => {
+                    setEventTo(e.target.value);
+                  }}
+                />
               </Box>
-              <TextField label="Date" type="date" required fullWidth />
               <TextField
+                value={eventDate}
+                placeholder="Date"
+                type="date"
+                required
+                fullWidth
+                onChange={(e) => {
+                  setEventDate(e.target.value);
+                }}
+              />
+              <TextField
+                value={eventParticipants}
+                type="number"
                 label="Participants"
-                placeholder="Enter event title"
+                placeholder="Enter Number of Participants"
                 fullWidth
                 variant="outlined"
+                onChange={(e) => {
+                  setEventParticipants(Number.parseInt(e.target.value));
+                }}
               />
               <TextField
+                value={eventLocation}
                 label="Location"
-                placeholder="Enter event title"
+                placeholder="Enter event Location"
                 fullWidth
                 variant="outlined"
+                onChange={(e) => {
+                  setEventLocation(e.target.value);
+                }}
               />
               <TextField
+                value={eventDescription}
                 label="Description"
                 placeholder="Enter Description"
                 multiline
                 rows={3}
                 fullWidth
                 variant="outlined"
+                onChange={(e) => {
+                  setEventDescription(e.target.value);
+                }}
               />
               <Box
                 sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
@@ -254,8 +356,12 @@ export const ModalEvent = ({
                 <Button onClick={handleClose} variant="text">
                   Cancel
                 </Button>
-                <Button variant="contained" color="primary">
-                  Save
+                <Button
+                  onClick={addingEvent}
+                  variant="contained"
+                  color="primary"
+                >
+                  Adding
                 </Button>
               </Box>
             </Box>

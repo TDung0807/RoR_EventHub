@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   Box,
@@ -13,7 +13,8 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MyButton, MyTextFields } from "../../index";
-
+import { createdGroup } from "../../../service/GuessGroup";
+import { useMutation } from "@tanstack/react-query";
 export function GuessGroupModal({
   open,
   handleChangingGuessList,
@@ -22,16 +23,30 @@ export function GuessGroupModal({
   data,
   ...props
 }) {
-  const [description, setDecription] = useState(
-    data != null && data.description ? data.description : ""
-  );
+  const [description, setDescription] = useState("");
+  const [groupName, setGroupName] = useState("");
 
-  const [groupName, setGroupName] = useState(
-    data != null && data.groupName ? data.groupName : ""
-  );
+  useEffect(() => {
+    if (data) {
+      setDescription(data.description || "");
+      setGroupName(data.groupName || "");
+    }
+  }, [data]); // Runs when `data` changes
 
-  const handleChangedDescription = (event) => setDecription(event.target.value);
+  const handleChangedDescription = (event) =>
+    setDescription(event.target.value);
   const handleChangedGroupName = (event) => setGroupName(event.target.value);
+  const { mutateAsync } = useMutation({
+    mutationFn: createdGroup,
+  });
+
+  const addingGroup = () => {
+    const result = mutateAsync({
+      description: description,
+      groupName: groupName,
+    });
+  };
+
   const modalStyle = {
     position: "absolute",
     top: "50%",
@@ -123,7 +138,7 @@ export function GuessGroupModal({
                   label="Add"
                   variant="contained"
                   sx={{ width: 120, height: "40px" }}
-                  onClick={handleClose}
+                  onClick={addingGroup}
                 ></MyButton>
               ) : (
                 <MyButton
