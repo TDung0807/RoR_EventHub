@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>You're invited to EventHub!</h1>
+    <p>Please go to <a href="https://13.123.42.1:3000/login">EventHub</a> and login to check your calendar.</p>
+
+    <h3>Your account details:</h3>
+    <p><strong>Account (Email):</strong> <%= @user.email %></p>
+    <p><strong>Account Creation Date:</strong> <%= @user.created_at %></p>
+    <h3>Your Password:</h3>
+    <p><strong>Password: </strong><span style="font-weight: normal;"><%= @password %></span></p>
+  </body>
+</html>

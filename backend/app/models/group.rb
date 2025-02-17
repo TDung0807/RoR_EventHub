@@ -10,6 +10,6 @@ class Group < ApplicationRecord
   belongs_to :hotel
   belongs_to :transport, optional: true
   validates :group, presence: true
-  validates :status, presence: true
-  validates :participants, numericality: { only_integer: true }
+  validates :groupStatus, presence: true
+  validates :quantity, numericality: { only_integer: true }
 end

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>You've been added to a group!</h1>
+    <p>Dear <%= @quest.name %>,</p>
+    <p>You've been successfully added to the following group(s):</p>
+    <ul>
+      <% @groups.each do |group| %>
+        <li><%= group.group %></li>
+      <% end %>
+    </ul>
+    <p>Please log in to <a href="https://13.123.42.1:3000/login">EventHub</a> to check your calendar and see the upcoming events.</p>
+    <p>Account: <%= @quest.email %></p>
+    <p>Best regards,</p>
+    <p>The EventHub Team</p>
+  </body>
+</html>
