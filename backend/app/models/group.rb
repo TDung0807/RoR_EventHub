@@ -9,7 +9,7 @@ class Group < ApplicationRecord
   has_and_belongs_to_many :dishes, join_table: 'groups_dishes'
   belongs_to :hotel
   belongs_to :transport, optional: true
-  validates :name, presence: true
-  validates :status, presence: true
-  validates :participants, numericality: { only_integer: true }
+  validates :group, presence: true
+  validates :groupStatus, presence: true
+  validates :quantity, numericality: { only_integer: true }
 end
