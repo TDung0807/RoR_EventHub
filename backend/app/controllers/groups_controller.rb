@@ -70,39 +70,47 @@ class GroupsController < ApplicationController
       end
     end
     def add_quests
-        @group = Group.find(params[:group_id])
-        quest_ids = params[:quest_ids]
+      @group = Group.find(params[:group_id])
+      quest_ids = params[:quest_ids]
     
-        if quest_ids.blank?
-          render json: { message: "No quests provided" }, status: :unprocessable_entity
-          return
-        end
-    
-        quests = Quest.find(quest_ids)
-    
-        if quests.empty?
-          render json: { message: "No quests found" }, status: :not_found
-        else
-          @group.quests << quests
-          render json: { message: 'Quests added successfully', group: @group.as_json }, status: :ok
-        end
+      if quest_ids.blank?
+        render json: { message: "No quests provided" }, status: :unprocessable_entity
+        return
       end
     
-      def remove_quest
-        @group = Group.find(params[:group_id])
-        @quest = Quest.find(params[:quest_id])
+      quests = Quest.find(quest_ids)
     
-        if @group.quests.include?(@quest)
-          @group.quests.delete(@quest)
-          render json: { message: 'Quest removed successfully', group: @group.as_json }, status: :ok
-        else
-          render json: { message: 'Quest not found in this group' }, status: :not_found
-        end
+      if quests.empty?
+        render json: { message: "No quests found" }, status: :not_found
+      else
+        @group.quests << quests
+        update_quantity(@group)
+        render json: { message: 'Quests added successfully', group: @group.as_json }, status: :ok
       end
+    end
     
-      def quests
-        @group = Group.find(params[:group_id])
-        render json: { quests: @group.quests.as_json }, status: :ok
+    def remove_quest
+      @group = Group.find(params[:group_id])
+      @quest = Quest.find(params[:quest_id])
+    
+      if @group.quests.include?(@quest)
+        @group.quests.delete(@quest)
+        update_quantity(@group)
+        render json: { message: 'Quest removed successfully', group: @group.as_json }, status: :ok
+      else
+        render json: { message: 'Quest not found in this group' }, status: :not_found
       end
+    end
+    
+  
+    def quests
+      @group = Group.find(params[:group_id])
+      render json: { quests: @group.quests.as_json }, status: :ok
+    end
+    private
+
+    def update_quantity(group)
+      group.update(quantity: group.quests.count)
+    end
   end
   
