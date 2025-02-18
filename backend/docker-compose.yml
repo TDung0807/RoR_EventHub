@@ -25,13 +25,15 @@ services:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       RAILS_ENV: production
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      SMTP_ADDRESS: "localhost"
+      SMTP_PORT: "25"
     volumes:
       - .:/app
       - ./config/master.key:/app/config/master.key:ro
       - ./config/credentials.yml.enc:/app/config/credentials.yml.enc:ro
     ports:
       - "0.0.0.0:3000:3000"
-      - "0.0.0.0:3421:3421"
+      - "0.0.0.0:587:587"
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec puma -C config/puma.rb"
 
 volumes:
