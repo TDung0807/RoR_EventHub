@@ -3,7 +3,7 @@ class GroupsController < ApplicationController
   
     private
     def group_params
-      params.require(:group).permit(:group, :groupStatus, :quantity, :description, :hotel_remark, :transport_remark, :dish_remark, :hotel_id, dish_ids: [])
+      params.require(:group).permit(:group, :groupStatus, :transport_id, :quantity, :description, :hotel_remark, :transport_remark, :dish_remark, :hotel_id, dish_ids: [])
     end
   
     public
