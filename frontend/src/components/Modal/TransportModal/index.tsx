@@ -13,11 +13,20 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MyButton, MyTextFields } from "../../index";
-export function TransportModal({ action, handleClose, data, ...props }) {
+import { addTranspost } from "../../../service/Transport";
+import { useMutation } from "@tanstack/react-query";
+export function TransportModal({
+  action,
+  handleClose,
+  data,
+  mainDataId,
+  ...props
+}) {
   const [type, setType] = useState("");
   const [brand, setBrand] = useState("");
   const [price, setPrice] = useState("");
   const [remark, setRemark] = useState("");
+  const transportType = ["Xe Máy", "Xe 4 chỗ", "Xe 7 chỗ", "Xe Limousine"];
 
   useEffect(() => {
     if (data) {
@@ -27,7 +36,16 @@ export function TransportModal({ action, handleClose, data, ...props }) {
       setRemark(data.remark || "");
     }
   }, [data]); // Runs when `data` changes
-
+  const { mutateAsync } = useMutation({ mutationFn: addTranspost });
+  const addingTransport = () => {
+    const result = mutateAsync({
+      vendor_id: mainDataId,
+      transport_type: transportType[type],
+      brand: brand,
+      price: price,
+      remark: remark,
+    });
+  };
   const handleTypeChange = (event) => setType(event.target.value);
   const handleBrandChange = (event) => setBrand(event.target.value);
   const handlePriceChange = (event) => setPrice(event.target.value);
@@ -51,9 +69,9 @@ export function TransportModal({ action, handleClose, data, ...props }) {
       <FormControl fullWidth sx={{ mb: 2 }}>
         <InputLabel id="vendor-label">Type</InputLabel>
         <Select labelId="vendor-label" value={type} onChange={handleTypeChange}>
-          <MenuItem value="Vendor A">Vendor A</MenuItem>
-          <MenuItem value="Vendor B">Vendor B</MenuItem>
-          <MenuItem value="Vendor C">Vendor C</MenuItem>
+          {transportType.map((item, index) => (
+            <MenuItem value={index}>{item}</MenuItem>
+          ))}
         </Select>
       </FormControl>
 
@@ -121,7 +139,7 @@ export function TransportModal({ action, handleClose, data, ...props }) {
               label="Add"
               variant="contained"
               sx={{ width: 120, height: "40px" }}
-              onClick={handleClose}
+              onClick={addingTransport}
             ></MyButton>
           ) : (
             <MyButton

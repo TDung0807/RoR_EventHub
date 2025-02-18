@@ -1,13 +1,13 @@
 import { client } from "../http-common";
-export const addVendor = async (transportData) => {
+export const addTranspost = async (transportData) => {
   return client.post(`/transports`, transportData);
 };
-export const getAllVendor = async () => {
+export const getAllTranspost = async () => {
   return client.get(`/transports`);
 };
-export const putVendor = async (transportId) => {
+export const putTranspost = async (transportId) => {
   return client.put(`/transports/${transportId}`);
 };
-export const deleteVendor = async (transportId) => {
+export const deleteTranspost = async (transportId) => {
   return client.delete(`/transports/${transportId}`);
 };

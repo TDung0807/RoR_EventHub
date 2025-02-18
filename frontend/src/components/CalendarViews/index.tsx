@@ -4,6 +4,8 @@ import Scheduler from "react-mui-scheduler";
 import { ModalEvent } from "components/Modal/ModalEvent";
 
 export const CalendarView = ({ events, onClickEventFunc = (item) => {} }) => {
+  // Hàm chuyển đổi thời gian ISO thành định dạng 12 giờ (AM/PM)
+
   const config = {
     options: {
       transitionMode: "zoom", // or fade

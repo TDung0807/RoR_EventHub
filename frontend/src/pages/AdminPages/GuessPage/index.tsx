@@ -43,7 +43,7 @@ export const AdminGuestPage = () => {
           handleClose={() => {
             setOpenGuessGroupModal(false);
           }}
-          data={null}
+          basedData={[]}
           handleChangingGuessList={(guessListData) => {
             setOpenGuessGroupModal(false);
             setOpenGuessListModal(true);

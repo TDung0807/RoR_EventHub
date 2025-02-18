@@ -1,6 +1,6 @@
 import { useAccountAuthetication } from "../../store";
 import { useMutation } from "@tanstack/react-query";
-import { loginFunc } from "../../service/User";
+import { loginFunc, registerFunc } from "../../service/User";
 import { client } from "../../http-common";
 
 export const useLogin = () => {
@@ -15,7 +15,7 @@ export const useLogin = () => {
   // Return a function for logging in
   return async (account, password) => {
     // Mock Data for Authentication
-    const result = await mutateAsync({ username: account, password });
+    const result = await mutateAsync({ username: account, password: password });
     if (
       result.data.token &&
       result.data.user.role == "admin" &&

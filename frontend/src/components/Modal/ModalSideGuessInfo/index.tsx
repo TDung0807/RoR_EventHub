@@ -10,6 +10,7 @@ export const ModalSideGuessinfo = ({
   handleClose,
   option = "Transport",
   action = "Add",
+  mainDataId = 1,
   data = null,
 }) => {
   const modalStyle = {
@@ -47,6 +48,7 @@ export const ModalSideGuessinfo = ({
             data={data}
             action={action}
             handleClose={handleClose}
+            mainDataId={mainDataId}
           ></TransportModal>
         )}
         {option == "Vendor" && (

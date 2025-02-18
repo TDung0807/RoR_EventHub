@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { MyButton, MyTextFields, DisplayGuessEmail } from "../../index";
+import { getGuestByName } from "../../../service/Guess";
+import { useQuery } from "react-query";
 
 export function ModalGuestList({
   open,
@@ -25,6 +27,38 @@ export function ModalGuestList({
     px: 4,
     pb: 3,
   };
+  const [guestEmail, setGuestEmail] = useState("");
+  const [guestName, setGuestName] = useState("");
+  const [shouldFetchGuest, setShouldFetchGuest] = useState(false);
+
+  const {
+    data: guestResult,
+    isError: guestIsError,
+    isLoading: guestIsLoading,
+  } = useQuery(
+    ["guessTaking", guestName],
+    () =>
+      //@ts-ignore
+      getGuestByName(guestName),
+    {
+      enabled: shouldFetchGuest, // Only run the query when shouldFetchGuest is true
+      onSettled: () => setShouldFetchGuest(false), // Reset after query is done
+    }
+  );
+
+  const addingGuestToGroup = () => {
+    setShouldFetchGuest(true); // Trigger the query
+  };
+
+  // Handle loading and error states
+  if (guestIsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (guestIsError) {
+    return <div>Error loading data. Please try again.</div>;
+  }
+
   const usersArr = [
     { id: 1, email: "Jack97@gmail.com" },
     { id: 2, email: "Jack97@gmail.com" },
@@ -89,6 +123,10 @@ export function ModalGuestList({
               marginRight: "auto",
               marginBottom: "20px",
             }}
+            value={guestEmail}
+            onChange={(event) => {
+              setGuestEmail(event.target.value);
+            }}
             sx={{ width: "100%" }}
             {...props}
           ></MyTextFields>
@@ -102,6 +140,10 @@ export function ModalGuestList({
               marginRight: "auto",
               marginBottom: "20px",
             }}
+            value={guestName}
+            onChange={(event) => {
+              setGuestName(event.target.value);
+            }}
             sx={{ width: "100%" }}
             {...props}
           ></MyTextFields>
@@ -109,6 +151,7 @@ export function ModalGuestList({
             label="Add Guess"
             sx={{ width: "100%" }}
             variant="contained"
+            onClick={addingGuestToGroup}
           ></MyButton>
           <DisplayGuessEmail usersArray={usersArr}></DisplayGuessEmail>
           <div

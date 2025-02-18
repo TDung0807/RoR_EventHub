@@ -4,13 +4,49 @@ import React, { useEffect, useState } from "react";
 import styles from "./HomePage.module.scss";
 import { MainTable } from "../../../components";
 import { useQuery } from "react-query";
-import { getAllEvent } from "../../../service/Event";
+import { getUpcomingEvent } from "../../../service/Event";
 export function AdminHomePage() {
-  const { data, error, isError, isLoading } = useQuery(["events"], getAllEvent);
+  const { data, error, isError, isLoading } = useQuery(
+    ["events"],
+    getUpcomingEvent
+  );
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  let upcomingEventRender = data.data.length;
+  let upcomingEventRender;
+  try {
+    upcomingEventRender = data.data.events.map(
+      ({
+        date,
+        description,
+        endHour,
+        groupLabel,
+        startHour,
+        updated_at,
+        user_id,
+        created_at,
+        ...rest
+      }) => {
+        return { ...rest };
+      }
+    );
+  } catch {
+    upcomingEventRender = data.data.map(
+      ({
+        date,
+        description,
+        endHour,
+        groupLabel,
+        startHour,
+        updated_at,
+        user_id,
+        created_at,
+        ...rest
+      }) => {
+        return { ...rest };
+      }
+    );
+  }
 
   const upcomingEventsRows = [
     "Event",

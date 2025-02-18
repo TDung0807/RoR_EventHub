@@ -20,7 +20,7 @@ export function MainTable({
   editPre = "",
   action = [],
   addingSideData = false,
-  addingSideDataFunc = () => {},
+  addingSideDataFunc = (id) => {},
   editEvent = (item) => {},
   sideDataName = "",
 }) {
@@ -29,7 +29,8 @@ export function MainTable({
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
-            {!sideData ? (
+            {utilityData[sideDataName] != undefined &&
+            utilityData[sideDataName].length != 0 ? (
               <TableCell align="center"> No </TableCell>
             ) : (
               <TableCell align="center"> </TableCell>
