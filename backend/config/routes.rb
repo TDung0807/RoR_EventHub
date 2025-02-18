@@ -13,7 +13,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :transports, only: [:create, :index, :update, :destroy]
+  resources :transports do
+    collection do
+      get :get_transport_by_vendor_id
+    end
+  end
   resources :vendors, only: [:create, :index, :update, :destroy]
   resources :hotels, only: [:create, :index, :show, :update, :destroy] do
     resources :rooms, only: [:create, :index, :show, :update, :destroy]
@@ -37,7 +41,10 @@ Rails.application.routes.draw do
 
   resources :dishes, only: [:show, :update, :destroy] do
     resources :ingredients, only: [:index]
+    member do
+      post :add_ingredients
+    end
   end
-
+  
   resources :ingredients, only: [:create, :index, :show, :update, :destroy]
 end

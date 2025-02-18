@@ -96,7 +96,6 @@ class QuestsController < ApplicationController
     render json: { groups: @quest.groups.as_json }, status: :ok
   end
 
-  # ✅ Find Quest by Name
   def find_by_name
     @quest = Quest.find_by(name: params[:name])
 
@@ -107,10 +106,10 @@ class QuestsController < ApplicationController
     end
   end
 
-  # ✅ Find Quest by Email
   def find_by_email
+    Rails.logger.info "Looking for quest with email: #{params[:email]}"
     @quest = Quest.find_by(email: params[:email])
-
+  
     if @quest
       render json: { quest: @quest.as_json }, status: :ok
     else

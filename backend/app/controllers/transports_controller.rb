@@ -1,10 +1,10 @@
 class TransportsController < ApplicationController
-    before_action :authenticate, only: [:create, :index, :update, :destroy]
+    before_action :authenticate, only: [:create, :index, :update, :destroy, :get_transport_by_vendor_id]
   
     private
   
     def transport_params
-      params.require(:transport).permit(:type, :brand, :price, :vendor_id)
+      params.require(:transport).permit(:transport_type, :brand, :price, :vendor_id)
     end
   
     public
@@ -58,6 +58,19 @@ class TransportsController < ApplicationController
           end
         else
           render json: { message: "Transport not found" }, status: :not_found
+        end
+      else
+        render json: { error: "Unauthorized" }, status: :unauthorized
+      end
+    end
+    def get_transport_by_vendor_id
+      if current_user
+        transports = Transport.where(vendor_id: params[:vendor_id])
+  
+        if transports.any?
+          render json: { transports: transports.as_json }, status: :ok
+        else
+          render json: { message: "No transports found for this vendor" }, status: :not_found
         end
       else
         render json: { error: "Unauthorized" }, status: :unauthorized
