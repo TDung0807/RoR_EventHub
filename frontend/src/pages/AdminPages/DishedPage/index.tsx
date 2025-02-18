@@ -30,10 +30,19 @@ export function DishedPage() {
     setDetailDished(null);
     setAction("add");
   };
+  if (dishedIsLoading) {
+    return <div>Loading...</div>;
+  }
+
   const dishedRows = ["Dish", "Price", "Type ", "Main Ingredient ", ""];
-  const dishedRenderData = dishedRawsData.data.dishes.map(
-    ({ description, created_at, updated_at, ...rest }) => rest
-  );
+  const dishedData = dishedRawsData.data.dishes;
+  let dishedRenderData = [];
+  if (dishedData.length != 0) {
+    dishedRenderData = dishedData.map(
+      ({ description, created_at, updated_at, ...rest }) => rest
+    );
+  }
+
   return (
     <div>
       <ModalDished

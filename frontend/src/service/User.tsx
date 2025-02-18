@@ -4,16 +4,8 @@ export const loginFunc = async ({ username, password }) => {
   return client.post("/login", { username: username, password: password });
 };
 export const registerFunc = async ({ username, password }) => {
-  //return client.post("/users", { username: username, password: password });
-  const result = await fetch(`${baseURL}/users`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json", // Corrected header
-    },
-    body: JSON.stringify({ username, password }),
-  });
-  return result.json();
+  return client.post("/users", { username: username, password: password });
 };
 export const getAllUsers = async () => {
-  client.get("/users");
+  return client.get("/users");
 };

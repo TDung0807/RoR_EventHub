@@ -11,3 +11,6 @@ export const putEvent = async (eventId) => {
 export const deleteHotel = async (eventId) => {
   return client.delete(`/events/${eventId}`);
 };
+export const getUpcomingEvent = async () => {
+  return client.get(`/events/upcoming`);
+};

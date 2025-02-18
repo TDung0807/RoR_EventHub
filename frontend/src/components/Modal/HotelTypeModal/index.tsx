@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   Box,
@@ -13,22 +13,48 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MyButton, MyTextFields } from "../../index";
-export function HotelTypeModal({ action, handleClose, data, ...props }) {
-  const [type, setType] = useState(
-    data != null && data.type != null ? data.type : ""
-  );
-  const [price, setPrice] = useState(
-    data != null && data.price != null ? data.price : ""
-  );
-  const [remark, setRemark] = useState(
-    data != null && data.remark ? data.remark : ""
-  );
+import { addRoom } from "../../../service/Room";
+import { useMutation } from "@tanstack/react-query";
+export function HotelTypeModal({
+  action,
+  handleClose,
+  data,
+  mainDataId,
+  ...props
+}) {
+  const [type, setType] = useState("");
+  const [price, setPrice] = useState("");
+  const [remark, setRemark] = useState("");
+
+  useEffect(() => {
+    if (data) {
+      setType(data.type || "");
+      setPrice(data.price || "");
+      setRemark(data.remark || "");
+    }
+  }, [data]); // Runs when `data` changes
 
   const handleTypeChange = (event) => setType(event.target.value);
   const handlePriceChange = (event) => setPrice(event.target.value);
 
   const handleRemarkChange = (event) => setRemark(event.target.value);
-
+  const { mutateAsync } = useMutation({ mutationFn: addRoom });
+  const roomTypeData = [
+    "Phòng Tổng Thống",
+    "Phòng Queen",
+    "Phòng Đơn",
+    "Phòng Đôi",
+    "Phòng Gia Đình",
+  ];
+  const addingRoomType = () => {
+    const result = mutateAsync({
+      hotel_id: mainDataId,
+      name: roomTypeData[Number.parseInt(type) - 1],
+      price: price,
+      room_type: type,
+      remark: remark,
+    });
+  };
   return (
     <div>
       <Box
@@ -48,9 +74,11 @@ export function HotelTypeModal({ action, handleClose, data, ...props }) {
       <FormControl fullWidth sx={{ mb: 2 }}>
         <InputLabel id="vendor-label">Room Type</InputLabel>
         <Select labelId="vendor-label" value={type} onChange={handleTypeChange}>
-          <MenuItem value="Vendor A">Vendor A</MenuItem>
-          <MenuItem value="Vendor B">Vendor B</MenuItem>
-          <MenuItem value="Vendor C">Vendor C</MenuItem>
+          <MenuItem value="1">Phòng Tổng Thống</MenuItem>
+          <MenuItem value="2">Phòng Queen</MenuItem>
+          <MenuItem value="3">Phòng Đơn</MenuItem>
+          <MenuItem value="4">Phòng Đôi</MenuItem>
+          <MenuItem value="5">Phòng Gia Đình</MenuItem>
         </Select>
       </FormControl>
 
@@ -103,7 +131,7 @@ export function HotelTypeModal({ action, handleClose, data, ...props }) {
               label="Add"
               variant="contained"
               sx={{ width: 120, height: "40px" }}
-              onClick={handleClose}
+              onClick={addingRoomType}
             ></MyButton>
           ) : (
             <MyButton

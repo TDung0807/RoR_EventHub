@@ -16,11 +16,51 @@ import { CalendarView, ModalEvent } from "../../../components";
 import { fakeEventsData } from "../../../mockdata";
 import { useQuery } from "react-query";
 import { getAllEvent } from "../../../service/Event";
-
+const formatTime = (isoString) => {
+  const date = new Date(isoString);
+  return date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+};
 export function CalendarPage() {
   const { data, error, isError, isLoading } = useQuery(["events"], getAllEvent);
-  let eventsData = data.data.events;
-
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  let eventsData;
+  try {
+    // Chuyển đổi dữ liệu
+    eventsData = data.data.map((event) => ({
+      id: `Event ${event.id}`,
+      label: `${event.label} & ${formatTime(event.startHour)} - ${formatTime(
+        event.endHour
+      )}`,
+      groupLabel: "Event",
+      startHour: formatTime(event.startHour),
+      endHour: formatTime(event.endHour),
+      date: event.date.split("T")[0], // Lấy phần ngày
+      location: event.location,
+      description: event.description || "",
+      user: "Admin",
+    }));
+  } catch {
+    // Chuyển đổi dữ liệu
+    eventsData = data.data.events.map((event) => ({
+      id: `Event ${event.id}`,
+      label: `${event.label} & ${formatTime(event.startHour)} - ${formatTime(
+        event.endHour
+      )}`,
+      groupLabel: "Event",
+      startHour: formatTime(event.startHour),
+      endHour: formatTime(event.endHour),
+      date: event.date.split("T")[0], // Lấy phần ngày
+      location: event.location,
+      description: event.description || "",
+      user: "Admin",
+    }));
+  }
   const [open, setOpen] = useState(false);
   const [detailEventData, setDetailEventData] = useState(null);
   const [action, setAction] = useState("");

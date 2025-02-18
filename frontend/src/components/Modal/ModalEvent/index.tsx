@@ -32,8 +32,27 @@ export const ModalEvent = ({
   useEffect(() => {
     if (detailEventData) {
       setEventName(detailEventData.label || "");
-      setEventFrom(detailEventData.startHour || "");
-      setEventTo(detailEventData.endHour || "");
+
+      setEventFrom(
+        detailEventData.startHour
+          ? () => {
+              const date = new Date(detailEventData.startHour);
+              const hours = String(date.getHours()).padStart(2, "0");
+              const minutes = String(date.getMinutes()).padStart(2, "0");
+              return `${hours}:${minutes}`;
+            }
+          : ""
+      );
+      setEventTo(
+        detailEventData.endHour
+          ? () => {
+              const date = new Date(detailEventData.endHour);
+              const hours = String(date.getHours()).padStart(2, "0");
+              const minutes = String(date.getMinutes()).padStart(2, "0");
+              return `${hours}:${minutes}`;
+            }
+          : ""
+      );
       setEventDate(detailEventData.date || "");
       setEventParticipants(detailEventData.participants ?? 1); // Ensuring 1 as default
       setEventLocation(detailEventData.location || "");

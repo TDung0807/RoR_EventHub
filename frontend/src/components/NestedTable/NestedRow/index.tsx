@@ -24,17 +24,26 @@ export function NestedRow({
   action,
   editEvent = (item) => {},
   addingSideData = false,
-  addingSideDataFunc = () => {},
+  addingSideDataFunc = (id) => {},
   sideDataName = "",
 }) {
   const [open, setOpen] = useState(false);
   const itemSide = sideData == null ? null : row[sideData];
   let sizeOfItemSide = 0;
+  const hotelsRows = ["No", "Room type", "Price per night", "Remark", ""];
+  const transportRows = [
+    "No",
+    "Transport type",
+    "Brand",
+    "Price ",
+    "Remark",
+    "",
+  ];
   try {
     sizeOfItemSide =
       !sideData || sideData == undefined ? 0 : Object.keys(itemSide[0]).length;
   } catch {
-    sideData = null;
+    sideData = [];
     sizeOfItemSide = 0;
   }
   return (
@@ -56,9 +65,15 @@ export function NestedRow({
 
         {sideData != null
           ? Object.keys(row).map((item) =>
-              item != sideData && item != "id" ? (
+              item != sideDataName &&
+              item != "id" &&
+              item != "checkout_time" &&
+              item != "checkin_time" ? (
                 <TableCell align="center">{row[item]}</TableCell>
-              ) : item != "id" && Array.isArray(action) ? (
+              ) : item != "id" &&
+                Array.isArray(action) &&
+                item != "checkout_time" &&
+                item != "checkin_time" ? (
                 <TableCell align="center">
                   {editRef ? (
                     <div style={{ cursor: "pointer" }}>
@@ -71,7 +86,10 @@ export function NestedRow({
                     </div>
                   ) : (
                     <div
-                      onClick={() => editEvent(item)}
+                      onClick={() => {
+                        console.log(row);
+                        editEvent(row);
+                      }}
                       style={{ cursor: "pointer" }}
                     >
                       <EditIcon></EditIcon>
@@ -84,7 +102,6 @@ export function NestedRow({
             )
           : Object.keys(row).map((key, index) => {
               if (key === sideData) return null;
-
               const isLastColumn = index + 2 > Object.keys(row).length;
               const isArray = Array.isArray(row[key]);
 
@@ -131,8 +148,8 @@ export function NestedRow({
               );
             })}
       </TableRow>
-      {sideData != null ? (
-        <TableRow>
+      <TableRow>
+        {sideData != null ? (
           <TableCell colSpan={6} style={{ padding: 0 }}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box
@@ -147,34 +164,41 @@ export function NestedRow({
                   <Table size="small" aria-label="room types">
                     <TableHead>
                       <TableRow>
-                        <TableCell>No</TableCell>
-                        {[itemSide[0]].map((itemObj) =>
-                          Object.keys(itemObj).map((item) => (
-                            <TableCell>{item}</TableCell>
-                          ))
-                        )}
+                        {sideDataName == "roomTypes"
+                          ? hotelsRows.map((item) => (
+                              <TableCell>{item}</TableCell>
+                            ))
+                          : ""}
+                        {sideDataName == "transportTypes"
+                          ? transportRows.map((item) => (
+                              <TableCell>{item}</TableCell>
+                            ))
+                          : ""}
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {row[sideData].map((room, index) => (
-                        <TableRow key={index}>
-                          <TableCell width={60}>{index + 1}</TableCell>
-                          {Object.keys(room).map((key) =>
-                            `${sizeOfItemSide}` == key ? (
-                              <TableCell width={140}>{room[key]}</TableCell>
-                            ) : (
-                              <TableCell width={280}>{room[key]}</TableCell>
-                            )
-                          )}
-                        </TableRow>
-                      ))}
+                      {row[sideDataName].length != 0 &&
+                        row[sideDataName].map((room, index) => (
+                          <TableRow key={index}>
+                            <TableCell width={60}>{index + 1}</TableCell>
+                            {Object.keys(room).map((key) =>
+                              `${sizeOfItemSide}` == key ? (
+                                <TableCell width={140}>{room[key]}</TableCell>
+                              ) : (
+                                <TableCell width={280}>{room[key]}</TableCell>
+                              )
+                            )}
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </Table>
                 </div>
                 {addingSideData && (
                   <div
                     style={{ cursor: "pointer" }}
-                    onClick={addingSideDataFunc}
+                    onClick={() => {
+                      addingSideDataFunc(row.id);
+                    }}
                   >
                     <p
                       style={{
@@ -193,10 +217,10 @@ export function NestedRow({
               </Box>
             </Collapse>
           </TableCell>
-        </TableRow>
-      ) : (
-        ""
-      )}
+        ) : (
+          ""
+        )}
+      </TableRow>
     </>
   );
 }
