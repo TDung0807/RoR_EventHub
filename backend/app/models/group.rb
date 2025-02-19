@@ -12,4 +12,5 @@ class Group < ApplicationRecord
   validates :group, presence: true
   validates :groupStatus, presence: true
   validates :quantity, numericality: { only_integer: true }
+  belongs_to :restaurant
 end

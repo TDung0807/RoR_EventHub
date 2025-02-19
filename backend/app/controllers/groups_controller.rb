@@ -3,7 +3,7 @@ class GroupsController < ApplicationController
   
     private
     def group_params
-      params.require(:group).permit(:group, :groupStatus, :transport_id, :quantity, :description, :hotel_remark, :transport_remark, :dish_remark, :hotel_id, dish_ids: [])
+      params.require(:group).permit(:group, :groupStatus, :transport_id, :quantity, :description, :hotel_remark, :transport_remark, :dish_remark, :hotel_id, :restaurant_id, dish_ids: [])
     end
   
     public
@@ -20,19 +20,17 @@ class GroupsController < ApplicationController
     end
   
     def index
-      groups = Group.all
-      render json: { groups: groups.as_json }, status: :ok
+      groups = Group.includes(:restaurant).all
+      render json: { groups: groups.as_json(include: :restaurant) }, status: :ok
     end
   
     def show
-      @group = Group.find_by(id: params[:id])
-      unless current_user
-        render json:{error:"Unauthorized"}, status: :unauthorized
-      end
+      @group = Group.includes(:restaurant).find_by(id: params[:id])
       unless @group
-        render json:{message:"Group not found"}, status: :not_found
+        render json: { message: "Group not found" }, status: :not_found
+        return
       end
-      render json: {group: @group.as_json}, status: :ok
+      render json: { group: @group.as_json(include: :restaurant) }, status: :ok
     end
   
     def update

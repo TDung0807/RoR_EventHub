@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_16_112842) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_19_083438) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -67,7 +67,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_16_112842) do
     t.datetime "updated_at", null: false
     t.bigint "transport_id", null: false
     t.bigint "hotel_id", null: false
+    t.bigint "restaurant_id", null: false
     t.index ["hotel_id"], name: "index_groups_on_hotel_id"
+    t.index ["restaurant_id"], name: "index_groups_on_restaurant_id"
     t.index ["transport_id"], name: "index_groups_on_transport_id"
   end
 
@@ -170,6 +172,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_16_112842) do
   add_foreign_key "dishes", "restaurants"
   add_foreign_key "events", "users"
   add_foreign_key "groups", "hotels"
+  add_foreign_key "groups", "restaurants"
   add_foreign_key "groups", "transports"
   add_foreign_key "groups_dishes", "dishes"
   add_foreign_key "groups_dishes", "groups"
