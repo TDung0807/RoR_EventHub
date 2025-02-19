@@ -4,13 +4,18 @@ import React, { useEffect, useState } from "react";
 import styles from "./UserPage.module.scss";
 import { MainTable } from "../../../components";
 import { useQuery } from "react-query";
-import { getAllEvent } from "../../../service/Event";
+import { getEventsByUserId } from "../../../service/Event";
+import { useAccountAuthetication } from "../../../store";
+
 export function UserHomePage() {
-  const { data, error, isError, isLoading } = useQuery(["events"], getAllEvent);
+  const userId = useAccountAuthetication((state) => state.userId);
+  const { data, error, isError, isLoading } = useQuery(
+    ["events", userId],
+    getEventsByUserId
+  );
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  let upcomingEventRender = data.data.length;
 
   const upcomingEventsRows = [
     "Event",
@@ -18,7 +23,40 @@ export function UserHomePage() {
     "Location ",
     "Participants ",
   ];
-
+  let upcomingEventRender;
+  try {
+    upcomingEventRender = data.data.events.map(
+      ({
+        date,
+        description,
+        endHour,
+        groupLabel,
+        startHour,
+        updated_at,
+        user_id,
+        created_at,
+        ...rest
+      }) => {
+        return { ...rest };
+      }
+    );
+  } catch {
+    upcomingEventRender = data.data.map(
+      ({
+        date,
+        description,
+        endHour,
+        groupLabel,
+        startHour,
+        updated_at,
+        user_id,
+        created_at,
+        ...rest
+      }) => {
+        return { ...rest };
+      }
+    );
+  }
   return (
     <div>
       <main className={styles.main}>

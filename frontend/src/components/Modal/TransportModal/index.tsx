@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MyButton, MyTextFields } from "../../index";
-import { addTranspost } from "../../../service/Transport";
+import { addTranspost, putTranspost } from "../../../service/Transport";
 import { useMutation } from "@tanstack/react-query";
 export function TransportModal({
   action,
@@ -26,25 +26,53 @@ export function TransportModal({
   const [brand, setBrand] = useState("");
   const [price, setPrice] = useState("");
   const [remark, setRemark] = useState("");
+  const [id, setId] = useState("");
+
   const transportType = ["Xe Máy", "Xe 4 chỗ", "Xe 7 chỗ", "Xe Limousine"];
 
   useEffect(() => {
     if (data) {
-      setType(data.type || "");
+      setId(data.id || "");
+      setType(data.transport_type || "");
       setBrand(data.brand || "");
       setPrice(data.price || "");
       setRemark(data.remark || "");
     }
   }, [data]); // Runs when `data` changes
-  const { mutateAsync } = useMutation({ mutationFn: addTranspost });
-  const addingTransport = () => {
-    const result = mutateAsync({
+  const { mutateAsync: addTransportFunc } = useMutation({
+    mutationFn: addTranspost,
+  });
+  const { mutateAsync: putTransportFunc } = useMutation({
+    mutationFn: putTranspost,
+  });
+  const addingTransport = async () => {
+    const result = await addTransportFunc({
       vendor_id: mainDataId,
       transport_type: transportType[type],
       brand: brand,
       price: price,
       remark: remark,
     });
+    if (result.status != 404 && result.status != 500) {
+      alert("Add Thành Công");
+    } else {
+      alert("Lỗi Add");
+    }
+  };
+  const editTransport = async () => {
+    const result = await putTransportFunc({
+      id: id,
+      vendor_id: mainDataId,
+      transport_type: transportType[type],
+      brand: brand,
+      price: price,
+      remark: remark,
+    });
+    if (result.status != 404 && result.status != 500) {
+      alert("Edit Thành Công");
+    } else {
+      alert("Lỗi Edit");
+    }
   };
   const handleTypeChange = (event) => setType(event.target.value);
   const handleBrandChange = (event) => setBrand(event.target.value);
@@ -70,7 +98,7 @@ export function TransportModal({
         <InputLabel id="vendor-label">Type</InputLabel>
         <Select labelId="vendor-label" value={type} onChange={handleTypeChange}>
           {transportType.map((item, index) => (
-            <MenuItem value={index}>{item}</MenuItem>
+            <MenuItem value={item}>{item}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -146,7 +174,7 @@ export function TransportModal({
               label="Edit"
               variant="contained"
               sx={{ width: 120, height: "40px" }}
-              onClick={handleClose}
+              onClick={editTransport}
             ></MyButton>
           )}
         </div>

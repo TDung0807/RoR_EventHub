@@ -38,7 +38,11 @@ export const useLogin = () => {
       setInfomation({
         name: result.data.user.username,
         email: result.data.user.username,
+        id: result.data.user.id,
       });
+      client.defaults.headers.common = {
+        Authorization: `Bearer ${result.data.token}`,
+      };
       setIsUser();
       return { isAdmin: false, isUser: true };
     } else {

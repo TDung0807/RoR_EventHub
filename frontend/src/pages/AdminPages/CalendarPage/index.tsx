@@ -25,7 +25,14 @@ const formatTime = (isoString) => {
   });
 };
 export function CalendarPage() {
-  const { data, error, isError, isLoading } = useQuery(["events"], getAllEvent);
+  const [open, setOpen] = useState(false);
+  const [detailEventData, setDetailEventData] = useState(null);
+  const [action, setAction] = useState("");
+  const handleOpen = () => setOpen(true);
+  const { data, error, isError, isLoading, refetch } = useQuery(
+    ["events"],
+    getAllEvent
+  );
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -33,10 +40,8 @@ export function CalendarPage() {
   try {
     // Chuyển đổi dữ liệu
     eventsData = data.data.map((event) => ({
-      id: `Event ${event.id}`,
-      label: `${event.label} & ${formatTime(event.startHour)} - ${formatTime(
-        event.endHour
-      )}`,
+      id: `${event.id}`,
+      label: `${event.label}`,
       groupLabel: "Event",
       startHour: formatTime(event.startHour),
       endHour: formatTime(event.endHour),
@@ -48,7 +53,7 @@ export function CalendarPage() {
   } catch {
     // Chuyển đổi dữ liệu
     eventsData = data.data.events.map((event) => ({
-      id: `Event ${event.id}`,
+      id: `${event.id}`,
       label: `${event.label} & ${formatTime(event.startHour)} - ${formatTime(
         event.endHour
       )}`,
@@ -61,10 +66,6 @@ export function CalendarPage() {
       user: "Admin",
     }));
   }
-  const [open, setOpen] = useState(false);
-  const [detailEventData, setDetailEventData] = useState(null);
-  const [action, setAction] = useState("");
-  const handleOpen = () => setOpen(true);
 
   const onClickEventFunc = (item) => {
     handleOpen();
@@ -89,6 +90,7 @@ export function CalendarPage() {
         setOpen={setOpen}
         action={action}
         onEditModal={onEditModal}
+        refetch={refetch}
       ></ModalEvent>
       <Box sx={{ display: "flex" }}>
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>

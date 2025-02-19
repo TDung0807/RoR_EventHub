@@ -2,7 +2,8 @@ import { client } from "../http-common";
 export const getAllGroup = async () => {
   return client.get(`/groups`);
 };
-export const getGroupById = async (id) => {
+export const getGroupById = async ({ queryKey }) => {
+  const [_, id] = queryKey;
   return client.get(`/groups/${id}`);
 };
 export const createdGroup = async (groupData) => {

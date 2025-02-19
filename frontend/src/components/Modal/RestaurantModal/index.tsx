@@ -13,17 +13,18 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MyButton, MyTextFields } from "../../index";
-import { addRestaurant } from "../../../service/Restaurant";
+import { addRestaurant, putRestaurant } from "../../../service/Restaurant";
 import { useMutation } from "@tanstack/react-query";
 export function RestaurantModal({ action, handleClose, data, ...props }) {
   const [restaurant, setRestaurant] = useState("");
   const [address, setAddress] = useState("");
   const [cuisine, setCuisine] = useState("");
   const [contact, setContact] = useState("");
-
+  const [id, setId] = useState("");
   useEffect(() => {
     if (data) {
-      setRestaurant(data.restaurantName || "");
+      setId(data.id || "");
+      setRestaurant(data.name || "");
       setAddress(data.address || "");
       setCuisine(data.cuisine || "");
       setContact(data.contact || "");
@@ -35,16 +36,39 @@ export function RestaurantModal({ action, handleClose, data, ...props }) {
   const handleCuisineChange = (event) => setCuisine(event.target.value);
   const handleContactChange = (event) => setContact(event.target.value);
 
-  const { mutateAsync } = useMutation({ mutationFn: addRestaurant });
+  const { mutateAsync: addingRestaurantFunc } = useMutation({
+    mutationFn: addRestaurant,
+  });
+  const { mutateAsync: putRestaurantFunc } = useMutation({
+    mutationFn: putRestaurant,
+  });
 
   const addingRestaurant = async () => {
-    const result = await mutateAsync({
+    const result = await addingRestaurantFunc({
       name: restaurant,
       address: address,
       contact: contact,
       cuisine: cuisine,
     });
-    console.log(result);
+    if (result.status != 404 && result.status != 500) {
+      alert("Add Thành Công");
+    } else {
+      alert("Lỗi Add");
+    }
+  };
+  const editRestaurant = async () => {
+    const result = await putRestaurantFunc({
+      id: id,
+      name: restaurant,
+      address: address,
+      contact: contact,
+      cuisine: cuisine,
+    });
+    if (result.status != 404 && result.status != 500) {
+      alert("Edit Thành Công");
+    } else {
+      alert("Lỗi Edit");
+    }
   };
   return (
     <div>
@@ -154,7 +178,7 @@ export function RestaurantModal({ action, handleClose, data, ...props }) {
               label="Edit"
               variant="contained"
               sx={{ width: 120, height: "40px" }}
-              onClick={handleClose}
+              onClick={editRestaurant}
             ></MyButton>
           )}
         </div>

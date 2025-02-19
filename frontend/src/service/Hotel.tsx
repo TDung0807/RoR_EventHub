@@ -8,8 +8,8 @@ export const getHotels = async () => {
 export const getHotelById = async (hotelId) => {
   return client.get(`/hotels/${hotelId}`);
 };
-export const putHotel = async (hotelId) => {
-  return client.put(`/hotels/${hotelId}`);
+export const putHotel = async (hotelData) => {
+  return client.put(`/hotels/${hotelData.id}`, hotelData);
 };
 export const deleteHotel = async (hotelId) => {
   return client.delete(`/hotels/${hotelId}`);

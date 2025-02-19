@@ -3,13 +3,7 @@ import EditIcon from "@mui/icons-material/Edit";
 
 export function DisplayGuessGroupSideInfo({
   title = "Transport information",
-  transportInfo = {
-    transportName: "Cam SM",
-    transportType: "4 seats",
-    hotelPickupTime: "10:00 on 15 December, 2024",
-    officePickupTime: "10:00 on 15 December, 2024",
-    transportRemark: "",
-  },
+  guessGroupData,
   hotelInfo = {
     hotelName: "Royal Hotel",
     hotelAddress:
@@ -26,9 +20,8 @@ export function DisplayGuessGroupSideInfo({
     cursineRemake: "",
   },
   remark = "",
-  options = "Lunchbox",
-  setOpenSideModal,
-  setActionSideModal,
+  options = "Restaurant",
+  editFunc,
   ...props
 }) {
   return (
@@ -45,7 +38,7 @@ export function DisplayGuessGroupSideInfo({
           <div style={{ marginRight: 16 }}>
             <h3
               style={{
-                marginTop: "-7px",
+                marginTop: "-3px",
                 marginBottom: 19,
                 color: "#005FB3",
                 fontSize: 24,
@@ -55,11 +48,8 @@ export function DisplayGuessGroupSideInfo({
             </h3>
           </div>
           <div
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              setOpenSideModal(true);
-              setActionSideModal("Edit");
-            }}
+            style={{ cursor: "pointer", marginBottom: 19 }}
+            onClick={editFunc}
           >
             <EditIcon></EditIcon>
           </div>
@@ -85,18 +75,11 @@ export function DisplayGuessGroupSideInfo({
 
             <div style={{ flex: 1 }}>
               <h4 style={{ margin: "0 0", fontWeight: "bold", fontSize: 24 }}>
-                {transportInfo.transportName}
+                {guessGroupData?.transport?.brand}
               </h4>
               <p style={{ margin: "5px 0", color: "#555" }}>
-                <strong>Transport type:</strong> {transportInfo.transportType}
-              </p>
-              <p style={{ margin: "5px 0", color: "#555" }}>
-                <strong>Hotel pickup time: </strong>
-                {transportInfo.hotelPickupTime}
-              </p>
-              <p style={{ margin: "5px 0", color: "#555" }}>
-                <strong>Office pickup time: </strong>
-                {transportInfo.officePickupTime}
+                <strong>Transport type:</strong>{" "}
+                {guessGroupData?.transport?.transport_type}
               </p>
 
               {/* Remarks Section */}
@@ -109,7 +92,8 @@ export function DisplayGuessGroupSideInfo({
                   color: "#555",
                 }}
               >
-                <strong>Remark:</strong> {transportInfo.transportRemark}
+                <strong>Remark:</strong>{" "}
+                {guessGroupData?.transport_remark || ""}
               </div>
             </div>
           </div>
@@ -135,18 +119,14 @@ export function DisplayGuessGroupSideInfo({
 
             <div style={{ flex: 1 }}>
               <h4 style={{ margin: "0 0", fontWeight: "bold", fontSize: 24 }}>
-                {hotelInfo.hotelName}
+                {guessGroupData?.hotel?.name}
               </h4>
               <p style={{ margin: "5px 0", color: "#555" }}>
-                {hotelInfo.hotelAddress}
+                {guessGroupData?.hotel?.address}
               </p>
               <p style={{ margin: "5px 0", color: "#555" }}>
                 <strong>Contact: </strong>
-                {hotelInfo.hotelContact}
-              </p>
-              <p style={{ margin: "5px 0", color: "#555" }}>
-                <strong>Attractment: </strong>
-                {hotelInfo.hotelAttractment}
+                {guessGroupData?.hotel?.contact}
               </p>
 
               {/* Remarks Section */}
@@ -159,12 +139,12 @@ export function DisplayGuessGroupSideInfo({
                   color: "#555",
                 }}
               >
-                <strong>Remark:</strong> {hotelInfo.hotelRemake}
+                <strong>Remark:</strong> {guessGroupData?.hotel_remark}
               </div>
             </div>
           </div>
         )}
-        {options == "Lunchbox" && (
+        {options == "Restaurant" && (
           <div
             style={{
               display: "flex",
@@ -185,19 +165,12 @@ export function DisplayGuessGroupSideInfo({
 
             <div style={{ flex: 1 }}>
               <h4 style={{ margin: "0 0", fontWeight: "bold", fontSize: 24 }}>
-                {cursineInfo.cursineName}
+                {guessGroupData?.restaurant?.name}
               </h4>
-              <p style={{ margin: "5px 0", color: "#555" }}>
-                <strong>Restaurant: </strong>
-                {cursineInfo.cursineRestaurant}
-              </p>
+
               <p style={{ margin: "5px 0", color: "#555" }}>
                 <strong>Cuisine type: </strong>
-                {cursineInfo.cursineType}
-              </p>
-              <p style={{ margin: "5px 0", color: "#555" }}>
-                <strong>Main ingredient: </strong>
-                {cursineInfo.cursineMainIngre}
+                {guessGroupData?.restaurant?.cuisine}
               </p>
 
               {/* Remarks Section */}
@@ -210,7 +183,7 @@ export function DisplayGuessGroupSideInfo({
                   color: "#555",
                 }}
               >
-                <strong>Remark:</strong> {cursineInfo.cursineRemake}
+                <strong>Remark:</strong> {guessGroupData?.dish_remark}
               </div>
             </div>
           </div>

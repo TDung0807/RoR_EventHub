@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MyButton, MyTextFields } from "../../index";
-import { addRoom } from "../../../service/Room";
+import { addRoom, putRoom } from "../../../service/Room";
 import { useMutation } from "@tanstack/react-query";
 export function HotelTypeModal({
   action,
@@ -25,12 +25,14 @@ export function HotelTypeModal({
   const [type, setType] = useState("");
   const [price, setPrice] = useState("");
   const [remark, setRemark] = useState("");
+  const [id, setId] = useState("");
 
   useEffect(() => {
     if (data) {
       setType(data.type || "");
       setPrice(data.price || "");
       setRemark(data.remark || "");
+      setId(data.id || "");
     }
   }, [data]); // Runs when `data` changes
 
@@ -38,7 +40,12 @@ export function HotelTypeModal({
   const handlePriceChange = (event) => setPrice(event.target.value);
 
   const handleRemarkChange = (event) => setRemark(event.target.value);
-  const { mutateAsync } = useMutation({ mutationFn: addRoom });
+  const { mutateAsync: addingRoomTypeFunc } = useMutation({
+    mutationFn: addRoom,
+  });
+  const { mutateAsync: PutRoomTypeFunc } = useMutation({
+    mutationFn: putRoom,
+  });
   const roomTypeData = [
     "Phòng Tổng Thống",
     "Phòng Queen",
@@ -46,14 +53,34 @@ export function HotelTypeModal({
     "Phòng Đôi",
     "Phòng Gia Đình",
   ];
-  const addingRoomType = () => {
-    const result = mutateAsync({
+  const addingRoomType = async () => {
+    const result = await addingRoomTypeFunc({
       hotel_id: mainDataId,
       name: roomTypeData[Number.parseInt(type) - 1],
       price: price,
       room_type: type,
       remark: remark,
     });
+    if (result.status != 404 && result.status != 500) {
+      alert("Add Thành Công");
+    } else {
+      alert("Lỗi Add");
+    }
+  };
+  const editRoomType = async () => {
+    const result = await PutRoomTypeFunc({
+      hotel_id: mainDataId,
+      id: id,
+      name: roomTypeData[Number.parseInt(type) - 1],
+      price: price,
+      room_type: type,
+      remark: remark,
+    });
+    if (result.status != 404 && result.status != 500) {
+      alert("Edit Thành Công");
+    } else {
+      alert("Lỗi Edit");
+    }
   };
   return (
     <div>
@@ -138,7 +165,7 @@ export function HotelTypeModal({
               label="Edit"
               variant="contained"
               sx={{ width: 120, height: "40px" }}
-              onClick={handleClose}
+              onClick={editRoomType}
             ></MyButton>
           )}
         </div>

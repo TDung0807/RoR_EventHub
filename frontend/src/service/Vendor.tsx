@@ -5,9 +5,9 @@ export const addVendor = async (vendorData) => {
 export const getAllVendor = async () => {
   return client.get(`/vendors`);
 };
-export const putVendor = async (vendorId) => {
-  return client.put(`/hotels/${vendorId}`);
+export const putVendor = async (vendorData) => {
+  return client.put(`/vendors/${vendorData.id}`, vendorData);
 };
-export const deleteVendor = async (vendorId) => {
-  return client.delete(`/hotels/${vendorId}`);
+export const deleteVendor = async (vendorData) => {
+  return client.delete(`/vendors/${vendorData.id}`);
 };

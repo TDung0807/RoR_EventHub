@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Box, Typography, Button, Rating } from "@mui/material";
@@ -18,7 +18,10 @@ import { getHotels } from "../../../service/Hotel";
 import { getAllVendor } from "../../../service/Vendor";
 import { getRestaurants } from "../../../service/Restaurant";
 import { getRoomByHotelId } from "../../../service/Room";
-import { addTranspost } from "../../../service/Transport";
+import {
+  addTranspost,
+  getTransportByVendorId,
+} from "../../../service/Transport";
 
 // Hàm định dạng giá tiền thành VND
 const formatPrice = (price) =>
@@ -37,6 +40,9 @@ export function UtilityPage() {
   const [actionOtherSideModal, setActionOtherSideModal] = useState("Add");
   const [currentSideData, setCurrentSideData] = useState({});
   const [mainDataId, setMainDataId] = useState(0);
+  const [roomData, setRoomData] = useState([]);
+  const [transportData, setTransportData] = useState([]);
+  const [transportQueries, setTransportQueries] = useState([]);
 
   // Fetch dữ liệu khách sạn, vendor, F&B
   const {
@@ -59,42 +65,88 @@ export function UtilityPage() {
     isError: FnbIsError,
     isLoading: FnbIsLoading,
   } = useQuery(["Fnb"], getRestaurants);
-
-  if (hotelIsLoading || vendorsIsLoading || FnbIsLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (hotelIsError || vendorsIsError || FnbIsError) {
-    return <div>Error loading data. Please try again.</div>;
-  }
+  const isLoading = hotelIsLoading || vendorsIsLoading || FnbIsLoading;
+  const isError = hotelIsError || vendorsIsError || FnbIsError;
+  useEffect(() => {
+    if (isLoading) console.log("Loading data...");
+    if (isError) console.log("Error loading data.");
+  }, [isLoading, isError]);
 
   const hotelsRawsDatas = hotelsRawsData?.data?.hotels || [];
+  const vendorsRawsDatas = vendorsRawsData?.data?.vendors || [];
+  const fnbRawsDatas = FnbRawsData?.data?.restaurants || [];
 
-  // Guard against dynamically changing queries
-  const roomQueries =
-    hotelsRawsDatas.length > 0
-      ? useQueries(
-          hotelsRawsDatas.map((hotel) => ({
-            queryKey: ["roomCurrently", hotel.id],
-            queryFn: () => getRoomByHotelId(hotel.id),
-            enabled: hotel.id != null,
-          }))
-        )
-      : [];
+  const roomQueries = useMemo(() => {
+    return hotelsRawsDatas.map((hotel) => ({
+      queryKey: ["roomCurrently", hotel.id],
+      queryFn: () => getRoomByHotelId(hotel.id),
+      enabled: Boolean(hotel.id),
+    }));
+  }, [hotelsRawsDatas]);
 
-  // Kiểm tra nếu có bất kỳ API nào đang loading
-  const isRoomLoading = roomQueries.some((query) => query.isLoading);
-  if (isRoomLoading) return <div>Loading room data...</div>;
+  const roomDataQueries = useQueries(roomQueries);
 
-  // Kiểm tra nếu có lỗi trong bất kỳ API nào
-  const isRoomError = roomQueries.some((query) => query.isError);
-  if (isRoomError) return <div>Error loading room data.</div>;
+  useEffect(() => {
+    if (roomDataQueries.length > 0) {
+      const newRoomData = roomDataQueries.map((query, index) => ({
+        hotelId: roomQueries[index]?.queryKey[1],
+        //@ts-ignore
+        rooms: query.data?.data?.rooms || [],
+      }));
+
+      if (JSON.stringify(newRoomData) != JSON.stringify(transportData)) {
+        setRoomData(newRoomData);
+      }
+    }
+  }, [JSON.stringify(roomDataQueries)]);
+
+  useEffect(() => {
+    if (vendorsRawsDatas.length > 0) {
+      setTransportQueries((prev) => {
+        const newTransportDataQueries = vendorsRawsDatas.map((vendor) => ({
+          queryKey: ["transportCurrently", vendor.id],
+          queryFn: () => getTransportByVendorId(vendor.id),
+          enabled: Boolean(vendor.id),
+        }));
+
+        return JSON.stringify(prev) == JSON.stringify(newTransportDataQueries)
+          ? prev
+          : newTransportDataQueries;
+      });
+    }
+  }, [vendorsRawsDatas]);
+
+  const transportDataQueries = useQueries(transportQueries);
+
+  useEffect(() => {
+    if (transportDataQueries.length > 0) {
+      const newTransportData = transportDataQueries.map((query, index) => ({
+        vendorId: transportQueries[index]?.queryKey[1],
+        //@ts-ignore
+        transports: query.data?.data?.transports || [],
+      }));
+
+      if (JSON.stringify(newTransportData) != JSON.stringify(transportData)) {
+        setTransportData(newTransportData);
+      }
+    }
+  }, [JSON.stringify(transportDataQueries)]);
+
+  // Kiểm tra trạng thái loading và error từ roomDataQueries
+  const isRoomLoading = roomDataQueries.some((query) => query.isLoading);
+  const isRoomError = roomDataQueries.some((query) => query.isError);
+  const isTransportLoading = transportDataQueries.some(
+    (query) => query.isLoading
+  );
+  const isTransportError = transportDataQueries.some((query) => query.isError);
+  if (isRoomLoading) return <div>Loading Room & Transport data...</div>;
+  if (isRoomError) return <div>Error loading Room & Transport data.</div>;
 
   // Xử lý dữ liệu khách sạn và phòng
   const hotelsData = hotelsRawsDatas.map(
     ({ created_at, updated_at, rating, ...hotel }, index) => {
       // @ts-ignore
-      const roomData = roomQueries[index]?.data?.data?.rooms || [];
+      const roomData = roomDataQueries[index]?.data?.data?.rooms || [];
       const roomTypes = roomData.map((room) => ({
         type: room.name,
         price: formatPrice(room.price),
@@ -108,20 +160,27 @@ export function UtilityPage() {
     }
   );
 
-  const vendorsData = vendorsRawsData.data.vendors.map(
-    ({ created_at, updated_at, ...rest }) => {
+  const vendorsData = vendorsRawsDatas.map(
+    ({ created_at, updated_at, ...rest }, index) => {
+      // @ts-ignore
+      const transportData =
+        // @ts-ignore
+        transportDataQueries[index]?.data?.data?.transports || [];
+      const transportType = transportData.map((transportData) => ({
+        type: transportData.transport_type,
+        brand: transportData.brand,
+        price: formatPrice(transportData.price),
+        remark: transportData.remark || "",
+      }));
       return {
         ...rest,
-        transportTypes: [],
+        transportTypes: transportType.length >= 0 ? transportType : [],
       };
     }
   );
-
-  const FnbData = FnbRawsData.data.restaurants.map(
-    ({ created_at, updated_at, ...rest }) => {
-      return { ...rest };
-    }
-  );
+  const FnbData = fnbRawsDatas.map(({ created_at, updated_at, ...rest }) => {
+    return { ...rest };
+  });
 
   const location = useLocation();
 

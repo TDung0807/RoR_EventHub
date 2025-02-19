@@ -23,7 +23,7 @@ export const AdminNavbar = () => {
           isExpanded ? styles.expanded : styles.collapsed
         }`}
       >
-        <ul>
+        <ul className={`${styles.navbar_container}`}>
           <li onClick={toggleNavbar} style={{ cursor: "pointer" }}>
             <MenuIcon
               style={{
@@ -38,7 +38,7 @@ export const AdminNavbar = () => {
             ></MenuIcon>
           </li>
           <li>
-            <Link to="/admin/homepage">
+            <Link className={`${styles.item_nav}`} to="/admin/homepage">
               <HomeIcon
                 style={{
                   width: 28,
@@ -51,7 +51,7 @@ export const AdminNavbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/admin/calendar">
+            <Link className={`${styles.item_nav}`} to="/admin/calendar">
               <CalendarMonthIcon
                 style={{
                   width: 28,
@@ -64,7 +64,7 @@ export const AdminNavbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/admin/guests">
+            <Link className={`${styles.item_nav}`} to="/admin/guests">
               <PeopleAltIcon
                 style={{
                   width: 28,
@@ -77,7 +77,7 @@ export const AdminNavbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/admin/utility">
+            <Link className={`${styles.item_nav}`} to="/admin/utility">
               <BookIcon
                 style={{
                   width: 28,
@@ -88,19 +88,6 @@ export const AdminNavbar = () => {
               ></BookIcon>
 
               {isExpanded && <span>Service Provider</span>}
-            </Link>
-          </li>
-          <li>
-            <Link to="/info">
-              <InfoIcon
-                style={{
-                  width: 28,
-                  height: 28,
-                  marginLeft: 15,
-                  marginRight: 18,
-                }}
-              ></InfoIcon>
-              {isExpanded && <span>Info</span>}
             </Link>
           </li>
         </ul>

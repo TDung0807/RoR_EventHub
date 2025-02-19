@@ -3,6 +3,9 @@ import { client } from "../http-common";
 export const addRestaurant = async (RestaurantData) => {
   return client.post(`/restaurants`, RestaurantData);
 };
+export const putRestaurant = async (RestaurantData) => {
+  return client.put(`/restaurants/${RestaurantData.id}`, RestaurantData);
+};
 export const getRestaurants = async () => {
   return client.get(`/restaurants`);
 };

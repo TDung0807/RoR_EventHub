@@ -1,5 +1,5 @@
 $primary-color: #fff;
-$hover-color: #3aa3ff;
+$hover-color: #fff;
 
 .navbar {
   &.collapsed {
@@ -48,19 +48,14 @@ $hover-color: #3aa3ff;
   margin-right: 10px;
 }
 
-ul {
-  list-style: none; // This removes the bullet points
+.navbar_container {
+  list-style: none;
   margin: 0;
   padding: 0;
   width: 100%;
 }
 
-li {
-  width: 100%;
-  // Additional styling for list items if needed
-}
-
-a {
+.item_nav {
   display: flex;
   align-items: center;
   padding-top: 15px;

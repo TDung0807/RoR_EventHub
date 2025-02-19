@@ -210,7 +210,10 @@ export function NestedRow({
                         color: "#0062B8",
                       }}
                     >
-                      {`+ Creating ${sideDataName}`}
+                      {sideDataName == "roomTypes" ? "+ Creating Room" : ""}
+                      {sideDataName == "transportTypes"
+                        ? "+Creating Transport Types"
+                        : ""}
                     </p>
                   </div>
                 )}

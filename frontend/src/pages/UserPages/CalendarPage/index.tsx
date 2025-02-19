@@ -15,16 +15,60 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { CalendarView, ModalEvent } from "../../../components";
 import { fakeEventsData } from "../../../mockdata";
 import { useQuery } from "react-query";
-import { getAllEvent } from "../../../service/Event";
+import { getEventsByUserId } from "../../../service/Event";
+import { useAccountAuthetication } from "../../../store";
 
+const formatTime = (isoString) => {
+  const date = new Date(isoString);
+  return date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+};
 export function UserCalendar() {
-  const { data, error, isError, isLoading } = useQuery(["events"], getAllEvent);
-  let eventsData = data.data.events;
-
+  const userId = useAccountAuthetication((state) => state.userId);
+  const { data, error, isError, isLoading } = useQuery(
+    ["events", userId],
+    getEventsByUserId
+  );
+  console.log(data);
   const [open, setOpen] = useState(false);
   const [detailEventData, setDetailEventData] = useState(null);
   const [action, setAction] = useState("");
   const handleOpen = () => setOpen(true);
+  let eventsData;
+  try {
+    // Chuyển đổi dữ liệu
+    eventsData =
+      data.data?.map((event) => ({
+        id: `${event.id}`,
+        label: `${event.label}`,
+        groupLabel: "Event",
+        startHour: formatTime(event.startHour),
+        endHour: formatTime(event.endHour),
+        date: event.date.split("T")[0], // Lấy phần ngày
+        location: event.location,
+        description: event.description || "",
+        user: "Admin",
+      })) || [];
+  } catch {
+    // Chuyển đổi dữ liệu
+    eventsData =
+      data.data?.events?.map((event) => ({
+        id: `${event.id}`,
+        label: `${event.label} & ${formatTime(event.startHour)} - ${formatTime(
+          event.endHour
+        )}`,
+        groupLabel: "Event",
+        startHour: formatTime(event.startHour),
+        endHour: formatTime(event.endHour),
+        date: event.date.split("T")[0], // Lấy phần ngày
+        location: event.location,
+        description: event.description || "",
+        user: "Admin",
+      })) || [];
+  }
 
   const onClickEventFunc = (item) => {
     handleOpen();
@@ -41,15 +85,9 @@ export function UserCalendar() {
     setDetailEventData(null);
     setAction("add");
   };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <ModalEvent
-        detailEventData={detailEventData}
-        open={open}
-        setOpen={setOpen}
-        action={action}
-        onEditModal={onEditModal}
-      ></ModalEvent>
       <Box sx={{ display: "flex" }}>
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
           <Box

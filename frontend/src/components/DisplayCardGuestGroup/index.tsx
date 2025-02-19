@@ -22,15 +22,15 @@ export const DisplayCardGuestGroup: React.FC<DisplayCardGuestGroupProp> = ({
         marginLeft: 80,
       }}
     >
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div style={{ display: "flex" }}>
         <div style={{ scale: "1.4", paddingTop: 8, marginRight: 17 }}>
           <InfoIcon color="primary"></InfoIcon>
         </div>
-        <div>
+        <div style={{ marginTop: "2px" }}>
           <h2 style={{ margin: 0, color: "#005FB3" }}>General information</h2>
         </div>
       </div>
-      <p>
+      <p style={{ marginTop: "16px" }}>
         <strong>Date created:</strong> {dateCreated}
       </p>
       <p>

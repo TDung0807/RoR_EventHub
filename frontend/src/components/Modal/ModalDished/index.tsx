@@ -13,7 +13,10 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { createdDished } from "../../../service/Dish";
+import { useQuery } from "react-query";
+
 import { useMutation } from "@tanstack/react-query";
+import { addIntergrient, getAllIntergrient } from "../../../service/Ingredient";
 export const ModalDished = ({
   open,
   setOpen,
@@ -26,7 +29,6 @@ export const ModalDished = ({
   const [dishedPrice, setDishedPrice] = useState("");
   const [dishedType, setDishedType] = useState("");
   const [ingredientValue, setIngredientValue] = useState("");
-
   useEffect(() => {
     if (detailDishedData) {
       setDishedName(detailDishedData.name || "");
@@ -35,6 +37,25 @@ export const ModalDished = ({
       setIngredientValue(detailDishedData.ingredient_id || "");
     }
   }, [detailDishedData]);
+  const {
+    data: intergrientData,
+    isError: IntergrientIsError,
+    isLoading: IntergrientIsLoading,
+  } = useQuery(["intergrient"], getAllIntergrient);
+  const { mutateAsync: addingDishedFunc } = useMutation({
+    mutationFn: createdDished,
+  });
+  const { mutateAsync: addingIntegrient } = useMutation({
+    mutationFn: addIntergrient,
+  });
+  if (IntergrientIsError) {
+    return <div>Loading...</div>;
+  }
+
+  if (IntergrientIsLoading) {
+    return <div>Error loading data. Please try again.</div>;
+  }
+  const intergrientDataRender = intergrientData?.data?.ingredients || [];
   const handleDishedPriceChange = (e) => {
     setDishedPrice(e.target.value);
   };
@@ -44,15 +65,19 @@ export const ModalDished = ({
   const handleDishedTypeChange = (e) => {
     setDishedType(e.target.value);
   };
-  const { mutateAsync } = useMutation({ mutationFn: createdDished });
 
-  const addingDished = () => {
-    const result = mutateAsync({
+  const addingDished = async () => {
+    const resultDished = await addingDishedFunc({
       restaurant_id: restaurant_id,
       name: dishedName,
       price: dishedPrice,
       dish_type: dishedType,
       ingredient_id: ingredientValue,
+    });
+
+    const resultIntegriendient = await addingIntegrient({
+      dish_id: resultDished?.data?.id || 1,
+      name: ingredientValue,
     });
   };
   return (
@@ -101,21 +126,22 @@ export const ModalDished = ({
                 onChange={handleDishedNameChange}
                 value={dishedName}
               />
-
-              <FormControl fullWidth>
-                <InputLabel id="mainInter-label">Main ingredient</InputLabel>
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel>Ingredients</InputLabel>
                 <Select
-                  required
-                  labelId="mainInter-label"
                   value={ingredientValue}
                   onChange={(e) => {
                     setIngredientValue(e.target.value);
                   }}
                 >
-                  <MenuItem value="Pork">Pork</MenuItem>
-                  <MenuItem value="Beef">Beef</MenuItem>
+                  {intergrientDataRender.map((item) => (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
+
               <TextField
                 label="Dished Type"
                 required
@@ -191,18 +217,19 @@ export const ModalDished = ({
                 value={dishedName}
               />
 
-              <FormControl fullWidth>
-                <InputLabel id="mainInter-label">Main ingredient</InputLabel>
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel>Ingredients</InputLabel>
                 <Select
-                  required
-                  labelId="mainInter-label"
                   value={ingredientValue}
                   onChange={(e) => {
                     setIngredientValue(e.target.value);
                   }}
                 >
-                  <MenuItem value={1}>Pork</MenuItem>
-                  <MenuItem value={2}>Beef</MenuItem>
+                  {intergrientDataRender.map((item) => (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
               <TextField

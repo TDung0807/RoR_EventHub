@@ -3,7 +3,6 @@ import { MyDataTable, ModalGuestList } from "../index";
 import GroupIcon from "@mui/icons-material/Group";
 import { displayPartsToString } from "typescript";
 import AddIcon from "@mui/icons-material/Add";
-
 interface DisplayGuestListGroupProps {
   [key: string]: any; // This allows for additional props not explicitly defined
 }
@@ -12,6 +11,7 @@ export const DisplayGuestListGroup: React.FC<DisplayGuestListGroupProps> = ({
   columns,
   rows,
   paginationModel,
+  idGuessGroup,
   ...props
 }) => {
   const [open, setOpen] = useState(false);
@@ -32,6 +32,7 @@ export const DisplayGuestListGroup: React.FC<DisplayGuestListGroupProps> = ({
       }}
     >
       <ModalGuestList
+        idGuessGroup={idGuessGroup}
         open={open}
         handleClose={handleClose}
         isCreated={false}

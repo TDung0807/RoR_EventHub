@@ -11,12 +11,13 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
-import { addEvent } from "../../../service/Event";
+import { addEvent, putEvent } from "../../../service/Event";
 import { useMutation } from "@tanstack/react-query";
 
 export const ModalEvent = ({
   open,
   setOpen,
+  refetch,
   detailEventData,
   action = "detail",
   onEditModal,
@@ -28,9 +29,10 @@ export const ModalEvent = ({
   const [eventParticipants, setEventParticipants] = useState(1);
   const [eventLocation, setEventLocation] = useState("");
   const [eventDescription, setEventDescription] = useState("");
-
+  const [id, setId] = useState("");
   useEffect(() => {
     if (detailEventData) {
+      setId(detailEventData.id || "");
       setEventName(detailEventData.label || "");
 
       setEventFrom(
@@ -65,6 +67,8 @@ export const ModalEvent = ({
     onEditModal(detailEventData);
   };
   const { mutateAsync: addingEventSer } = useMutation({ mutationFn: addEvent });
+  const { mutateAsync: editEventSer } = useMutation({ mutationFn: putEvent });
+
   const addingEvent = async () => {
     const result = await addingEventSer({
       label: eventName,
@@ -75,6 +79,30 @@ export const ModalEvent = ({
       location: eventLocation,
       description: eventDescription,
     });
+    if (result.status != 404 && result.status != 500) {
+      alert("Add Thành Công");
+      refetch();
+    } else {
+      alert("Lỗi Add");
+    }
+  };
+  const editEvent = async () => {
+    const result = await editEventSer({
+      id: id,
+      label: eventName,
+      startHour: eventFrom,
+      endHour: eventTo,
+      date: eventDate,
+      participants: eventParticipants,
+      location: eventLocation,
+      description: eventDescription,
+    });
+    if (result.status != 404 && result.status != 500) {
+      alert("Edit Thành Công");
+      refetch();
+    } else {
+      alert("Lỗi Edit");
+    }
   };
   return (
     <>
@@ -250,7 +278,7 @@ export const ModalEvent = ({
                 <Button onClick={handleClose} variant="text">
                   Cancel
                 </Button>
-                <Button variant="contained" color="primary">
+                <Button onClick={editEvent} variant="contained" color="primary">
                   Edit
                 </Button>
               </Box>

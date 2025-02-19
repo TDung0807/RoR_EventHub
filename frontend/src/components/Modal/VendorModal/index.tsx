@@ -14,7 +14,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { MyButton, MyTextFields } from "../../index";
 import { DateTimeField } from "@mui/x-date-pickers/DateTimeField";
-import { addVendor } from "../../../service/Vendor";
+import { addVendor, putVendor } from "../../../service/Vendor";
 import { useMutation } from "@tanstack/react-query";
 export function VendorModal({ action, handleClose, data, ...props }) {
   const [vendorName, setVendorName] = useState("");
@@ -22,9 +22,10 @@ export function VendorModal({ action, handleClose, data, ...props }) {
   const [contact, setContact] = useState(null);
   const [timeLimit, setTimeLimit] = useState(null);
   const [distanceLimit, setDistanceLimit] = useState("");
-
+  const [id, setId] = useState("");
   useEffect(() => {
     if (data) {
+      setId(data.id || "");
       setVendorName(data.name || "");
       setServiceType(data.service || "");
       setContact(data.contact || null);
@@ -33,16 +34,42 @@ export function VendorModal({ action, handleClose, data, ...props }) {
     }
   }, [data]); // Runs when `data` changes
 
-  const { mutateAsync } = useMutation({ mutationFn: addVendor });
+  const { mutateAsync: addingVendorsFunc } = useMutation({
+    mutationFn: addVendor,
+  });
+  const { mutateAsync: editVendorsFunc } = useMutation({
+    mutationFn: putVendor,
+  });
 
   const addingVendors = async () => {
-    const result = await mutateAsync({
+    const result = await addingVendorsFunc({
       name: vendorName,
       service: serviceType,
       contact: contact,
       time_limit: timeLimit,
       distance_limit: distanceLimit,
     });
+    if (result.status != 404 && result.status != 500) {
+      alert("Add Thành Công");
+    } else {
+      alert("Lỗi Add");
+    }
+  };
+
+  const editVendors = async () => {
+    const result = await editVendorsFunc({
+      id: id,
+      name: vendorName,
+      service: serviceType,
+      contact: contact,
+      time_limit: timeLimit,
+      distance_limit: distanceLimit,
+    });
+    if (result.status != 404 && result.status != 500) {
+      alert("Edit Thành Công");
+    } else {
+      alert("Lỗi Edit");
+    }
   };
 
   const handleVendorNameChange = (event) => setVendorName(event.target.value);
@@ -183,7 +210,7 @@ export function VendorModal({ action, handleClose, data, ...props }) {
               label="Edit"
               variant="contained"
               sx={{ width: 120, height: "40px" }}
-              onClick={handleClose}
+              onClick={editVendors}
             ></MyButton>
           )}
         </div>

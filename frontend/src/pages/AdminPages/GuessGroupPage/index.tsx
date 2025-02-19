@@ -12,13 +12,54 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  getAllGuessFromGroup,
+  deleteGuestsFromGroup,
+} from "../../../service/Guess";
+import { getGroupById } from "../../../service/GuessGroup";
+import { useQuery } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 
+const formatDate = (isoString) => {
+  const date = new Date(isoString);
+  return date.toISOString().replace("T", " ").substring(0, 19);
+};
 export function GuessGroupPage() {
-  const navigate = useNavigate();
   const [serviceSignal, setServiceSignal] = useState(true);
   const [informationSignal, setInformationSignal] = useState(false);
+  const [editData, setEditData] = useState({});
+  const changingBtn = ["Restaurant", "Hotel", "Transport"];
+  const [activeButton, setActiveButton] = useState(changingBtn[0]);
+  const [openSideModal, setOpenSideModal] = useState(false);
+  const [actionSideModal, setActionSideModal] = useState("Add");
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const {
+    data: guessGroupData,
+    error: guessGroupDataError,
+    isError: guessGroupDataIsError,
+    isLoading: guessGroupDataIsLoading,
+  } = useQuery(["guessGroupData", id], getGroupById);
 
+  const {
+    data: guestInGroup,
+    isError: guestInGroupIsError,
+    isLoading: guestInGroupIsLoading,
+    refetch: refetchGuestInGroup,
+  } = useQuery(["guestIngroup", id], getAllGuessFromGroup);
+  const { mutateAsync } = useMutation({ mutationFn: deleteGuestsFromGroup });
+
+  // Handle loading and error states
+  if (guestInGroupIsLoading || guessGroupDataIsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (guestInGroupIsError || guessGroupDataIsError) {
+    return <div>Error loading data. Please try again.</div>;
+  }
+  const guessGroupDataRender = guessGroupData?.data?.group || [];
+  const usersArr = guestInGroup?.data?.quests || [];
   const changeServiceTabs = () => {
     setServiceSignal(true);
     setInformationSignal(false);
@@ -27,6 +68,29 @@ export function GuessGroupPage() {
     setInformationSignal(true);
     setServiceSignal(false);
   };
+  const openEditTabs = (rows) => {
+    setOpenSideModal(true);
+    if (activeButton == "Restaurant") {
+      setEditData({
+        ...guessGroupDataRender.restaurant,
+        remark: guessGroupDataRender.dish_remark,
+      });
+    }
+    if (activeButton == "Hotel") {
+      setEditData({
+        ...guessGroupDataRender.hotel,
+        remark: guessGroupDataRender.hotel_remark,
+      });
+    }
+    if (activeButton == "Transport") {
+      setEditData({
+        ...guessGroupDataRender.transport,
+        remark: guessGroupDataRender.transport_remark,
+      });
+    }
+    setActionSideModal("Edit");
+  };
+
   const columns: GridColDef[] = [
     { field: "id", headerName: "No", width: 120 },
     { field: "name", headerName: "Name", width: 500 },
@@ -41,14 +105,20 @@ export function GuessGroupPage() {
           <div
             style={{
               marginTop: "auto",
-              paddingTop: 6,
               marginBottom: "auto",
               cursor: "pointer",
               textAlign: "right",
             }}
           >
             <DeleteIcon
-              onClick={() => alert("Bạn muốn xóa User này")}
+              onClick={async () => {
+                let result = await mutateAsync({
+                  group_id: id,
+                  quest_id: params.row.id,
+                });
+                refetchGuestInGroup();
+                alert("Bạn muốn xóa User này");
+              }}
             ></DeleteIcon>
           </div>
         );
@@ -56,21 +126,14 @@ export function GuessGroupPage() {
       sortable: false,
     },
   ];
-  const rows = [
-    { id: 1, name: "Trịnh Trần Phương Tứn", email: "tun@gmail.com" },
-    { id: 2, name: "Dũng 5 ngày không tắm", email: "tun@gmail.com" },
-    { id: 3, name: "Dũng 7 ngày không đánh răng", email: "tun@gmail.com" },
-  ];
+
   const paginationModel = { page: 0, pageSize: 5 };
 
-  const changingBtn = ["Lunchbox", "Hotel", "Transport"];
-  const [activeButton, setActiveButton] = useState(changingBtn[0]);
-  const [openSideModal, setOpenSideModal] = useState(false);
-  const [actionSideModal, setActionSideModal] = useState("Add");
   return (
     <div>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <ModalSideGuessinfo
+          data={editData}
           open={openSideModal}
           handleClose={() => {
             setOpenSideModal(false);
@@ -87,12 +150,6 @@ export function GuessGroupPage() {
           >
             &lt;
           </button>
-          <MyButton
-            label="Publish"
-            className={styles.publishButton}
-            sx={{ width: 227, height: 48 }}
-            variant="contained"
-          ></MyButton>
         </div>
         <div className={styles.tabsContainer}>
           <div className="item_container">
@@ -119,15 +176,16 @@ export function GuessGroupPage() {
             <div>
               <div className={styles.cardSection}>
                 <DisplayCardGuestGroup
-                  dateCreated="15 December, 2024"
-                  lastUpdated="10:00 on 15 December, 2024"
-                  description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                  dateCreated={formatDate(guessGroupDataRender.created_at)}
+                  lastUpdated={formatDate(guessGroupDataRender.updated_at)}
+                  description={guessGroupDataRender.description}
                 />
               </div>
               <div className={styles.cardSection}>
                 <DisplayGuestListGroup
+                  idGuessGroup={id}
                   columns={columns}
-                  rows={rows}
+                  rows={usersArr}
                   paginationModel={paginationModel}
                 />
               </div>
@@ -151,7 +209,7 @@ export function GuessGroupPage() {
                     activeButton={activeButton}
                     setActiveButton={setActiveButton}
                   />
-                  <MyButton
+                  {/* <MyButton
                     label={`+ Add ${activeButton}`}
                     className={styles.publishButton}
                     sx={{ height: "38.4px" }}
@@ -160,16 +218,16 @@ export function GuessGroupPage() {
                       setOpenSideModal(true);
                       setActionSideModal("Add");
                     }}
-                  ></MyButton>
+                  ></MyButton> */}
                 </div>
               </div>
 
               <div className={styles.cardSection} style={{ paddingTop: 0 }}>
                 <DisplayGuessGroupSideInfo
+                  guessGroupData={guessGroupDataRender}
                   options={activeButton}
                   title={`${activeButton} information`}
-                  setOpenSideModal={setOpenSideModal}
-                  setActionSideModal={setActionSideModal}
+                  editFunc={openEditTabs}
                 />
               </div>
             </div>

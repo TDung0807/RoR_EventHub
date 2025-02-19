@@ -20,7 +20,7 @@ export const AdminGuestPage = () => {
   );
   const [openGuessGroupModal, setOpenGuessGroupModal] = useState(false);
   const [openGuessListModal, setOpenGuessListModal] = useState(false);
-  const [guessListData, setGuessListData] = useState({});
+  const [guessListId, setGuessListId] = useState({});
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -29,12 +29,26 @@ export const AdminGuestPage = () => {
   const guessGroupRows = [
     "Group",
     "Group Status ",
-    "Date Created ",
     "Quantity",
+    "Date Created ",
     "Last Update",
     "",
   ];
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    return date.toISOString().replace("T", " ").substring(0, 19);
+  };
 
+  const transformedData = groupData.map(
+    ({ id, group, groupStatus, quantity, created_at, updated_at }) => ({
+      id,
+      group,
+      groupStatus,
+      quantity,
+      created_at: formatDate(created_at),
+      updated_at: formatDate(updated_at),
+    })
+  );
   return (
     <div>
       {openGuessGroupModal == true ? (
@@ -44,7 +58,8 @@ export const AdminGuestPage = () => {
             setOpenGuessGroupModal(false);
           }}
           basedData={[]}
-          handleChangingGuessList={(guessListData) => {
+          handleChangingGuessList={(guessListId) => {
+            setGuessListId(guessListId);
             setOpenGuessGroupModal(false);
             setOpenGuessListModal(true);
           }}
@@ -55,6 +70,7 @@ export const AdminGuestPage = () => {
       )}
       {openGuessListModal == true ? (
         <ModalGuestList
+          idGuessGroup={guessListId}
           open={openGuessListModal}
           handleClose={() => {
             setOpenGuessListModal(false);
@@ -99,7 +115,7 @@ export const AdminGuestPage = () => {
             editPre={`${location.pathname}`}
             editRef={true}
             utilityRows={guessGroupRows}
-            utilityData={groupData}
+            utilityData={transformedData}
             action={["edit", "delete"]}
           />
         </Box>

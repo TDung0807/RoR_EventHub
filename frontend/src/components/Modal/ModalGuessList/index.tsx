@@ -3,7 +3,15 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { MyButton, MyTextFields, DisplayGuessEmail } from "../../index";
-import { getGuestByName } from "../../../service/Guess";
+import {
+  getGuestByName,
+  getAllGuessFromGroup,
+  addGuestsToGroup,
+  getGuestByEmail,
+} from "../../../service/Guess";
+import { registerFunc } from "../../../service/User";
+import { useMutation } from "@tanstack/react-query";
+
 import { useQuery } from "react-query";
 
 export function ModalGuestList({
@@ -12,6 +20,7 @@ export function ModalGuestList({
   isCreated,
   handleCreated = () => {},
   urlBack = "",
+  idGuessGroup,
   ...props
 }) {
   const style = {
@@ -30,46 +39,81 @@ export function ModalGuestList({
   const [guestEmail, setGuestEmail] = useState("");
   const [guestName, setGuestName] = useState("");
   const [shouldFetchGuest, setShouldFetchGuest] = useState(false);
+  const { mutateAsync: addGuestToGroup } = useMutation({
+    mutationFn: addGuestsToGroup,
+  });
+  const { mutateAsync: registerService } = useMutation({
+    mutationFn: registerFunc,
+  });
 
   const {
-    data: guestResult,
-    isError: guestIsError,
-    isLoading: guestIsLoading,
+    data: guestInGroup,
+    isError: guest1InGroupIsError,
+    isLoading: guest1InGroupIsLoading,
+    refetch: refetchGuestInGroup,
+  } = useQuery(["guestIngroup", idGuessGroup], getAllGuessFromGroup);
+  const {
+    data: guestResult2,
+    isError: guest2IsError,
+    isLoading: guest2IsLoading,
   } = useQuery(
     ["guessTaking", guestName],
     () =>
       //@ts-ignore
-      getGuestByName(guestName),
+      getGuestByEmail(encodeURIComponent(guestEmail)),
+    {
+      enabled: shouldFetchGuest, // Only run the query when shouldFetchGuest is true
+      onSettled: () => setShouldFetchGuest(false), // Reset after query is done
+    }
+  );
+  const {
+    data: guestResult1,
+    isError: guest1IsError,
+    isLoading: guest1IsLoading,
+  } = useQuery(
+    ["guessTaking", guestName],
+    () =>
+      //@ts-ignore
+      getG(guestName),
     {
       enabled: shouldFetchGuest, // Only run the query when shouldFetchGuest is true
       onSettled: () => setShouldFetchGuest(false), // Reset after query is done
     }
   );
 
-  const addingGuestToGroup = () => {
-    setShouldFetchGuest(true); // Trigger the query
-  };
-
   // Handle loading and error states
-  if (guestIsLoading) {
+  if (guest1IsLoading || guest1InGroupIsLoading || guest2IsLoading) {
     return <div>Loading...</div>;
   }
 
-  if (guestIsError) {
+  if (guest1IsError || guest1InGroupIsError || guest2IsError) {
     return <div>Error loading data. Please try again.</div>;
   }
+  const usersArr = guestInGroup?.data?.quests || [];
+  const addingGuestToGroup = async () => {
+    await setShouldFetchGuest(true); // Trigger the query
+    const guessData =
+      guestResult1?.data?.quest || guestResult2?.data?.quest || [];
 
-  const usersArr = [
-    { id: 1, email: "Jack97@gmail.com" },
-    { id: 2, email: "Jack97@gmail.com" },
-    { id: 3, email: "Jack97@gmail.com" },
-    { id: 4, email: "Jack97@gmail.com" },
-    { id: 5, email: "Jack97@gmail.com" },
-    { id: 6, email: "Jack97@gmail.com" },
-    { id: 7, email: "Jack97@gmail.com" },
-    { id: 8, email: "Jack97@gmail.com" },
-    { id: 9, email: "Jack97@gmail.com" },
-  ];
+    try {
+      let resultAddGroup = await addGuestToGroup({
+        group_id: idGuessGroup,
+        quest_ids: [guessData.id],
+      });
+      let resultRegister = await registerService({
+        user: {
+          username: guessData.name,
+          name: guessData.name,
+          role: 0,
+          password: "123",
+          email: guessData.email,
+        },
+      });
+      refetchGuestInGroup();
+    } catch {
+      alert("Không có khách cần tìm");
+    }
+  };
   return (
     <div>
       <Modal
@@ -153,7 +197,11 @@ export function ModalGuestList({
             variant="contained"
             onClick={addingGuestToGroup}
           ></MyButton>
-          <DisplayGuessEmail usersArray={usersArr}></DisplayGuessEmail>
+          <DisplayGuessEmail
+            idGuessGroup={idGuessGroup}
+            refetchFunc={refetchGuestInGroup}
+            usersArray={usersArr}
+          ></DisplayGuessEmail>
           <div
             className="btn_created"
             style={{

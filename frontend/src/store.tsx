@@ -10,6 +10,7 @@ type AccountAuthetication = {
   unsetIsUser: () => void;
   name: any;
   email: any;
+  userId: any;
   setInfomation: (information) => void;
   unsetInfomation: () => void;
 };
@@ -18,13 +19,14 @@ export const useAccountAuthetication = create<AccountAuthetication>((set) => ({
   isUser: false,
   email: "",
   name: "",
-
+  userId: "",
   setIsAdmin: () => {
     set({ isAdmin: true });
   },
   unsetIsAdmin: () => {
     set({ isAdmin: false });
   },
+
   setIsUser: () => {
     set({ isUser: true });
   },
@@ -32,7 +34,7 @@ export const useAccountAuthetication = create<AccountAuthetication>((set) => ({
     set({ isUser: false });
   },
   setInfomation: (info) => {
-    set({ name: info.name, email: info.email });
+    set({ name: info.name, email: info.email, userId: info.id });
   },
   unsetInfomation: () => {
     set({ name: "", email: "" });

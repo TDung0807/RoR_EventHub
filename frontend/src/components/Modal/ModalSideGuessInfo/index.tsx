@@ -29,8 +29,8 @@ export const ModalSideGuessinfo = ({
     <Modal open={open} onClose={handleClose}>
       <Box sx={modalStyle}>
         {/* Header */}
-        {option == "Lunchbox" && (
-          <LunchBoxModal
+        {option == "Restaurant" && (
+          <RestaurantModal
             data={data}
             action={action}
             handleClose={handleClose}

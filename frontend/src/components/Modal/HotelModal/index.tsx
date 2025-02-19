@@ -14,9 +14,11 @@ import {
   Stack,
 } from "@mui/material";
 import { MyButton } from "../../index";
-import { addHotel } from "../../../service/Hotel";
+import { addHotel, putHotel } from "../../../service/Hotel";
 import { useMutation } from "@tanstack/react-query";
 export function HotelModal({ action, handleClose, data, ...props }) {
+  const hotelId = data != null && data.id != null ? data.id : "";
+
   const [address, setAddress] = useState(
     data != null && data.address != null ? data.address : ""
   );
@@ -62,9 +64,14 @@ export function HotelModal({ action, handleClose, data, ...props }) {
   const handleDistantChange = (event) => setDistant(event.target.value);
   const handleContactChange = (event) => setContact(event.target.value);
 
-  const { mutateAsync } = useMutation({ mutationFn: addHotel });
+  const { mutateAsync: addingHotelsFunc } = useMutation({
+    mutationFn: addHotel,
+  });
+  const { mutateAsync: putHotelFunc } = useMutation({
+    mutationFn: putHotel,
+  });
   const addingHotels = async () => {
-    const result = await mutateAsync({
+    const result = await addingHotelsFunc({
       name: hotelName,
       address: address,
       rating: starValue,
@@ -74,6 +81,29 @@ export function HotelModal({ action, handleClose, data, ...props }) {
       checkin_time: checkinTime,
       checkout_time: checkoutTime,
     });
+    if (result.status != 404 && result.status != 500) {
+      alert("Add Thành Công");
+    } else {
+      alert("Lỗi Add");
+    }
+  };
+  const editHotels = async () => {
+    const result = await putHotelFunc({
+      id: hotelId,
+      name: hotelName,
+      address: address,
+      rating: starValue,
+      star: starValue,
+      distance: distant,
+      contact: contact,
+      checkin_time: checkinTime,
+      checkout_time: checkoutTime,
+    });
+    if (result.status != 404 && result.status != 500) {
+      alert("Edit Thành Công");
+    } else {
+      alert("Lỗi Edit");
+    }
   };
   return (
     <div>
@@ -195,7 +225,7 @@ export function HotelModal({ action, handleClose, data, ...props }) {
               label="Edit"
               variant="contained"
               sx={{ width: 120, height: "40px" }}
-              onClick={handleClose}
+              onClick={editHotels}
             ></MyButton>
           )}
         </div>

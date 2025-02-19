@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import styles from "./Navbar.module.scss"; // Make sure the path is correct
+import styles from "./UserNavbar.module.scss"; // Make sure the path is correct
 import { navbarImage } from "../../assets"; // Adjust the path based on your project structure
 import BookIcon from "@mui/icons-material/Book";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
@@ -22,7 +22,7 @@ export const UserNavbar = () => {
           isExpanded ? styles.expanded : styles.collapsed
         }`}
       >
-        <ul>
+        <ul className="navbar_container">
           <li onClick={toggleNavbar} style={{ cursor: "pointer" }}>
             <MenuIcon
               style={{
