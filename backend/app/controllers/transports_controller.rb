@@ -66,12 +66,7 @@ class TransportsController < ApplicationController
     def get_transport_by_vendor_id
       if current_user
         transports = Transport.where(vendor_id: params[:vendor_id])
-  
-        if transports.any?
-          render json: { transports: transports.as_json }, status: :ok
-        else
-          render json: { message: "No transports found for this vendor" }, status: :not_found
-        end
+        render json: { transports: transports.as_json }, status: :ok
       else
         render json: { error: "Unauthorized" }, status: :unauthorized
       end
