@@ -7,18 +7,18 @@ Rails.application.routes.draw do
   resources :events, only: [:create, :index, :edit, :update, :destroy] do
     collection do
       get :upcoming
-    end
-    member do
       get 'user_events/:user_id', to: 'events#events_by_user'
     end
   end
 
   resources :transports do
     collection do
-      get :get_transport_by_vendor_id
+      get :get_by_vendor
     end
   end
+
   resources :vendors, only: [:create, :index, :update, :destroy]
+
   resources :hotels, only: [:create, :index, :show, :update, :destroy] do
     resources :rooms, only: [:create, :index, :show, :update, :destroy]
   end
@@ -30,9 +30,11 @@ Rails.application.routes.draw do
   end
 
   resources :quests, only: [:create, :index, :show, :update, :destroy] do
+    collection do
+      get 'find_by_name/:name', to: 'quests#find_by_name'
+      get 'find_by_email/:email', to: 'quests#find_by_email'
+    end
     get 'groups', to: 'quests#groups'
-    get 'find_by_name/:name', to: 'quests#find_by_name', on: :collection
-    get 'find_by_email/:email', to: 'quests#find_by_email', on: :collection
   end
 
   resources :restaurants, only: [:create, :index, :show, :update, :destroy] do
@@ -46,5 +48,9 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :ingredients, only: [:create, :index, :show, :update, :destroy]
+  resources :ingredients, only: [:create, :index, :show, :update, :destroy] do
+    collection do
+      get :by_name
+    end
+  end
 end

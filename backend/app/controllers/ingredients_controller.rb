@@ -1,5 +1,5 @@
 class IngredientsController < ApplicationController
-  before_action :authenticate, only: [:create, :index, :show, :update, :destroy]
+  before_action :authenticate, only: [:create, :index, :show, :update, :destroy, :get_by_name]
 
   def create
     if current_user
@@ -48,7 +48,14 @@ class IngredientsController < ApplicationController
       render json: { error: "Unauthorized" }, status: :unauthorized
     end
   end
-
+  def get_by_name
+    @ingredient = Ingredient.find_by("LOWER(name) = ?", params[:name].downcase)
+    if @ingredient
+      render json: @ingredient.as_json, status: :ok
+    else
+      render json: { error: "Ingredient not found" }, status: :not_found
+    end
+  end
   private
 
   def ingredient_params
