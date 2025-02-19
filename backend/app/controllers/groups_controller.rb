@@ -20,17 +20,17 @@ class GroupsController < ApplicationController
     end
   
     def index
-      groups = Group.includes(:restaurant).all
-      render json: { groups: groups.as_json(include: :restaurant) }, status: :ok
+      groups = Group.includes(:restaurant, :transport, :hotel).all
+      render json: { groups: groups.as_json(include: [:restaurant, :transport, :hotel]) }, status: :ok
     end
   
     def show
-      @group = Group.includes(:restaurant).find_by(id: params[:id])
+      @group = Group.includes(:restaurant, :transport, :hotel).find_by(id: params[:id])
       unless @group
         render json: { message: "Group not found" }, status: :not_found
         return
       end
-      render json: { group: @group.as_json(include: :restaurant) }, status: :ok
+      render json: { group: @group.as_json(include: [:restaurant, :transport, :hotel]) }, status: :ok
     end
   
     def update
