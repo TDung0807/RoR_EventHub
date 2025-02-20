@@ -1,5 +1,5 @@
 # Use latest Node.js for building the frontend
-FROM node:latest-alpine AS build
+FROM node:alpine AS build
 
 # Set working directory
 WORKDIR /app
