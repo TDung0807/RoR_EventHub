@@ -20,50 +20,46 @@ ENV RAILS_ENV=production \
 # Build stage for dependencies
 FROM base AS build
 
-# Install build dependencies
+# Install only necessary build dependencies
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config && \
+    apt-get install --no-install-recommends -y build-essential libpq-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy only the necessary files for dependency installation
+# Copy only necessary files for dependency installation
 COPY Gemfile Gemfile.lock ./
 
 # Install gems efficiently
 RUN bundle install --jobs=4 --retry=3 && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
+    rm -rf ~/.bundle/ "$BUNDLE_PATH"/ruby/*/cache
 
-# Copy the entire app
+# Copy application code
 COPY . .
 
-# Precompile assets and bootsnap
-RUN bundle exec bootsnap precompile --gemfile && \
-    bundle exec bootsnap precompile app/ lib/
+# Precompile bootsnap
+RUN bundle exec bootsnap precompile --gemfile && bundle exec bootsnap precompile app/ lib/
 
-# Adjust script permissions
-RUN chmod +x bin/* && sed -i "s/\r$//g" bin/*
+# Ensure scripts are executable
+RUN chmod +x bin/* && sed -i 's/\r$//' bin/*
 
 # Final production image
 FROM base
 
-# Create a non-root user for security
-RUN groupadd --system --gid 1000 rails && \
-    useradd --system --uid 1000 --gid 1000 --create-home --shell /bin/bash rails
+# Create non-root user for security
+RUN addgroup --system rails && adduser --system --ingroup rails rails
 
 # Copy built application and dependencies
-COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
+COPY --from=build "$BUNDLE_PATH" "$BUNDLE_PATH"
 COPY --from=build /rails /rails
 
-# Change ownership for runtime directories
-RUN chown -R rails:rails /rails/db /rails/log /rails/storage /rails/tmp
+# Set permissions
+RUN chown -R rails:rails /rails
 
-# Switch to the non-root user
+# Switch to non-root user
 USER rails
 
-# Expose the port Rails runs on
+# Expose Rails port
 EXPOSE 3000
 
-# Default entrypoint
+# Default entrypoint and command
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-
-# Default command
 CMD ["./bin/rails", "server"]

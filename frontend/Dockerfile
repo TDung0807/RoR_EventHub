@@ -1,5 +1,5 @@
-# Use Node.js for building the frontend
-FROM node:20-alpine AS build
+# Use latest Node.js for building the frontend
+FROM node:latest-alpine AS build
 
 # Set working directory
 WORKDIR /app
@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy package files for efficient caching
 COPY package.json package-lock.json ./
 
-# Install dependencies (optimize for peer deps issue)
-RUN npm ci --legacy-peer-deps
+# Install dependencies efficiently
+RUN npm ci --legacy-peer-deps --prefer-offline --no-audit
 
 # Copy the rest of the app files
 COPY . .

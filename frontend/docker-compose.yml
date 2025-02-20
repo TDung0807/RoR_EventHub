@@ -9,5 +9,3 @@ services:
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-    depends_on:
-      - rails_app
