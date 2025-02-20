@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     resources :ingredients, only: [:index]
     member do
       post :add_ingredients
+      delete :remove_ingredients
     end
   end
   
