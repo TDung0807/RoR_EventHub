@@ -16,6 +16,8 @@ import { MyButton, MyTextFields } from "../../index";
 import { DateTimeField } from "@mui/x-date-pickers/DateTimeField";
 import { addVendor, putVendor } from "../../../service/Vendor";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+
 export function VendorModal({ action, handleClose, data, ...props }) {
   const [vendorName, setVendorName] = useState("");
   const [serviceType, setServiceType] = useState("");
@@ -45,35 +47,63 @@ export function VendorModal({ action, handleClose, data, ...props }) {
   });
 
   const addingVendors = async () => {
-    const result = await addingVendorsFunc({
-      name: vendorName,
-      service: serviceType,
-      contact: contact,
-      time_limit: timeLimit,
-      distance_limit: distanceLimit,
-      transport_type: transportType,
-    });
-    if (result.status != 404 && result.status != 500) {
-      alert("Add Thành Công");
-    } else {
-      alert("Lỗi Add");
+    try {
+      const result = await addingVendorsFunc({
+        name: vendorName,
+        service: serviceType,
+        contact: contact,
+        time_limit: timeLimit,
+        distance_limit: distanceLimit,
+        transport_type: transportType,
+      });
+      if (result.status != 404 && result.status != 500) {
+        toast("Thêm thành công ùi", {
+          autoClose: 3000,
+          type: "success",
+        });
+        handleClose();
+      } else {
+        toast("Lỗi ùi nè bạn ui", {
+          autoClose: 3000,
+          type: "error",
+        });
+      }
+    } catch {
+      toast("Lỗi ùi nè bạn ui", {
+        autoClose: 3000,
+        type: "error",
+      });
     }
   };
 
   const editVendors = async () => {
-    const result = await editVendorsFunc({
-      id: id,
-      name: vendorName,
-      service: serviceType,
-      contact: contact,
-      time_limit: timeLimit,
-      distance_limit: distanceLimit,
-      transport_type: transportType,
-    });
-    if (result.status != 404 && result.status != 500) {
-      alert("Edit Thành Công");
-    } else {
-      alert("Lỗi Edit");
+    try {
+      const result = await editVendorsFunc({
+        id: id,
+        name: vendorName,
+        service: serviceType,
+        contact: contact,
+        time_limit: timeLimit,
+        distance_limit: distanceLimit,
+        transport_type: transportType,
+      });
+      if (result.status != 404 && result.status != 500) {
+        toast("Sửa thành công ùi", {
+          autoClose: 3000,
+          type: "success",
+        });
+        handleClose();
+      } else {
+        toast("Lỗi ùi nè bạn ui", {
+          autoClose: 3000,
+          type: "error",
+        });
+      }
+    } catch {
+      toast("Lỗi ùi nè bạn ui", {
+        autoClose: 3000,
+        type: "error",
+      });
     }
   };
 

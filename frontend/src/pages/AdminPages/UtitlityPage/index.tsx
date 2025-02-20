@@ -141,7 +141,7 @@ export function UtilityPage() {
   const isTransportError = transportDataQueries.some((query) => query.isError);
   if (isRoomLoading || isTransportLoading)
     return <div>Loading Room & Transport data...</div>;
-  if (isRoomError || isTransportLoading)
+  if (isRoomError || isTransportError)
     return <div>Error loading Room & Transport data.</div>;
 
   // Xử lý dữ liệu khách sạn và phòng

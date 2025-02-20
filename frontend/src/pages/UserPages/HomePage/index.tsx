@@ -77,7 +77,7 @@ export function UserHomePage() {
               fontWeight: 700,
             }}
           >
-            WELCOME TO CEH SYSTEM
+            WELCOME TO G&D SYSTEM
           </h1>
         </header>
         <section className={styles.eventsSection}>

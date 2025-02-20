@@ -15,6 +15,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { MyButton, MyTextFields } from "../../index";
 import { addTranspost, putTranspost } from "../../../service/Transport";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+
 export function TransportModal({
   action,
   handleClose,
@@ -46,32 +48,60 @@ export function TransportModal({
     mutationFn: putTranspost,
   });
   const addingTransport = async () => {
-    const result = await addTransportFunc({
-      vendor_id: mainDataId,
-      transport_type: transportType[type],
-      brand: brand,
-      price: price,
-      remark: remark,
-    });
-    if (result.status != 404 && result.status != 500) {
-      alert("Add Thành Công");
-    } else {
-      alert("Lỗi Add");
+    try {
+      const result = await addTransportFunc({
+        vendor_id: mainDataId,
+        transport_type: transportType[type],
+        brand: brand,
+        price: price,
+        remark: remark,
+      });
+      if (result.status != 404 && result.status != 500) {
+        toast("Thêm thành công ùi", {
+          autoClose: 3000,
+          type: "success",
+        });
+        handleClose();
+      } else {
+        toast("Lỗi ùi nè bạn ui", {
+          autoClose: 3000,
+          type: "error",
+        });
+      }
+    } catch {
+      toast("Lỗi ùi nè bạn ui", {
+        autoClose: 3000,
+        type: "error",
+      });
     }
   };
   const editTransport = async () => {
-    const result = await putTransportFunc({
-      id: id,
-      vendor_id: mainDataId,
-      transport_type: transportType[type],
-      brand: brand,
-      price: price,
-      remark: remark,
-    });
-    if (result.status != 404 && result.status != 500) {
-      alert("Edit Thành Công");
-    } else {
-      alert("Lỗi Edit");
+    try {
+      const result = await putTransportFunc({
+        id: id,
+        vendor_id: mainDataId,
+        transport_type: transportType[type],
+        brand: brand,
+        price: price,
+        remark: remark,
+      });
+      if (result.status != 404 && result.status != 500) {
+        toast("Sửa thành công ùi", {
+          autoClose: 3000,
+          type: "success",
+        });
+        handleClose();
+      } else {
+        toast("Lỗi ùi nè bạn ui", {
+          autoClose: 3000,
+          type: "error",
+        });
+      }
+    } catch {
+      toast("Lỗi ùi nè bạn ui", {
+        autoClose: 3000,
+        type: "error",
+      });
     }
   };
   const handleTypeChange = (event) => setType(event.target.value);

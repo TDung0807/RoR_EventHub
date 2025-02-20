@@ -9,3 +9,6 @@ export const createdDished = async (dishedData) => {
     dishedData
   );
 };
+export const editDished = async (dishedData) => {
+  return client.put(`/dished/${dishedData.id[0]}`, dishedData);
+};

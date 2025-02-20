@@ -19,6 +19,7 @@ import { useQuery } from "react-query";
 import { getHotels } from "../../../service/Hotel";
 import { getAllTranspost } from "../../../service/Transport";
 import { getRestaurants } from "../../../service/Restaurant";
+import { toast } from "react-toastify";
 
 export function GuessGroupModal({
   open,
@@ -233,7 +234,25 @@ export function GuessGroupModal({
                 label={action === "Add" ? "Add" : "Edit"}
                 variant="contained"
                 sx={{ width: 120, height: "40px" }}
-                onClick={action === "Add" ? addingGroup : handleClose}
+                onClick={
+                  action === "Add"
+                    ? () => {
+                        try {
+                          addingGroup();
+                          toast("Thêm thành công ùi", {
+                            autoClose: 3000,
+                            type: "success",
+                          });
+                          handleClose();
+                        } catch {
+                          toast("Lỗi ùi nè bạn ui", {
+                            autoClose: 3000,
+                            type: "error",
+                          });
+                        }
+                      }
+                    : handleClose
+                }
               />
             </Box>
           </>
