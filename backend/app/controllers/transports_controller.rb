@@ -46,7 +46,15 @@ class TransportsController < ApplicationController
         render json: { error: "Unauthorized" }, status: :unauthorized
       end
     end
-  
+    def show
+      transport = Transport.find_by(id: params[:id])
+      if transport
+        render json: transport.as_json, status: :ok
+      else
+        render json: { message: "Transport not found" }, status: :not_found
+      end
+    end
+    
     def destroy
       if current_user
         transport = Transport.find_by(id: params[:id])
