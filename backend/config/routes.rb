@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
-  resources :users, only: [:create, :index]
+  resources :users, only: [:create, :index, :show]
   post 'login', to: "authentication#login"
   
   resources :events, only: [:create, :index, :edit, :update, :destroy] do
@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     resources :ingredients, only: [:index]
     member do
       post :add_ingredients
+      delete :remove_ingredients
     end
   end
   

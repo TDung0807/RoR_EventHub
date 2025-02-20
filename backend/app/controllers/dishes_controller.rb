@@ -65,9 +65,21 @@ class DishesController < ApplicationController
       render json: { error: "Unauthorized" }, status: :unauthorized
     end
   end
-  
+  def remove_ingredients
+    if current_user
+      @dish = Dish.find(params[:id])
+      if params[:ingredient_ids]
+        ingredients = Ingredient.find(params[:ingredient_ids])
+        @dish.ingredients.delete(ingredients)
+        render json: { message: "Ingredients removed successfully", dish: @dish.as_json(include: :ingredients) }, status: :ok
+      else
+        render json: { message: "No ingredient IDs provided" }, status: :bad_request
+      end
+    else
+      render json: { error: "Unauthorized" }, status: :unauthorized
+    end
+  end
   private
-
   def dish_params
     params.require(:dish).permit(:name, :price, :description, :dish_type, :restaurant_id, ingredient_ids: [])
   end
