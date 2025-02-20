@@ -5,7 +5,8 @@ export const getAllIntergrient = async () => {
 export const getAllIntergrientById = async (id) => {
   return client.get(`/ingredients/${id}`);
 };
-export const getAllIntergrientByDishedId = async (id) => {
+export const getAllIntergrientByDishedId = async ({ queryKey }) => {
+  const [_, id] = queryKey;
   return client.get(`/dishes/${id}/ingredients`);
 };
 export const addIntergrient = async (integrientData) => {

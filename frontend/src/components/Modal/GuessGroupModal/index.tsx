@@ -152,30 +152,6 @@ export function GuessGroupModal({
 
             <TextField
               fullWidth
-              label="Hotel Remark"
-              value={remarkHotel}
-              onChange={(e) => setRemarkHotel(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-
-            <TextField
-              fullWidth
-              label="Transport Remark"
-              value={remarkTransport}
-              onChange={(e) => setRemarkTransport(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-
-            <TextField
-              fullWidth
-              label="Dish Remark"
-              value={remarkDished}
-              onChange={(e) => setRemarkDished(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-
-            <TextField
-              fullWidth
               label="Description"
               value={description}
               onChange={handleChangedDescription}

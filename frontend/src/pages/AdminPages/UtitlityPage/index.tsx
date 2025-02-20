@@ -94,7 +94,7 @@ export function UtilityPage() {
         rooms: query.data?.data?.rooms || [],
       }));
 
-      if (JSON.stringify(newRoomData) != JSON.stringify(transportData)) {
+      if (JSON.stringify(newRoomData) != JSON.stringify(roomData)) {
         setRoomData(newRoomData);
       }
     }
@@ -139,8 +139,10 @@ export function UtilityPage() {
     (query) => query.isLoading
   );
   const isTransportError = transportDataQueries.some((query) => query.isError);
-  if (isRoomLoading) return <div>Loading Room & Transport data...</div>;
-  if (isRoomError) return <div>Error loading Room & Transport data.</div>;
+  if (isRoomLoading || isTransportLoading)
+    return <div>Loading Room & Transport data...</div>;
+  if (isRoomError || isTransportLoading)
+    return <div>Error loading Room & Transport data.</div>;
 
   // Xử lý dữ liệu khách sạn và phòng
   const hotelsData = hotelsRawsDatas.map(

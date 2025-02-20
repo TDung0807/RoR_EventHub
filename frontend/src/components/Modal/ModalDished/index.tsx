@@ -16,7 +16,11 @@ import { createdDished } from "../../../service/Dish";
 import { useQuery } from "react-query";
 
 import { useMutation } from "@tanstack/react-query";
-import { addIntergrient, getAllIntergrient } from "../../../service/Ingredient";
+import {
+  addIntergrient,
+  getAllIntergrient,
+  getAllIntergrientByDishedId,
+} from "../../../service/Ingredient";
 export const ModalDished = ({
   open,
   setOpen,
@@ -42,20 +46,39 @@ export const ModalDished = ({
     isError: IntergrientIsError,
     isLoading: IntergrientIsLoading,
   } = useQuery(["intergrient"], getAllIntergrient);
+
   const { mutateAsync: addingDishedFunc } = useMutation({
     mutationFn: createdDished,
   });
   const { mutateAsync: addingIntegrient } = useMutation({
     mutationFn: addIntergrient,
   });
-  if (IntergrientIsError) {
+
+  const intergrientDataRender = intergrientData?.data?.ingredients || [];
+  const {
+    data: intergrientIdData,
+    isError: IntergrientIdIsError,
+    isLoading: IntergrientIdIsLoading,
+  } = useQuery(
+    ["intergrient", intergrientDataRender.id],
+    getAllIntergrientByDishedId
+  );
+  const intergrientDataIdRender = intergrientIdData?.data?.ingredients || [];
+
+  if (IntergrientIsError || IntergrientIdIsError) {
     return <div>Loading...</div>;
   }
 
-  if (IntergrientIsLoading) {
+  if (IntergrientIsLoading || IntergrientIdIsLoading) {
     return <div>Error loading data. Please try again.</div>;
   }
-  const intergrientDataRender = intergrientData?.data?.ingredients || [];
+  // Use useEffect to avoid triggering re-renders
+  useEffect(() => {
+    if (intergrientDataIdRender?.id) {
+      setIngredientValue(intergrientDataIdRender.id);
+    }
+  }, [intergrientDataIdRender?.id]);
+
   const handleDishedPriceChange = (e) => {
     setDishedPrice(e.target.value);
   };

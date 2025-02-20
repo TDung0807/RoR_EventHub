@@ -31,7 +31,8 @@ export function CalendarPage() {
   const handleOpen = () => setOpen(true);
   const { data, error, isError, isLoading, refetch } = useQuery(
     ["events"],
-    getAllEvent
+    getAllEvent,
+    { staleTime: 0 }
   );
   if (isLoading) {
     return <div>Loading...</div>;

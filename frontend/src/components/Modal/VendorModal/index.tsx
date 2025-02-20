@@ -22,6 +22,8 @@ export function VendorModal({ action, handleClose, data, ...props }) {
   const [contact, setContact] = useState(null);
   const [timeLimit, setTimeLimit] = useState(null);
   const [distanceLimit, setDistanceLimit] = useState("");
+  const [transportType, setTransportType] = useState("");
+
   const [id, setId] = useState("");
   useEffect(() => {
     if (data) {
@@ -31,6 +33,7 @@ export function VendorModal({ action, handleClose, data, ...props }) {
       setContact(data.contact || null);
       setTimeLimit(data.time_limit || null);
       setDistanceLimit(data.distance_limit || "");
+      setTransportType(data.transport_type || "");
     }
   }, [data]); // Runs when `data` changes
 
@@ -48,6 +51,7 @@ export function VendorModal({ action, handleClose, data, ...props }) {
       contact: contact,
       time_limit: timeLimit,
       distance_limit: distanceLimit,
+      transport_type: transportType,
     });
     if (result.status != 404 && result.status != 500) {
       alert("Add Thành Công");
@@ -64,6 +68,7 @@ export function VendorModal({ action, handleClose, data, ...props }) {
       contact: contact,
       time_limit: timeLimit,
       distance_limit: distanceLimit,
+      transport_type: transportType,
     });
     if (result.status != 404 && result.status != 500) {
       alert("Edit Thành Công");
@@ -137,6 +142,22 @@ export function VendorModal({ action, handleClose, data, ...props }) {
         }}
         value={contact}
         onChange={handleContactChange}
+        sx={{ width: "100%" }}
+      ></MyTextFields>
+      <MyTextFields
+        id="outlined-password-input"
+        label="Transport Type"
+        type="text"
+        variant="outlined"
+        style={{
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginBottom: "20px",
+        }}
+        value={transportType}
+        onChange={(e) => {
+          setTransportType(e.target.value);
+        }}
         sx={{ width: "100%" }}
       ></MyTextFields>
       <MyTextFields
