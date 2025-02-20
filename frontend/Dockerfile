@@ -15,7 +15,7 @@ COPY . .
 
 # Set production mode and build
 ENV NODE_ENV=production
-RUN npm start
+RUN npm run build  # ✅ Corrected from `npm start` to `npm run build`
 
 # Use lightweight Nginx for serving the built app
 FROM nginx:alpine
