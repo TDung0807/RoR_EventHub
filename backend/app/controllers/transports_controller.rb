@@ -74,7 +74,7 @@ class TransportsController < ApplicationController
     def get_transport_by_vendor_id
       if current_user
         transports = Transport.where(vendor_id: params[:vendor_id])
-        render json: { transports: transports.as_json }, status: :ok
+        render json: { transports: transports.any? ? transports.as_json : nil }, status: :ok
       else
         render json: { error: "Unauthorized" }, status: :unauthorized
       end

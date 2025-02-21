@@ -98,22 +98,14 @@ class QuestsController < ApplicationController
 
   def find_by_name
     @quest = Quest.find_by(name: params[:name])
-
-    if @quest
-      render json: { quest: @quest.as_json }, status: :ok
-    else
-      render json: { message: "Quest not found with this name" }, status: :not_found
-    end
+  
+    render json: { quest: @quest ? @quest.as_json : nil }, status: :ok
   end
 
   def find_by_email
     Rails.logger.info "Looking for quest with email: #{params[:email]}"
     @quest = Quest.find_by(email: params[:email])
   
-    if @quest
-      render json: { quest: @quest.as_json }, status: :ok
-    else
-      render json: { message: "Quest not found with this email" }, status: :not_found
-    end
+    render json:  { quest: @quest ? @quest.as_json : nil }, status: :ok
   end
 end
