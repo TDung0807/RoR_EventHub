@@ -9,11 +9,13 @@ import { useAccountAuthetication } from "../../../store";
 
 export function UserHomePage() {
   const userId = useAccountAuthetication((state) => state.userId);
+
   const { data, error, isError, isLoading } = useQuery(
     ["events", userId],
     getEventsByUserId,
     { staleTime: 0 }
   );
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -81,6 +83,7 @@ export function UserHomePage() {
             WELCOME TO G&D SYSTEM
           </h1>
         </header>
+
         <section className={styles.eventsSection}>
           <h2>Upcoming event</h2>
           <MainTable

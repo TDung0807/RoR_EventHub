@@ -2,15 +2,18 @@ import { upcomingEvent } from "../../../mockdata/event";
 import { bannerBackGround } from "../../../assets";
 import React, { useEffect, useState } from "react";
 import styles from "./HomePage.module.scss";
-import { MainTable } from "../../../components";
+import { MainTable, GroupChoosingButton } from "../../../components";
 import { useQuery } from "react-query";
-import { getUpcomingEvent } from "../../../service/Event";
+import { getUpcomingEvent, getAllEvent } from "../../../service/Event";
 export function AdminHomePage() {
+  const changingBtn = ["Upcoming", "All"];
+  const [activeButton, setActiveButton] = useState(changingBtn[0]);
   const { data, error, isError, isLoading } = useQuery(
-    ["events"],
-    getUpcomingEvent,
+    activeButton === "Upcoming" ? ["Upcomingevents"] : ["events"],
+    activeButton === "Upcoming" ? getUpcomingEvent : getAllEvent,
     { staleTime: 0 }
   );
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -80,6 +83,21 @@ export function AdminHomePage() {
             WELCOME TO G&D SYSTEM
           </h1>
         </header>
+        <GroupChoosingButton
+          style={{
+            marginTop: 12,
+            marginBottom: 12,
+            display: "flex",
+            alignItems: "center",
+            border: "1px solid #ccc",
+            borderRadius: 10,
+            overflow: "hidden",
+            width: "fit-content",
+          }}
+          changingBtn={changingBtn}
+          activeButton={activeButton}
+          setActiveButton={setActiveButton}
+        />
         <section className={styles.eventsSection}>
           <h2>Upcoming event</h2>
           <MainTable

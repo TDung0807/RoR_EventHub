@@ -5,12 +5,12 @@ import { ModalEvent } from "components/Modal/ModalEvent";
 
 export const CalendarView = ({ events, onClickEventFunc = (item) => {} }) => {
   // Hàm chuyển đổi thời gian ISO thành định dạng 12 giờ (AM/PM)
-
+  console.log(events);
   const config = {
     options: {
       transitionMode: "zoom", // or fade
       startWeekOn: "mon", // or sun
-      defaultMode: "month", // or week | day | timeline
+      defaultMode: "day", // or week | day | timeline
       minWidth: 540,
       maxWidth: 540,
       minHeight: 540,
