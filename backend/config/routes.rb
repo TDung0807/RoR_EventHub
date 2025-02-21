@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :transports do
     collection do
       get :get_by_vendor
+      get :get_transport_by_vendor_id
     end
   end
 
