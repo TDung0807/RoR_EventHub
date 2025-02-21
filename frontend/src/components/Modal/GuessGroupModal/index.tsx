@@ -215,11 +215,23 @@ export function GuessGroupModal({
                 mt: 2,
               }}
               onClick={async () => {
-                let guessGroupData = await addingGroup();
-                handleChangingGuessList(guessGroupData.data.id);
+                try {
+                  let guessGroupData = await addingGroup();
+                  handleChangingGuessList(guessGroupData.data.id);
+                  toast("Thêm thành công ùi", {
+                    autoClose: 3000,
+                    type: "success",
+                  });
+                  handleClose();
+                } catch {
+                  toast("Chưa thêm Guess Group nè bạn ui", {
+                    autoClose: 3000,
+                    type: "error",
+                  });
+                }
               }}
             >
-              + Add Guess List (Optional)
+              + Add Guest List (Optional)
             </Typography>
 
             {/* Buttons */}

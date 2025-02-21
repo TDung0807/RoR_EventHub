@@ -8,11 +8,13 @@ import {
   getAllGuessFromGroup,
   addGuestsToGroup,
   getGuestByEmail,
+  createdGuest,
 } from "../../../service/Guess";
 import { registerFunc } from "../../../service/User";
 import { useMutation } from "@tanstack/react-query";
 
 import { useQuery } from "react-query";
+import { toast } from "react-toastify";
 
 export function ModalGuestList({
   open,
@@ -44,6 +46,9 @@ export function ModalGuestList({
   });
   const { mutateAsync: registerService } = useMutation({
     mutationFn: registerFunc,
+  });
+  const { mutateAsync: createGuestService } = useMutation({
+    mutationFn: createdGuest,
   });
 
   const {
@@ -94,24 +99,53 @@ export function ModalGuestList({
     await setShouldFetchGuest(true); // Trigger the query
     const guessData =
       guestResult1?.data?.quest || guestResult2?.data?.quest || [];
-
+    console.log(guessData);
     try {
-      let resultAddGroup = await addGuestToGroup({
-        group_id: idGuessGroup,
-        quest_ids: [guessData.id],
-      });
-      let resultRegister = await registerService({
-        user: {
-          username: guessData.name,
-          name: guessData.name,
-          role: 0,
-          password: "123",
-          email: guessData.email,
-        },
-      });
-      refetchGuestInGroup();
+      if (guessData.length != 0) {
+        let resultAddGroup = await addGuestToGroup({
+          group_id: idGuessGroup,
+          quest_ids: [guessData.id],
+        });
+        let resultRegister = await registerService({
+          user: {
+            username: guessData.name,
+            name: guessData.name,
+            role: 0,
+            password: "123",
+            email: guessData.email,
+          },
+        });
+        toast("Đã thêm khách mới thành công ùi", { type: "success" });
+        refetchGuestInGroup();
+      } else {
+        let resultAddGuest = await createGuestService({
+          name: guestName,
+          email: guestEmail,
+          phone: "0903829122",
+        });
+        const guessDataId = await resultAddGuest?.data?.id;
+        let resultAddGroup = await addGuestToGroup({
+          group_id: idGuessGroup,
+          quest_ids: [guessDataId],
+        });
+        let resultRegister = await registerService({
+          user: {
+            username: guestName,
+            name: guestName,
+            role: 0,
+            password: "123",
+            email: guestEmail,
+          },
+        });
+        toast("Đã thêm khách mới thành công với cài đặt mặc định ùi", {
+          type: "success",
+        });
+        refetchGuestInGroup();
+      }
     } catch {
-      alert("Không có khách cần tìm");
+      toast("Lỗi ùi nè bạn ui", {
+        type: "error",
+      });
     }
   };
   return (
@@ -131,7 +165,7 @@ export function ModalGuestList({
               }}
               className="numbering-place"
             >
-              <h2> Guess List</h2>
+              <h2 style={{ marginBottom: 24 }}> Guest List</h2>
               <div
                 style={{
                   backgroundColor: "#F1F9FF",

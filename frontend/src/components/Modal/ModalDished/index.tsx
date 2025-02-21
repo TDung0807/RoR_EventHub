@@ -66,14 +66,21 @@ export const ModalDished = ({
   });
 
   const intergrientDataRender = intergrientData?.data?.ingredients || [];
+  const ingredientId =
+    intergrientDataRender && intergrientDataRender.length
+      ? intergrientDataRender[0].id
+      : null;
+
   const {
     data: intergrientIdData,
     isError: IntergrientIdIsError,
     isLoading: IntergrientIdIsLoading,
   } = useQuery(
-    ["intergrient", intergrientDataRender.id],
-    getAllIntergrientByDishedId
+    ["intergrient", ingredientId],
+    () => getAllIntergrientByDishedId(ingredientId),
+    { enabled: Boolean(ingredientId) }
   );
+
   const intergrientDataIdRender = intergrientIdData?.data?.ingredients[0] || {};
 
   if (IntergrientIsError || IntergrientIdIsError) {

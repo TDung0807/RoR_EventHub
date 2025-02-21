@@ -71,6 +71,7 @@ export function DisplayGuessGroupSideInfo({
                 borderRadius: 10,
                 margin: 0,
               }}
+              src="https://vinfast-binhduong.vn/wp-content/uploads/2024/05/img9.webp"
             ></img>
 
             <div style={{ flex: 1 }}>
@@ -80,6 +81,9 @@ export function DisplayGuessGroupSideInfo({
               <p style={{ margin: "5px 0", color: "#555" }}>
                 <strong>Transport type:</strong>{" "}
                 {guessGroupData?.transport?.transport_type}
+              </p>
+              <p style={{ margin: "5px 0", color: "#555" }}>
+                <strong>Price:</strong> {guessGroupData?.transport?.price} VNĐ
               </p>
 
               {/* Remarks Section */}
@@ -115,6 +119,7 @@ export function DisplayGuessGroupSideInfo({
                 borderRadius: 10,
                 margin: 0,
               }}
+              src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/375261727.jpg?k=4f4e47cc7b14899307b6d9e6643f0ecbfd847f3dd42066d978107f0c2fbce37a&o=&hp=1"
             ></img>
 
             <div style={{ flex: 1 }}>
@@ -161,6 +166,7 @@ export function DisplayGuessGroupSideInfo({
                 borderRadius: 10,
                 margin: 0,
               }}
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm-sV3bNJlRSXFJqzRl1KyD694gHNZ4TZILg&s"
             ></img>
 
             <div style={{ flex: 1 }}>
@@ -171,6 +177,14 @@ export function DisplayGuessGroupSideInfo({
               <p style={{ margin: "5px 0", color: "#555" }}>
                 <strong>Cuisine type: </strong>
                 {guessGroupData?.restaurant?.cuisine}
+              </p>
+              <p style={{ margin: "5px 0", color: "#555" }}>
+                <strong>Contact: </strong>
+                {guessGroupData?.restaurant?.contact}
+              </p>
+              <p style={{ margin: "5px 0", color: "#555" }}>
+                <strong>Address: </strong>
+                {guessGroupData?.restaurant?.address}
               </p>
 
               {/* Remarks Section */}

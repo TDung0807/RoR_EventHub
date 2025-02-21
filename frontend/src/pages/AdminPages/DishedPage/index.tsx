@@ -41,12 +41,14 @@ export function DishedPage() {
   const dishedData = dishedRawsData?.data?.dishes || [];
 
   const intergrientQuery = useMemo(() => {
+    if (!dishedData || dishedData.length === 0) return [];
+
     return dishedData.map((dished) => ({
       queryKey: ["roomCurrently", dished.id],
       queryFn: () => getAllIntergrientByDishedId(dished.id),
       enabled: Boolean(dished.id),
     }));
-  }, [dishedData]);
+  }, [JSON.stringify(dishedData)]); // Tránh thay đổi object tham chiếu gây re-render
 
   const intergrientDataQueries = useQueries(intergrientQuery);
 

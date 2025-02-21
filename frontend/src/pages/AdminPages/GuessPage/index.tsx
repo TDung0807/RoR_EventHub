@@ -98,7 +98,7 @@ export const AdminGuestPage = () => {
               variant="h4"
               marginBottom={0}
             >
-              Guess Group List
+              Guest Group List
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Button
@@ -107,7 +107,7 @@ export const AdminGuestPage = () => {
                   setOpenGuessGroupModal(true);
                 }}
               >
-                + Create Guess Group
+                + Create Guest Group
               </Button>
             </Box>
           </Box>
