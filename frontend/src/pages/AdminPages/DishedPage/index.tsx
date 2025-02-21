@@ -47,7 +47,7 @@ export function DishedPage() {
       queryFn: () => getAllIntergrientByDishedId(dished.id),
       enabled: Boolean(dished.id),
     }));
-  }, [dishedData.length]); // Chỉ phụ thuộc vào số lượng phần tử
+  }, [dishedData]); // Chỉ phụ thuộc vào số lượng phần tử
 
   const intergrientDataQueries = useQueries(intergrientQuery);
 

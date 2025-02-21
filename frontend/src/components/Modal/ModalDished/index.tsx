@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   Modal,
   Box,
@@ -66,10 +66,9 @@ export const ModalDished = ({
   });
 
   const intergrientDataRender = intergrientData?.data?.ingredients || [];
-  const ingredientId =
-    intergrientDataRender && intergrientDataRender.length
-      ? intergrientDataRender[0].id
-      : null;
+  const ingredientId = useMemo(() => {
+    return intergrientDataRender.length ? intergrientDataRender[0].id : null;
+  }, [intergrientDataRender]);
 
   const {
     data: intergrientIdData,
@@ -84,7 +83,7 @@ export const ModalDished = ({
   const intergrientDataIdRender = intergrientIdData?.data?.ingredients[0] || {};
 
   if (IntergrientIsError || IntergrientIdIsError) {
-    return <div>Loading...</div>;
+    toast.error("Lỗi khi tải dữ liệu nguyên liệu!");
   }
 
   if (IntergrientIsLoading || IntergrientIdIsLoading) {
@@ -92,10 +91,13 @@ export const ModalDished = ({
   }
   // Use useEffect to avoid triggering re-renders
   useEffect(() => {
-    if (intergrientDataIdRender?.id) {
+    if (
+      intergrientDataIdRender?.id &&
+      intergrientDataIdRender.id !== ingredientValue
+    ) {
       setIngredientValue(intergrientDataIdRender.id);
     }
-  }, [intergrientDataIdRender?.id]);
+  }, [intergrientDataIdRender?.id, ingredientValue]);
 
   const handleDishedPriceChange = (e) => {
     setDishedPrice(e.target.value);
