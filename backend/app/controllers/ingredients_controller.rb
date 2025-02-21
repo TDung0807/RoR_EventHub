@@ -50,11 +50,7 @@ class IngredientsController < ApplicationController
   end
   def get_by_name
     @ingredient = Ingredient.find_by("LOWER(name) = ?", params[:name].downcase)
-    if @ingredient
-      render json: @ingredient.as_json, status: :ok
-    else
-      render json: { error: "Ingredient not found" }, status: :not_found
-    end
+    render json: { ingredient: @ingredient ? @ingredient.as_json : nil }, status: :ok
   end
   private
 

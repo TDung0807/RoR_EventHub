@@ -60,9 +60,9 @@ class EventsController < ApplicationController
       @user = User.find_by(id: params[:user_id])
       if @user
         @events = @user.events
-        render json: { events: @events.map(&:as_json) }, status: :ok
+        render json: { events: @events.any? ? @events.map(&:as_json) : nil }, status: :ok
       else
-        render json: { error: "User not found" }, status: :not_found
+        render json: { error: "User not found" }, status: :ok
       end
     else
       render json: { error: "Unauthorized" }, status: :unauthorized
