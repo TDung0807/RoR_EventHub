@@ -71,7 +71,6 @@ export function HotelTypeModal({
           type: "success",
         });
         roomDataQueries.forEach((query) => query.refetch());
-
         handleClose();
       } else {
         toast("Lỗi ùi nè bạn ui", {

@@ -12,7 +12,6 @@ import { fakeGuessGroupData } from "../../../mockdata";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { getAllGroup } from "../../../service/GuessGroup";
-
 export const AdminGuestPage = () => {
   const { data, error, isError, isLoading } = useQuery(
     ["guessgroups"],

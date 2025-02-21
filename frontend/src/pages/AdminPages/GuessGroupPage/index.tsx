@@ -20,6 +20,7 @@ import {
 import { getGroupById } from "../../../service/GuessGroup";
 import { useQuery } from "react-query";
 import { useMutation } from "@tanstack/react-query";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const formatDate = (isoString) => {
   const date = new Date(isoString);
@@ -150,7 +151,7 @@ export function GuessGroupPage() {
             }}
             className={styles.backButton}
           >
-            &lt;
+            <ArrowBackIcon />
           </button>
         </div>
         <div className={styles.tabsContainer}>

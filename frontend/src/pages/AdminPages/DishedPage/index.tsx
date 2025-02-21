@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { useQuery, useQueries } from "react-query";
 import { getAllDishedFromRestaurant } from "../../../service/Dish";
 import { getAllIntergrientByDishedId } from "../../../service/Ingredient";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export function DishedPage() {
   const { id } = useParams();
@@ -41,14 +42,12 @@ export function DishedPage() {
   const dishedData = dishedRawsData?.data?.dishes || [];
 
   const intergrientQuery = useMemo(() => {
-    if (!dishedData || dishedData.length === 0) return [];
-
-    return dishedData.map((dished) => ({
+    return (dishedData || []).map((dished) => ({
       queryKey: ["roomCurrently", dished.id],
       queryFn: () => getAllIntergrientByDishedId(dished.id),
       enabled: Boolean(dished.id),
     }));
-  }, [JSON.stringify(dishedData)]); // Tránh thay đổi object tham chiếu gây re-render
+  }, [dishedData.length]); // Chỉ phụ thuộc vào số lượng phần tử
 
   const intergrientDataQueries = useQueries(intergrientQuery);
 
@@ -90,7 +89,10 @@ export function DishedPage() {
       <Box sx={{ padding: 2 }}>
         <div className={styles.headerContainer}>
           <Link to="/admin/utility" style={{ width: "fit-content" }}>
-            <button className={styles.backButton}>&lt;</button>
+            <button className={styles.backButton}>
+              {" "}
+              <ArrowBackIcon />{" "}
+            </button>
           </Link>
 
           <MyButton
