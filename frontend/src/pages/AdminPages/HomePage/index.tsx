@@ -99,7 +99,9 @@ export function AdminHomePage() {
           setActiveButton={setActiveButton}
         />
         <section className={styles.eventsSection}>
-          <h2>Upcoming event</h2>
+          <h2>
+            {activeButton == "Upcoming" ? "Upcoming event" : "All Events"}
+          </h2>
           <MainTable
             utilityRows={upcomingEventsRows}
             utilityData={upcomingEventRender}
