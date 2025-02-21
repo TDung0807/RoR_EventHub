@@ -22,6 +22,7 @@ export function DishedPage() {
     error: dishedError,
     isError: dishedIsError,
     isLoading: dishedIsLoading,
+    refetch: refetchDishedFunc,
   } = useQuery(["dished", id], getAllDishedFromRestaurant);
   const handleOpen = () => setModalopen(true);
   const onEditModal = (item) => {
@@ -42,15 +43,15 @@ export function DishedPage() {
   const dishedData = dishedRawsData?.data?.dishes || [];
 
   const intergrientQuery = useMemo(() => {
-    return (dishedData || []).map((dished) => ({
+    return dishedData.map((dished) => ({
       queryKey: ["roomCurrently", dished.id],
       queryFn: () => getAllIntergrientByDishedId(dished.id),
       enabled: Boolean(dished.id),
     }));
-  }, [dishedData]); // Chỉ phụ thuộc vào số lượng phần tử
+  }, [dishedData]);
 
+  // useQueries luôn được gọi
   const intergrientDataQueries = useQueries(intergrientQuery);
-
   useEffect(() => {
     if (intergrientDataQueries.length > 0) {
       const newInterData = intergrientDataQueries.map((query, index) => ({
@@ -65,21 +66,18 @@ export function DishedPage() {
     }
   }, [JSON.stringify(intergrientDataQueries)]);
 
-  let dishedRenderData = [];
-  if (dishedData.length != 0) {
-    dishedRenderData = dishedData.map(
-      ({ description, created_at, updated_at, id, ...rest }, index) => {
-        const interData =
-          // @ts-ignore
-          intergrientDataQueries[index]?.data?.data?.ingredients || [];
-        return { ...rest, MainInter: interData };
-      }
-    );
-  }
+  const dishedRenderData = dishedData.map((dished, index) => {
+    const { description, created_at, updated_at, id, ...rest } = dished;
+    const interData =
+      //@ts-ignore
+      intergrientDataQueries[index]?.data?.data?.ingredients || [];
+    return { ...rest, MainInter: interData };
+  });
 
   return (
     <div>
       <ModalDished
+        refetchDishedFunc={refetchDishedFunc}
         restaurant_id={id}
         detailDishedData={detailDished}
         action={action}

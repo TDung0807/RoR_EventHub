@@ -58,6 +58,7 @@ export function UtilityPage() {
     error: vendorsError,
     isError: vendorsIsError,
     isLoading: vendorsIsLoading,
+    refetch: refetchVendorsFunc,
   } = useQuery(["vendors"], getAllVendor);
 
   const {
@@ -65,6 +66,7 @@ export function UtilityPage() {
     error: FnbError,
     isError: FnbIsError,
     isLoading: FnbIsLoading,
+    refetch: refetchRestaurantFunc,
   } = useQuery(["Fnb"], getRestaurants);
   const isLoading = hotelIsLoading || vendorsIsLoading || FnbIsLoading;
   const isError = hotelIsError || vendorsIsError || FnbIsError;
@@ -220,6 +222,8 @@ export function UtilityPage() {
           option={activeButton}
           action={actionSideModal}
           refetchHotels={refetchHotels}
+          refetchVendorsFunc={refetchVendorsFunc}
+          refetchRestaurantFunc={refetchRestaurantFunc}
         />
         <OtherSideModal
           roomDataQueries={roomDataQueries}

@@ -30,6 +30,7 @@ export const ModalDished = ({
   detailDishedData = null,
   action = "detail",
   restaurant_id = "1",
+  refetchDishedFunc,
 }) => {
   const handleClose = () => setOpen(false);
   const [dishedName, setDishedName] = useState("");
@@ -132,6 +133,7 @@ export const ModalDished = ({
           type: "success",
         });
         handleClose();
+        refetchDishedFunc();
       } else {
         toast("Lỗi ùi nè bạn ui", {
           autoClose: 3000,
@@ -173,6 +175,7 @@ export const ModalDished = ({
             type: "success",
           });
           handleClose();
+          refetchDishedFunc();
         } else {
           toast("Lỗi ùi nè bạn ui", {
             autoClose: 3000,

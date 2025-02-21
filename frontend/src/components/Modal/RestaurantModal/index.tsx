@@ -22,6 +22,7 @@ export function RestaurantModal({
   handleClose,
   data,
   refetchGuessGroup = null,
+  refetchRestaurantFunc = null,
   ...props
 }) {
   const [restaurant, setRestaurant] = useState("");
@@ -64,6 +65,9 @@ export function RestaurantModal({
           autoClose: 3000,
           type: "success",
         });
+        if (refetchRestaurantFunc != null) {
+          refetchRestaurantFunc();
+        }
         handleClose();
       } else {
         toast("Lỗi ùi nè bạn ui", {

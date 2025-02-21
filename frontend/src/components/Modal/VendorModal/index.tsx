@@ -18,7 +18,13 @@ import { addVendor, putVendor } from "../../../service/Vendor";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-export function VendorModal({ action, handleClose, data, ...props }) {
+export function VendorModal({
+  action,
+  handleClose,
+  data,
+  refetchVendorsFunc = null,
+  ...props
+}) {
   const [vendorName, setVendorName] = useState("");
   const [serviceType, setServiceType] = useState("");
   const [contact, setContact] = useState(null);
@@ -61,6 +67,9 @@ export function VendorModal({ action, handleClose, data, ...props }) {
           autoClose: 3000,
           type: "success",
         });
+        if (refetchVendorsFunc != null) {
+          refetchVendorsFunc();
+        }
         handleClose();
       } else {
         toast("Lỗi ùi nè bạn ui", {
@@ -92,6 +101,9 @@ export function VendorModal({ action, handleClose, data, ...props }) {
           autoClose: 3000,
           type: "success",
         });
+        if (refetchVendorsFunc != null) {
+          refetchVendorsFunc();
+        }
         handleClose();
       } else {
         toast("Lỗi ùi nè bạn ui", {

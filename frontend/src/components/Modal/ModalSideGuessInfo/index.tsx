@@ -14,6 +14,8 @@ export const ModalSideGuessinfo = ({
   refetchGuessGroup = null,
   refetchHotels = null,
   data = null,
+  refetchVendorsFunc = null,
+  refetchRestaurantFunc = null,
 }) => {
   const modalStyle = {
     position: "absolute",
@@ -62,6 +64,7 @@ export const ModalSideGuessinfo = ({
             data={data}
             action={action}
             handleClose={handleClose}
+            refetchVendorsFunc={refetchVendorsFunc}
           ></VendorModal>
         )}
         {option == "Fnb" && (
@@ -69,6 +72,7 @@ export const ModalSideGuessinfo = ({
             data={data}
             action={action}
             handleClose={handleClose}
+            refetchRestaurantFunc={refetchRestaurantFunc}
           />
         )}
       </Box>
