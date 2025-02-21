@@ -29,7 +29,7 @@ const formatTime = (isoString) => {
 export function UserCalendar() {
   const userId = useAccountAuthetication((state) => state.userId);
   const { data, error, isError, isLoading } = useQuery(
-    ["events", userId],
+    ["upcomingEvent", userId],
     getEventsByUserId,
     { staleTime: 0 }
   );

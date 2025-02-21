@@ -30,7 +30,7 @@ export function CalendarPage() {
   const [action, setAction] = useState("");
   const handleOpen = () => setOpen(true);
   const { data, error, isError, isLoading, refetch } = useQuery(
-    ["events"],
+    ["upcomingEvent"],
     getAllEvent,
     { staleTime: 0 }
   );
