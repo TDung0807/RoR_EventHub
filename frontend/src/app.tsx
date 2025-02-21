@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  HashRouter,
+} from "react-router-dom";
 import {
   AdminHomePage,
   LoginPage,
@@ -33,7 +38,7 @@ const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ToastContainer></ToastContainer>
-      <Router>
+      <HashRouter>
         <div className="App">
           <Routes>
             <Route path="/" element={<LoginPage />} />
@@ -58,7 +63,7 @@ const App: React.FC = () => {
             </Route>
           </Routes>
         </div>
-      </Router>
+      </HashRouter>
     </QueryClientProvider>
   );
 };
