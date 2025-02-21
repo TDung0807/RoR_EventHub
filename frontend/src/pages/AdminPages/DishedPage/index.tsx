@@ -24,6 +24,42 @@ export function DishedPage() {
     isLoading: dishedIsLoading,
     refetch: refetchDishedFunc,
   } = useQuery(["dished", id], getAllDishedFromRestaurant);
+
+  // Đảm bảo các hook dưới luôn được gọi
+  const dishedData = dishedRawsData?.data?.dishes || [];
+
+  const intergrientQuery = useMemo(() => {
+    return dishedData.map((dished) => ({
+      queryKey: ["roomCurrently", dished.id],
+      queryFn: () => getAllIntergrientByDishedId(dished.id),
+      enabled: Boolean(dished.id),
+    }));
+  }, [dishedData]);
+
+  const intergrientDataQueries = useQueries(intergrientQuery);
+
+  useEffect(() => {
+    if (intergrientDataQueries.length > 0) {
+      const newInterData = intergrientDataQueries.map((query, index) => ({
+        intergrient_id: intergrientQuery[index]?.queryKey[1],
+        // @ts-ignore
+        intergrient: query.data?.data?.ingredients || [],
+      }));
+      if (JSON.stringify(newInterData) !== JSON.stringify(interData)) {
+        setInterData(newInterData);
+      }
+    }
+  }, [JSON.stringify(intergrientDataQueries)]);
+
+  const dishedRenderData = dishedData.map((dished, index) => {
+    const { description, created_at, updated_at, id, ...rest } = dished;
+    const ingredientData =
+      // @ts-ignore
+      intergrientDataQueries[index]?.data?.data?.ingredients || [];
+    return { ...rest, MainInter: ingredientData };
+  });
+
+  // Các hàm mở modal, chỉnh sửa...
   const handleOpen = () => setModalopen(true);
   const onEditModal = (item) => {
     handleOpen();
@@ -35,45 +71,8 @@ export function DishedPage() {
     setDetailDished(null);
     setAction("add");
   };
-  if (dishedIsLoading) {
-    return <div>Loading...</div>;
-  }
 
-  const dishedRows = ["Dish", "Price", "Type ", "Main Ingredient ", ""];
-  const dishedData = dishedRawsData?.data?.dishes || [];
-
-  const intergrientQuery = useMemo(() => {
-    return dishedData.map((dished) => ({
-      queryKey: ["roomCurrently", dished.id],
-      queryFn: () => getAllIntergrientByDishedId(dished.id),
-      enabled: Boolean(dished.id),
-    }));
-  }, [dishedData]);
-
-  // useQueries luôn được gọi
-  const intergrientDataQueries = useQueries(intergrientQuery);
-  useEffect(() => {
-    if (intergrientDataQueries.length > 0) {
-      const newInterData = intergrientDataQueries.map((query, index) => ({
-        intergrient_id: intergrientQuery[index]?.queryKey[1],
-        //@ts-ignore
-        intergrient: query.data?.data?.ingredients || [],
-      }));
-
-      if (JSON.stringify(newInterData) != JSON.stringify(interData)) {
-        setInterData(newInterData);
-      }
-    }
-  }, [JSON.stringify(intergrientDataQueries)]);
-
-  const dishedRenderData = dishedData.map((dished, index) => {
-    const { description, created_at, updated_at, id, ...rest } = dished;
-    const interData =
-      //@ts-ignore
-      intergrientDataQueries[index]?.data?.data?.ingredients || [];
-    return { ...rest, MainInter: interData };
-  });
-
+  // Bây giờ trong JSX, xử lý loading hoặc error bên trong giao diện
   return (
     <div>
       <ModalDished
@@ -83,29 +82,34 @@ export function DishedPage() {
         action={action}
         setOpen={setModalopen}
         open={modalOpen}
-      ></ModalDished>
+      />
       <Box sx={{ padding: 2 }}>
         <div className={styles.headerContainer}>
           <Link to="/admin/utility" style={{ width: "fit-content" }}>
             <button className={styles.backButton}>
-              {" "}
-              <ArrowBackIcon />{" "}
+              <ArrowBackIcon />
             </button>
           </Link>
-
           <MyButton
             label="+ Created Dished"
             className={styles.publishButton}
             sx={{ width: 227, height: 48 }}
             variant="contained"
             onClick={onCreatedModal}
-          ></MyButton>
+          />
         </div>
-        <MainTable
-          editEvent={onEditModal}
-          utilityRows={dishedRows}
-          utilityData={dishedRenderData}
-        />
+        {/* Hiển thị giao diện loading hoặc error nếu cần */}
+        {dishedIsLoading ? (
+          <Typography>Loading...</Typography>
+        ) : dishedIsError ? (
+          <Typography>Error: Loading Dished</Typography>
+        ) : (
+          <MainTable
+            editEvent={onEditModal}
+            utilityRows={["Dish", "Price", "Type ", "Main Ingredient ", ""]}
+            utilityData={dishedRenderData}
+          />
+        )}
       </Box>
     </div>
   );
