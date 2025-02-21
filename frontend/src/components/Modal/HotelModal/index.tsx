@@ -16,6 +16,8 @@ import {
 import { MyButton } from "../../index";
 import { addHotel, putHotel } from "../../../service/Hotel";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+
 export function HotelModal({ action, handleClose, data, ...props }) {
   const hotelId = data != null && data.id != null ? data.id : "";
 
@@ -71,39 +73,67 @@ export function HotelModal({ action, handleClose, data, ...props }) {
     mutationFn: putHotel,
   });
   const addingHotels = async () => {
-    const result = await addingHotelsFunc({
-      name: hotelName,
-      address: address,
-      rating: starValue,
-      star: starValue,
-      distance: distant,
-      contact: contact,
-      checkin_time: checkinTime,
-      checkout_time: checkoutTime,
-    });
-    if (result.status != 404 && result.status != 500) {
-      alert("Add Thành Công");
-    } else {
-      alert("Lỗi Add");
+    try {
+      const result = await addingHotelsFunc({
+        name: hotelName,
+        address: address,
+        rating: starValue,
+        star: starValue,
+        distance: distant,
+        contact: contact,
+        checkin_time: checkinTime,
+        checkout_time: checkoutTime,
+      });
+      if (result.status != 404 && result.status != 500) {
+        toast("Thêm thành công ùi", {
+          autoClose: 3000,
+          type: "success",
+        });
+      } else {
+        toast("Lỗi ùi nè bạn ui", {
+          autoClose: 3000,
+          type: "error",
+        });
+      }
+      handleClose();
+    } catch {
+      toast("Lỗi ùi nè bạn ui", {
+        autoClose: 3000,
+        type: "error",
+      });
     }
   };
   const editHotels = async () => {
-    const result = await putHotelFunc({
-      id: hotelId,
-      name: hotelName,
-      address: address,
-      rating: starValue,
-      star: starValue,
-      distance: distant,
-      contact: contact,
-      checkin_time: checkinTime,
-      checkout_time: checkoutTime,
-    });
-    if (result.status != 404 && result.status != 500) {
-      alert("Edit Thành Công");
-    } else {
-      alert("Lỗi Edit");
+    try {
+      const result = await putHotelFunc({
+        id: hotelId,
+        name: hotelName,
+        address: address,
+        rating: starValue,
+        star: starValue,
+        distance: distant,
+        contact: contact,
+        checkin_time: checkinTime,
+        checkout_time: checkoutTime,
+      });
+      if (result.status != 404 && result.status != 500) {
+        toast("Sửa thành công ùi", {
+          autoClose: 3000,
+          type: "success",
+        });
+      } else {
+        toast("Lỗi ùi nè bạn ui", {
+          autoClose: 3000,
+          type: "error",
+        });
+      }
+    } catch {
+      toast("Lỗi ùi nè bạn ui", {
+        autoClose: 3000,
+        type: "error",
+      });
     }
+    handleClose();
   };
   return (
     <div>

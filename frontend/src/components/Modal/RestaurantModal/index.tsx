@@ -15,6 +15,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { MyButton, MyTextFields } from "../../index";
 import { addRestaurant, putRestaurant } from "../../../service/Restaurant";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+
 export function RestaurantModal({ action, handleClose, data, ...props }) {
   const [restaurant, setRestaurant] = useState("");
   const [address, setAddress] = useState("");
@@ -44,30 +46,58 @@ export function RestaurantModal({ action, handleClose, data, ...props }) {
   });
 
   const addingRestaurant = async () => {
-    const result = await addingRestaurantFunc({
-      name: restaurant,
-      address: address,
-      contact: contact,
-      cuisine: cuisine,
-    });
-    if (result.status != 404 && result.status != 500) {
-      alert("Add Thành Công");
-    } else {
-      alert("Lỗi Add");
+    try {
+      const result = await addingRestaurantFunc({
+        name: restaurant,
+        address: address,
+        contact: contact,
+        cuisine: cuisine,
+      });
+      if (result.status != 404 && result.status != 500) {
+        toast("Thêm thành công ùi", {
+          autoClose: 3000,
+          type: "success",
+        });
+        handleClose();
+      } else {
+        toast("Lỗi ùi nè bạn ui", {
+          autoClose: 3000,
+          type: "error",
+        });
+      }
+    } catch {
+      toast("Lỗi ùi nè bạn ui", {
+        autoClose: 3000,
+        type: "error",
+      });
     }
   };
   const editRestaurant = async () => {
-    const result = await putRestaurantFunc({
-      id: id,
-      name: restaurant,
-      address: address,
-      contact: contact,
-      cuisine: cuisine,
-    });
-    if (result.status != 404 && result.status != 500) {
-      alert("Edit Thành Công");
-    } else {
-      alert("Lỗi Edit");
+    try {
+      const result = await putRestaurantFunc({
+        id: id,
+        name: restaurant,
+        address: address,
+        contact: contact,
+        cuisine: cuisine,
+      });
+      if (result.status != 404 && result.status != 500) {
+        toast("Sửa thành công ùi", {
+          autoClose: 3000,
+          type: "success",
+        });
+        handleClose();
+      } else {
+        toast("Lỗi ùi nè bạn ui", {
+          autoClose: 3000,
+          type: "error",
+        });
+      }
+    } catch {
+      toast("Lỗi ùi nè bạn ui", {
+        autoClose: 3000,
+        type: "error",
+      });
     }
   };
   return (

@@ -15,6 +15,9 @@ export const addIntergrient = async (integrientData) => {
 export const putIntergrient = async (id, integrientData) => {
   return client.put(`/ingredients/${id}`, integrientData);
 };
-export const deleteIntergrient = async (id, integrientData) => {
-  return client.delete(`/ingredients/${id}`);
+export const deleteIntergrient = async (integrientData) => {
+  return client.delete(
+    `/dishes/${integrientData.id}/remove_ingredients`,
+    integrientData
+  );
 };

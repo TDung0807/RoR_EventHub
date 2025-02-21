@@ -15,6 +15,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { MyButton, MyTextFields } from "../../index";
 import { addRoom, putRoom } from "../../../service/Room";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+
 export function HotelTypeModal({
   action,
   handleClose,
@@ -54,32 +56,60 @@ export function HotelTypeModal({
     "Phòng Gia Đình",
   ];
   const addingRoomType = async () => {
-    const result = await addingRoomTypeFunc({
-      hotel_id: mainDataId,
-      name: roomTypeData[Number.parseInt(type) - 1],
-      price: price,
-      room_type: type,
-      remark: remark,
-    });
-    if (result.status != 404 && result.status != 500) {
-      alert("Add Thành Công");
-    } else {
-      alert("Lỗi Add");
+    try {
+      const result = await addingRoomTypeFunc({
+        hotel_id: mainDataId,
+        name: roomTypeData[Number.parseInt(type) - 1],
+        price: price,
+        room_type: type,
+        remark: remark,
+      });
+      if (result.status != 404 && result.status != 500) {
+        toast("Thêm thành công ùi", {
+          autoClose: 3000,
+          type: "success",
+        });
+        handleClose();
+      } else {
+        toast("Lỗi ùi nè bạn ui", {
+          autoClose: 3000,
+          type: "error",
+        });
+      }
+    } catch {
+      toast("Lỗi ùi nè bạn ui", {
+        autoClose: 3000,
+        type: "error",
+      });
     }
   };
   const editRoomType = async () => {
-    const result = await PutRoomTypeFunc({
-      hotel_id: mainDataId,
-      id: id,
-      name: roomTypeData[Number.parseInt(type) - 1],
-      price: price,
-      room_type: type,
-      remark: remark,
-    });
-    if (result.status != 404 && result.status != 500) {
-      alert("Edit Thành Công");
-    } else {
-      alert("Lỗi Edit");
+    try {
+      const result = await PutRoomTypeFunc({
+        hotel_id: mainDataId,
+        id: id,
+        name: roomTypeData[Number.parseInt(type) - 1],
+        price: price,
+        room_type: type,
+        remark: remark,
+      });
+      if (result.status != 404 && result.status != 500) {
+        toast("Sửa thành công ùi", {
+          autoClose: 3000,
+          type: "success",
+        });
+        handleClose();
+      } else {
+        toast("Lỗi ùi nè bạn ui", {
+          autoClose: 3000,
+          type: "error",
+        });
+      }
+    } catch {
+      toast("Lỗi ùi nè bạn ui", {
+        autoClose: 3000,
+        type: "error",
+      });
     }
   };
   return (

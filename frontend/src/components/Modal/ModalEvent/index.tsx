@@ -13,6 +13,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import { addEvent, putEvent } from "../../../service/Event";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 export const ModalEvent = ({
   open,
@@ -70,38 +71,74 @@ export const ModalEvent = ({
   const { mutateAsync: editEventSer } = useMutation({ mutationFn: putEvent });
 
   const addingEvent = async () => {
-    const result = await addingEventSer({
-      label: eventName,
-      startHour: eventFrom,
-      endHour: eventTo,
-      date: eventDate,
-      participants: eventParticipants,
-      location: eventLocation,
-      description: eventDescription,
-    });
-    if (result.status != 404 && result.status != 500) {
-      alert("Add Thành Công");
-      refetch();
-    } else {
-      alert("Lỗi Add");
+    try {
+      const result = await addingEventSer({
+        label: eventName,
+        startHour: eventFrom,
+        endHour: eventTo,
+        date: eventDate,
+        participants: eventParticipants,
+        location: eventLocation,
+        description: eventDescription,
+      });
+      if (
+        result.status != 404 &&
+        result.status != 500 &&
+        result.status != 422
+      ) {
+        toast("Thêm thành công ùi", {
+          autoClose: 3000,
+          type: "success",
+        });
+        refetch();
+        handleClose();
+      } else {
+        toast("Lỗi ùi nè bạn ui", {
+          autoClose: 3000,
+          type: "error",
+        });
+      }
+    } catch {
+      toast("Lỗi ùi nè bạn ui", {
+        autoClose: 3000,
+        type: "error",
+      });
     }
   };
   const editEvent = async () => {
-    const result = await editEventSer({
-      id: id,
-      label: eventName,
-      startHour: eventFrom,
-      endHour: eventTo,
-      date: eventDate,
-      participants: eventParticipants,
-      location: eventLocation,
-      description: eventDescription,
-    });
-    if (result.status != 404 && result.status != 500) {
-      alert("Edit Thành Công");
-      refetch();
-    } else {
-      alert("Lỗi Edit");
+    try {
+      const result = await editEventSer({
+        id: id,
+        label: eventName,
+        startHour: eventFrom,
+        endHour: eventTo,
+        date: eventDate,
+        participants: eventParticipants,
+        location: eventLocation,
+        description: eventDescription,
+      });
+      if (
+        result.status != 404 &&
+        result.status != 500 &&
+        result.status != 422
+      ) {
+        toast("Sửa thành công ùi", {
+          autoClose: 3000,
+          type: "success",
+        });
+        refetch();
+        handleClose();
+      } else {
+        toast("Lỗi ùi nè bạn ui", {
+          autoClose: 3000,
+          type: "error",
+        });
+      }
+    } catch {
+      toast("Lỗi ùi nè bạn ui", {
+        autoClose: 3000,
+        type: "error",
+      });
     }
   };
   return (

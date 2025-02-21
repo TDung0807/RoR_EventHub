@@ -8,9 +8,7 @@ import BookIcon from "@mui/icons-material/Book";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import HomeIcon from "@mui/icons-material/Home";
-import InfoIcon from "@mui/icons-material/Info";
 import MenuIcon from "@mui/icons-material/Menu";
-
 export const AdminNavbar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -24,19 +22,19 @@ export const AdminNavbar = () => {
         }`}
       >
         <ul className={`${styles.navbar_container}`}>
-          <li onClick={toggleNavbar} style={{ cursor: "pointer" }}>
-            <MenuIcon
-              style={{
-                paddingTop: 15,
-                paddingBottom: 15,
-                color: "black",
-                marginLeft: 15,
-                marginRight: 18,
-                width: 28,
-                height: 28,
-              }}
-            ></MenuIcon>
+          <li onClick={toggleNavbar}>
+            <Link className={`${styles.item_nav}`} to="#">
+              <MenuIcon
+                style={{
+                  width: 28,
+                  height: 28,
+                  marginLeft: 15,
+                  marginRight: 18,
+                }}
+              ></MenuIcon>
+            </Link>
           </li>
+
           <li>
             <Link className={`${styles.item_nav}`} to="/admin/homepage">
               <HomeIcon

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import {
   AdminHomePage,
@@ -15,11 +15,24 @@ import { PrivateRoutes } from "./components";
 import AdminLayout from "./layout/AdminLayout";
 import UserLayout from "./layout/UserLayout";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useAccountAuthetication } from "./store";
+import { ToastContainer } from "react-toastify";
+
 const App: React.FC = () => {
+  const token = useAccountAuthetication((state) => state.token);
+  const initializeAuth = useAccountAuthetication(
+    (state) => state.initializeAuth
+  );
+
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
+
   const queryClient = new QueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ToastContainer></ToastContainer>
       <Router>
         <div className="App">
           <Routes>

@@ -5,6 +5,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { useLogout } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import { useAccountAuthetication } from "../../store";
+import { Typography } from "@mui/material";
 
 export function AdminHeader() {
   const email = useAccountAuthetication((state) => state.email);
@@ -23,6 +24,15 @@ export function AdminHeader() {
           alt="Logo"
           className={styles.logo}
         />
+        <Typography
+          fontWeight={700}
+          fontFamily={"Montserrat"}
+          color="#005FB3"
+          variant="h5"
+          marginBottom={0}
+        >
+          GD System
+        </Typography>
       </div>
       <div className={styles.right}>
         <img

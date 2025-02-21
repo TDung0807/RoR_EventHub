@@ -1,21 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./LoginPage.module.scss";
 import { logo } from "../../assets";
 import { MyButton, MyTextFields } from "../../components";
 import { fontFamily, fontSize, fontWeight } from "@mui/system";
 import { useLogin } from "../../hooks";
 import { useNavigate } from "react-router-dom";
+import { useAccountAuthetication } from "../../store"; // import store
+import { jwtDecode } from "jwt-decode"; // import dependency
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const token = useAccountAuthetication((state) => state.token);
+  const isAdmin = useAccountAuthetication((state) => state.isAdmin);
+  const isUser = useAccountAuthetication((state) => state.isUser);
   const navigate = useNavigate();
 
   const login = useLogin();
 
   const onLogin = async () => {
     const { isAdmin, isUser } = await login(email, password);
-    console.log(isUser);
 
     if (isAdmin) {
       navigate("/admin/homepage");
@@ -25,6 +29,16 @@ export const LoginPage: React.FC = () => {
       alert("Invalid credentials. Please try again.");
     }
   };
+
+  useEffect(() => {
+    if (token) {
+      if (isAdmin) {
+        navigate("/admin/homepage");
+      } else if (isUser) {
+        navigate("/user/homepage");
+      }
+    }
+  }, [token, isAdmin, isUser, navigate]);
 
   return (
     <div className={styles.background}>

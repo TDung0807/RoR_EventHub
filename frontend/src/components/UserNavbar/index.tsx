@@ -22,22 +22,21 @@ export const UserNavbar = () => {
           isExpanded ? styles.expanded : styles.collapsed
         }`}
       >
-        <ul className="navbar_container">
-          <li onClick={toggleNavbar} style={{ cursor: "pointer" }}>
-            <MenuIcon
-              style={{
-                paddingTop: 15,
-                paddingBottom: 15,
-                color: "black",
-                marginLeft: 15,
-                marginRight: 18,
-                width: 28,
-                height: 28,
-              }}
-            ></MenuIcon>
+        <ul className={`${styles.navbar_container}`}>
+          <li onClick={toggleNavbar}>
+            <Link className={`${styles.item_nav}`} to="#">
+              <MenuIcon
+                style={{
+                  width: 28,
+                  height: 28,
+                  marginLeft: 15,
+                  marginRight: 18,
+                }}
+              ></MenuIcon>
+            </Link>
           </li>
           <li>
-            <Link to="/user/homepage">
+            <Link className={`${styles.item_nav}`} to="/user/homepage">
               <HomeIcon
                 style={{
                   width: 28,
@@ -50,7 +49,7 @@ export const UserNavbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/user/calendar">
+            <Link className={`${styles.item_nav}`} to="/user/calendar">
               <CalendarMonthIcon
                 style={{
                   width: 28,
