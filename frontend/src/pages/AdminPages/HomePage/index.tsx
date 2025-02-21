@@ -8,7 +8,8 @@ import { getUpcomingEvent } from "../../../service/Event";
 export function AdminHomePage() {
   const { data, error, isError, isLoading } = useQuery(
     ["events"],
-    getUpcomingEvent
+    getUpcomingEvent,
+    { staleTime: 0 }
   );
   if (isLoading) {
     return <div>Loading...</div>;

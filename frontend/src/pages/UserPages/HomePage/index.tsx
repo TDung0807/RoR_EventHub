@@ -11,7 +11,8 @@ export function UserHomePage() {
   const userId = useAccountAuthetication((state) => state.userId);
   const { data, error, isError, isLoading } = useQuery(
     ["events", userId],
-    getEventsByUserId
+    getEventsByUserId,
+    { staleTime: 0 }
   );
   if (isLoading) {
     return <div>Loading...</div>;

@@ -30,7 +30,8 @@ export function UserCalendar() {
   const userId = useAccountAuthetication((state) => state.userId);
   const { data, error, isError, isLoading } = useQuery(
     ["events", userId],
-    getEventsByUserId
+    getEventsByUserId,
+    { staleTime: 0 }
   );
   console.log(data);
   const [open, setOpen] = useState(false);
