@@ -23,6 +23,7 @@ export function HotelModal({
   handleClose,
   data,
   refetchGuessGroup = null,
+  refetchHotels = null,
   ...props
 }) {
   const hotelId = data != null && data.id != null ? data.id : "";
@@ -95,6 +96,9 @@ export function HotelModal({
           autoClose: 3000,
           type: "success",
         });
+        if (refetchHotels != null) {
+          refetchHotels();
+        }
       } else {
         toast("Lỗi ùi nè bạn ui", {
           autoClose: 3000,
@@ -121,12 +125,16 @@ export function HotelModal({
         contact: contact,
         checkin_time: checkinTime,
         checkout_time: checkoutTime,
+        remark: remark,
       });
       if (result.status != 404 && result.status != 500) {
         toast("Sửa thành công ùi", {
           autoClose: 3000,
           type: "success",
         });
+        if (refetchHotels != null) {
+          refetchHotels();
+        }
         if (refetchGuessGroup != null) {
           refetchGuessGroup();
         }

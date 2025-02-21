@@ -12,6 +12,7 @@ export const ModalSideGuessinfo = ({
   action = "Add",
   mainDataId = 1,
   refetchGuessGroup = null,
+  refetchHotels = null,
   data = null,
 }) => {
   const modalStyle = {
@@ -40,6 +41,7 @@ export const ModalSideGuessinfo = ({
         )}
         {option == "Hotel" && (
           <HotelModal
+            refetchHotels={refetchHotels}
             refetchGuessGroup={refetchGuessGroup}
             data={data}
             action={action}

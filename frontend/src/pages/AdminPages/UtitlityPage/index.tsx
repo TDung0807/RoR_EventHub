@@ -50,6 +50,7 @@ export function UtilityPage() {
     error: hotelError,
     isError: hotelIsError,
     isLoading: hotelIsLoading,
+    refetch: refetchHotels,
   } = useQuery(["hotels"], getHotels);
 
   const {
@@ -218,6 +219,7 @@ export function UtilityPage() {
           }}
           option={activeButton}
           action={actionSideModal}
+          refetchHotels={refetchHotels}
         />
         <OtherSideModal
           roomDataQueries={roomDataQueries}
