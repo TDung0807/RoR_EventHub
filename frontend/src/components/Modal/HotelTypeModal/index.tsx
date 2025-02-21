@@ -22,6 +22,7 @@ export function HotelTypeModal({
   handleClose,
   data,
   mainDataId,
+  roomDataQueries = null,
   ...props
 }) {
   const [type, setType] = useState("");
@@ -69,6 +70,8 @@ export function HotelTypeModal({
           autoClose: 3000,
           type: "success",
         });
+        roomDataQueries.forEach((query) => query.refetch());
+
         handleClose();
       } else {
         toast("Lỗi ùi nè bạn ui", {

@@ -22,6 +22,8 @@ export function TransportModal({
   handleClose,
   data,
   mainDataId,
+  transportDataQueries = null,
+  refetchGuessGroup = null,
   ...props
 }) {
   const [type, setType] = useState("");
@@ -61,6 +63,8 @@ export function TransportModal({
           autoClose: 3000,
           type: "success",
         });
+        transportDataQueries.forEach((query) => query.refetch());
+
         handleClose();
       } else {
         toast("Lỗi ùi nè bạn ui", {
@@ -91,6 +95,9 @@ export function TransportModal({
           type: "success",
         });
         handleClose();
+        if (refetchGuessGroup != null) {
+          refetchGuessGroup();
+        }
       } else {
         toast("Lỗi ùi nè bạn ui", {
           autoClose: 3000,
@@ -128,7 +135,7 @@ export function TransportModal({
         <InputLabel id="vendor-label">Type</InputLabel>
         <Select labelId="vendor-label" value={type} onChange={handleTypeChange}>
           {transportType.map((item, index) => (
-            <MenuItem value={item}>{item}</MenuItem>
+            <MenuItem value={index}>{item}</MenuItem>
           ))}
         </Select>
       </FormControl>

@@ -10,6 +10,8 @@ export function OtherSideModal({
   handleClose,
   option = "Transport",
   action = "Add",
+  roomDataQueries,
+  transportDataQueries,
 }) {
   const modalStyle = {
     position: "absolute",
@@ -28,6 +30,7 @@ export function OtherSideModal({
       <Box sx={modalStyle}>
         {option == "Hotel" && (
           <HotelTypeModal
+            roomDataQueries={roomDataQueries}
             data={null}
             action={action}
             handleClose={handleClose}
@@ -36,6 +39,7 @@ export function OtherSideModal({
         )}
         {option == "Vendor" && (
           <TransportModal
+            transportDataQueries={transportDataQueries}
             data={null}
             action={action}
             handleClose={handleClose}

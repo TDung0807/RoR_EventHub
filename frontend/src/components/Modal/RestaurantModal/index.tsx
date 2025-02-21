@@ -17,7 +17,13 @@ import { addRestaurant, putRestaurant } from "../../../service/Restaurant";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-export function RestaurantModal({ action, handleClose, data, ...props }) {
+export function RestaurantModal({
+  action,
+  handleClose,
+  data,
+  refetchGuessGroup = null,
+  ...props
+}) {
   const [restaurant, setRestaurant] = useState("");
   const [address, setAddress] = useState("");
   const [cuisine, setCuisine] = useState("");
@@ -87,6 +93,9 @@ export function RestaurantModal({ action, handleClose, data, ...props }) {
           type: "success",
         });
         handleClose();
+        if (refetchGuessGroup != null) {
+          refetchGuessGroup();
+        }
       } else {
         toast("Lỗi ùi nè bạn ui", {
           autoClose: 3000,

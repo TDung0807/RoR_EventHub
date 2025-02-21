@@ -220,6 +220,8 @@ export function UtilityPage() {
           action={actionSideModal}
         />
         <OtherSideModal
+          roomDataQueries={roomDataQueries}
+          transportDataQueries={transportDataQueries}
           mainDataId={mainDataId}
           open={openOtherSideModal}
           handleClose={() => {

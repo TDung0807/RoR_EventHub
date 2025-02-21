@@ -18,7 +18,13 @@ import { addHotel, putHotel } from "../../../service/Hotel";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-export function HotelModal({ action, handleClose, data, ...props }) {
+export function HotelModal({
+  action,
+  handleClose,
+  data,
+  refetchGuessGroup = null,
+  ...props
+}) {
   const hotelId = data != null && data.id != null ? data.id : "";
 
   const [address, setAddress] = useState(
@@ -121,6 +127,9 @@ export function HotelModal({ action, handleClose, data, ...props }) {
           autoClose: 3000,
           type: "success",
         });
+        if (refetchGuessGroup != null) {
+          refetchGuessGroup();
+        }
       } else {
         toast("Lỗi ùi nè bạn ui", {
           autoClose: 3000,

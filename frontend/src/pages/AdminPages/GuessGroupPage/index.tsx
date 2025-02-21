@@ -40,6 +40,7 @@ export function GuessGroupPage() {
     error: guessGroupDataError,
     isError: guessGroupDataIsError,
     isLoading: guessGroupDataIsLoading,
+    refetch: refetchGuessGroup,
   } = useQuery(["guessGroupData", id], getGroupById);
 
   const {
@@ -138,6 +139,7 @@ export function GuessGroupPage() {
           handleClose={() => {
             setOpenSideModal(false);
           }}
+          refetchGuessGroup={refetchGuessGroup}
           option={activeButton}
           action={actionSideModal}
         />
