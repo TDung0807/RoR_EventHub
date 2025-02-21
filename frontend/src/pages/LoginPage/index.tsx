@@ -4,7 +4,7 @@ import { logo } from "../../assets";
 import { MyButton, MyTextFields } from "../../components";
 import { fontFamily, fontSize, fontWeight } from "@mui/system";
 import { useLogin } from "../../hooks";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAccountAuthetication } from "../../store"; // import store
 import { jwtDecode } from "jwt-decode"; // import dependency
 
@@ -15,6 +15,7 @@ export const LoginPage: React.FC = () => {
   const isAdmin = useAccountAuthetication((state) => state.isAdmin);
   const isUser = useAccountAuthetication((state) => state.isUser);
   const navigate = useNavigate();
+  const { hash, pathname, search } = location;
 
   const login = useLogin();
 
@@ -32,13 +33,17 @@ export const LoginPage: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      if (isAdmin) {
-        navigate("/admin/homepage");
-      } else if (isUser) {
-        navigate("/user/homepage");
+      console.log(pathname);
+      const targetPath = isAdmin
+        ? "/admin/homepage"
+        : isUser
+        ? "/user/homepage"
+        : null;
+      if (targetPath && location.pathname !== targetPath) {
+        navigate(targetPath);
       }
     }
-  }, [token, isAdmin, isUser, navigate]);
+  }, [token, isAdmin, isUser, navigate, location.pathname]);
 
   return (
     <div className={styles.background}>
