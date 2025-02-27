@@ -44,21 +44,25 @@ export function UserHomePage() {
       }
     );
   } catch {
-    upcomingEventRender = data.data.map(
-      ({
-        date,
-        description,
-        endHour,
-        groupLabel,
-        startHour,
-        updated_at,
-        user_id,
-        created_at,
-        ...rest
-      }) => {
-        return { ...rest };
-      }
-    );
+    try {
+      upcomingEventRender = data.data.map(
+        ({
+          date,
+          description,
+          endHour,
+          groupLabel,
+          startHour,
+          updated_at,
+          user_id,
+          created_at,
+          ...rest
+        }) => {
+          return { ...rest };
+        }
+      );
+    } catch {
+      upcomingEventRender = [];
+    }
   }
   return (
     <div>

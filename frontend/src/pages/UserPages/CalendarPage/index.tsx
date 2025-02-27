@@ -33,7 +33,6 @@ export function UserCalendar() {
     getEventsByUserId,
     { staleTime: 0 }
   );
-  console.log(data);
   const [open, setOpen] = useState(false);
   const [detailEventData, setDetailEventData] = useState(null);
   const [action, setAction] = useState("");
@@ -54,21 +53,25 @@ export function UserCalendar() {
         user: "Admin",
       })) || [];
   } catch {
-    // Chuyển đổi dữ liệu
-    eventsData =
-      data.data?.events?.map((event) => ({
-        id: `${event.id}`,
-        label: `${event.label} & ${formatTime(event.startHour)} - ${formatTime(
-          event.endHour
-        )}`,
-        groupLabel: "Event",
-        startHour: formatTime(event.startHour),
-        endHour: formatTime(event.endHour),
-        date: event.date.split("T")[0], // Lấy phần ngày
-        location: event.location,
-        description: event.description || "",
-        user: "Admin",
-      })) || [];
+    try {
+      // Chuyển đổi dữ liệu
+      eventsData =
+        data.data?.events?.map((event) => ({
+          id: `${event.id}`,
+          label: `${event.label} & ${formatTime(
+            event.startHour
+          )} - ${formatTime(event.endHour)}`,
+          groupLabel: "Event",
+          startHour: formatTime(event.startHour),
+          endHour: formatTime(event.endHour),
+          date: event.date.split("T")[0], // Lấy phần ngày
+          location: event.location,
+          description: event.description || "",
+          user: "Admin",
+        })) || [];
+    } catch {
+      eventsData = [];
+    }
   }
 
   const onClickEventFunc = (item) => {
