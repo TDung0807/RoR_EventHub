@@ -38,7 +38,7 @@ const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ToastContainer></ToastContainer>
-      <HashRouter>
+      <Router>
         <div className="App">
           <Routes>
             <Route path="/" element={<LoginPage />} />
@@ -63,7 +63,7 @@ const App: React.FC = () => {
             </Route>
           </Routes>
         </div>
-      </HashRouter>
+      </Router>
     </QueryClientProvider>
   );
 };

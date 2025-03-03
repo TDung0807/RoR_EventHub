@@ -32,13 +32,14 @@ export const LoginPage: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      console.log(pathname);
       const targetPath = isAdmin
         ? "/admin/homepage"
         : isUser
         ? "/user/homepage"
         : null;
       if (targetPath && location.pathname !== targetPath) {
+        console.log(targetPath);
+
         navigate(targetPath);
       }
     }
