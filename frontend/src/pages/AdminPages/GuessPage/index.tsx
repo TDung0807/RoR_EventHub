@@ -17,6 +17,8 @@ export const AdminGuestPage = () => {
     ["guessgroups"],
     getAllGroup
   );
+  const { hash, pathname, search } = location;
+  console.log(pathname);
   const [openGuessGroupModal, setOpenGuessGroupModal] = useState(false);
   const [openGuessListModal, setOpenGuessListModal] = useState(false);
   const [guessListId, setGuessListId] = useState({});
@@ -111,7 +113,7 @@ export const AdminGuestPage = () => {
             </Box>
           </Box>
           <MainTable
-            editPre={`${location.pathname}`}
+            editPre={`${pathname}`}
             editRef={true}
             utilityRows={guessGroupRows}
             utilityData={transformedData}

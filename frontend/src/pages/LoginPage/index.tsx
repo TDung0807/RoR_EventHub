@@ -21,7 +21,6 @@ export const LoginPage: React.FC = () => {
 
   const onLogin = async () => {
     const { isAdmin, isUser } = await login(email, password);
-
     if (isAdmin) {
       navigate("/admin/homepage");
     } else if (isUser) {
