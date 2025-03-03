@@ -17,17 +17,20 @@ class Event < ApplicationRecord
   belongs_to :user
   has_and_belongs_to_many :groups, join_table: 'events_groups'
   has_and_belongs_to_many :quests, after_add: :set_participants_count, after_remove: :set_participants_count
+  before_save :convert_hours_format
 
   # Custom JSON Serialization
   def as_json(options = {})
     super(options).merge({
-      startHour: self[:startHour], # Correct column reference
-      endHour: self[:endHour]
+      start_hour: self[:start_hour],
+      end_hour: self[:end_hour]
     })
   end
-
   private
-
+  def convert_hours_format
+    self.start_hour = startHour if startHour.present?
+    self.end_hour = endHour if endHour.present?
+  end
   def start_and_endHour_are_valid_times
     if startHour.present?
       begin
