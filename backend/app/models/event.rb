@@ -5,7 +5,7 @@ class Event < ApplicationRecord
   validates :location, presence: true
   validates :participants, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
 
-  validate :start_and_end_hour_are_valid_times
+  validate :start_and_endHour_are_valid_times
 
   # Callbacks
   before_save :parse_and_calculate_duration
@@ -18,28 +18,28 @@ class Event < ApplicationRecord
 
   private
 
-  def start_and_end_hour_are_valid_times
-    if start_hour.present?
+  def start_and_endHour_are_valid_times
+    if startHour.present?
       begin
-        Time.parse(start_hour.to_s) 
+        Time.parse(startHour.to_s) 
       rescue ArgumentError
-        errors.add(:start_hour, "must be a valid time")
+        errors.add(:startHour, "must be a valid time")
       end
     end
 
-    if end_hour.present?
+    if endHour.present?
       begin
-        Time.parse(end_hour.to_s)
+        Time.parse(endHour.to_s)
       rescue ArgumentError
-        errors.add(:end_hour, "must be a valid time")
+        errors.add(:endHour, "must be a valid time")
       end
     end
   end
 
   def parse_and_calculate_duration
-    if start_hour.present? && end_hour.present?
-      start_time = Time.parse(start_hour.to_s)
-      end_time = Time.parse(end_hour.to_s)
+    if startHour.present? && endHour.present?
+      start_time = Time.parse(startHour.to_s)
+      end_time = Time.parse(endHour.to_s)
       self.duration = ((end_time - start_time) / 1.hour).to_f.round(2)
     end
   end

@@ -98,7 +98,7 @@ class EventsController < ApplicationController
   private
 
   def event_params
-    params.required(:event).permit(:label, :date, :description, :location, :participants, :start_hour, :end_hour, :group_id)
+    params.required(:event).permit(:label, :date, :description, :location, :participants, :startHour, :endHour, :group_id)
   end
 
   def set_event
