@@ -34,16 +34,16 @@ Rails.application.routes.draw do
   end
   
 
-  resources :quests, only: [:create, :index, :show, :update, :destroy] do
-    collection do
-      get 'find_by_name/:name', to: 'quests#find_by_name'
-      get 'find_by_email/:email', to: 'quests#find_by_email'
-    end
-    member do
-      get 'events_by_quest', to: 'quests#events_by_quest'
-      get 'groups', to: 'quests#groups'
-    end
+resources :quests, only: [:create, :index, :show, :update, :destroy] do
+  collection do
+    get 'find_by_name/:name', to: 'quests#find_by_name'
+    get 'find_by_email/:email', to: 'quests#find_by_email'
+    get 'events/:email', to: 'quests#events_by_quest' # <== Add this line
   end
+  member do
+    get 'groups', to: 'quests#groups'
+  end
+end
 
   resources :restaurants, only: [:create, :index, :show, :update, :destroy] do
     resources :dishes, only: [:create, :index]
