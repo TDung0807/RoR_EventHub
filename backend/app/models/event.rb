@@ -4,8 +4,8 @@ class Event < ApplicationRecord
   validates :date, presence: true
   validates :location, presence: true
   validates :participants, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
-  validates :startHour, presence: true
-  validates :endHour, presence: true
+  validates :start_hour, presence: true
+  validates :end_hour, presence: true
 
   validate :start_and_endHour_are_valid_times
 
