@@ -38,7 +38,7 @@ resources :quests, only: [:create, :index, :show, :update, :destroy] do
   collection do
     get 'find_by_name/:name', to: 'quests#find_by_name'
     get 'find_by_email/:email', to: 'quests#find_by_email'
-    get 'events/:email', to: 'quests#events_by_quest' # <== Add this line
+    get 'events', to: 'quests#events_by_quest'
   end
   member do
     get 'groups', to: 'quests#groups'
