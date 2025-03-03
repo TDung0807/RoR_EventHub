@@ -1,4 +1,5 @@
 class Event < ApplicationRecord
+  # Validations
   validates :label, presence: true
   validates :date, presence: true
   validates :location, presence: true
@@ -6,43 +7,44 @@ class Event < ApplicationRecord
 
   validate :start_and_end_hour_are_valid_times
 
+  # Callbacks
   before_save :parse_and_calculate_duration
-  before_save :update_participants_count
+  before_save :set_participants_count
 
+  # Associations
   belongs_to :user
-  has_and_belongs_to_many :groups
-  has_and_belongs_to_many :quests, after_add: :update_participants_count, after_remove: :update_participants_count
-  has_many :groups, dependent: :destroy
+  has_and_belongs_to_many :groups, join_table: 'events_groups'
+  has_and_belongs_to_many :quests, after_add: :set_participants_count, after_remove: :set_participants_count
+
   private
 
   def start_and_end_hour_are_valid_times
-    if startHour.present?
+    if start_hour.present?
       begin
-        Time.parse(startHour.to_s) 
+        Time.parse(start_hour.to_s) 
       rescue ArgumentError
-        errors.add(:startHour, "must be a valid time")
+        errors.add(:start_hour, "must be a valid time")
       end
     end
 
-    if endHour.present?
+    if end_hour.present?
       begin
-        Time.parse(endHour.to_s)
+        Time.parse(end_hour.to_s)
       rescue ArgumentError
-        errors.add(:endHour, "must be a valid time")
+        errors.add(:end_hour, "must be a valid time")
       end
     end
   end
 
   def parse_and_calculate_duration
-    if startHour.present? && endHour.present?
-      start_time = Time.parse(startHour.to_s)
-      end_time = Time.parse(endHour.to_s)
+    if start_hour.present? && end_hour.present?
+      start_time = Time.parse(start_hour.to_s)
+      end_time = Time.parse(end_hour.to_s)
       self.duration = ((end_time - start_time) / 1.hour).to_f.round(2)
     end
   end
 
-  def update_participants_count(_quest = nil)
+  def set_participants_count(_quest = nil)
     self.participants = quests.sum(:participants_count)
-    save if persisted?
   end
 end

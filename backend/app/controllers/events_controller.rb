@@ -103,5 +103,7 @@ class EventsController < ApplicationController
 
   def set_event
     @event = Event.find_by(id: params[:id])
+    render json: { error: "Event not found" }, status: :not_found unless @event
   end
+  
 end
