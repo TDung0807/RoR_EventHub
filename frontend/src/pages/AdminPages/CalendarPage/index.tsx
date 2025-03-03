@@ -18,11 +18,14 @@ import { useQuery } from "react-query";
 import { getAllEvent } from "../../../service/Event";
 const formatTime = (isoString) => {
   const date = new Date(isoString);
-  return date.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
+  const hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  // Force the 13, 14, ... hours format
+  const formattedHours = hours.toString().padStart(2, "0");
+
+  return `${formattedHours}:${minutes} ${ampm}`;
 };
 export function CalendarPage() {
   const [open, setOpen] = useState(false);
