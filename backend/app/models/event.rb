@@ -12,7 +12,7 @@ class Event < ApplicationRecord
   belongs_to :user
   has_and_belongs_to_many :groups
   has_and_belongs_to_many :quests, after_add: :update_participants_count, after_remove: :update_participants_count
-
+  has_many :groups, dependent: :destroy
   private
 
   def start_and_end_hour_are_valid_times

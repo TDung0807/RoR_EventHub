@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get :upcoming
       get 'user_events/:user_id', to: 'events#events_by_user'
     end
+    resources :groups, only: [:index, :create, :show, :update, :destroy]
   end
 
   resources :transports do
@@ -26,6 +27,7 @@ Rails.application.routes.draw do
   end
 
   resources :groups, only: [:create, :index, :show, :update, :destroy] do
+    get 'events', to: 'events#events_by_group'
     post 'quests', to: 'groups#add_quests'
     delete 'quests/:quest_id', to: 'groups#remove_quest'
     get 'quests', to: 'groups#quests'
