@@ -18,13 +18,6 @@ class Event < ApplicationRecord
   has_and_belongs_to_many :groups, join_table: 'events_groups'
   has_and_belongs_to_many :quests, after_add: :set_participants_count, after_remove: :set_participants_count
 
-  # Custom JSON Serialization
-  def as_json(options = {})
-    super(options).merge({
-      start_hour: self[:start_hour],
-      end_hour: self[:end_hour]
-    })
-  end
   private
   def start_and_end_hour_are_valid_times
     if start_hour.present?
