@@ -107,16 +107,12 @@ class QuestsController < ApplicationController
     @quest = Quest.find_by(email: params[:email])
     render json:  { quest: @quest ? @quest.as_json : nil }, status: :ok
   end
-
-  def events_by_email
+  
+  def events_by_quest
     @quest = Quest.find_by(email: params[:email])
+    return render json: { message: "Quest not found" }, status: :not_found unless @quest
   
-    unless @quest
-      render json: { message: "Quest not found" }, status: :not_found
-      return
-    end
-    sorted_events = @quest.events.order(:date) 
-    render json: { events: sorted_events.as_json }, status: :ok
+    events = Event.where(id: @quest.groups.pluck(:event_id).compact.uniq).order(:date)
+    render json: { events: events.as_json }, status: :ok
   end
-  
 end
