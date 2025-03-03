@@ -19,3 +19,9 @@ export const getEventsByUserId = async ({ queryKey }) => {
 
   return client.get(`/events/user_events/${id}`);
 };
+
+export const getEventsByUserEmail = async ({ queryKey }) => {
+  const [_, email] = queryKey;
+
+  return client.get(`/quests/events?email=${email}`);
+};

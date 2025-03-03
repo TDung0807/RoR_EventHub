@@ -38,8 +38,6 @@ export const LoginPage: React.FC = () => {
         ? "/user/homepage"
         : null;
       if (targetPath && location.pathname !== targetPath) {
-        console.log(targetPath);
-
         navigate(targetPath);
       }
     }
@@ -62,7 +60,7 @@ export const LoginPage: React.FC = () => {
         <form>
           <MyTextFields
             id="email_fields"
-            label="Your Email"
+            label="Your UserName"
             type="email"
             variant="outlined"
             style={{

@@ -4,18 +4,17 @@ import React, { useEffect, useState } from "react";
 import styles from "./UserPage.module.scss";
 import { MainTable } from "../../../components";
 import { useQuery } from "react-query";
-import { getEventsByUserId } from "../../../service/Event";
+import { getEventsByUserEmail } from "../../../service/Event";
 import { useAccountAuthetication } from "../../../store";
 
 export function UserHomePage() {
-  const userId = useAccountAuthetication((state) => state.userId);
+  const email = useAccountAuthetication((state) => state.email);
 
   const { data, error, isError, isLoading } = useQuery(
-    ["events", userId],
-    getEventsByUserId,
+    ["allEvents", encodeURIComponent(email).replace(/\./g, "%2E")],
+    getEventsByUserEmail,
     { staleTime: 0 }
   );
-
   if (isLoading) {
     return <div>Loading...</div>;
   }

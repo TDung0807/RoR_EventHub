@@ -40,7 +40,9 @@ export function ModalGuestList({
   };
   const [guestEmail, setGuestEmail] = useState("");
   const [guestName, setGuestName] = useState("");
-  const [shouldFetchGuest, setShouldFetchGuest] = useState(false);
+  const [shouldFetchGuestEmail, setShouldFetchGuestEmail] = useState(false);
+  const [shouldFetchGuestName, setShouldFetchGuestName] = useState(false);
+
   const { mutateAsync: addGuestToGroup } = useMutation({
     mutationFn: addGuestsToGroup,
   });
@@ -62,13 +64,13 @@ export function ModalGuestList({
     isError: guest2IsError,
     isLoading: guest2IsLoading,
   } = useQuery(
-    ["guessTaking", guestName],
+    ["guessTakingEmail", guestEmail],
     () =>
       //@ts-ignore
-      getGuestByEmail(encodeURIComponent(guestEmail)),
+      getGuestByEmail(guestEmail),
     {
-      enabled: shouldFetchGuest, // Only run the query when shouldFetchGuest is true
-      onSettled: () => setShouldFetchGuest(false), // Reset after query is done
+      enabled: shouldFetchGuestEmail, // Only run the query when shouldFetchGuest is true
+      onSettled: () => setShouldFetchGuestEmail(false), // Reset after query is done
     }
   );
   const {
@@ -76,13 +78,13 @@ export function ModalGuestList({
     isError: guest1IsError,
     isLoading: guest1IsLoading,
   } = useQuery(
-    ["guessTaking", guestName],
+    ["guessTakingName", guestName],
     () =>
       //@ts-ignore
-      getG(guestName),
+      getGuestByName(guestName),
     {
-      enabled: shouldFetchGuest, // Only run the query when shouldFetchGuest is true
-      onSettled: () => setShouldFetchGuest(false), // Reset after query is done
+      enabled: shouldFetchGuestName, // Only run the query when shouldFetchGuest is true
+      onSettled: () => setShouldFetchGuestName(false), // Reset after query is done
     }
   );
 
@@ -96,25 +98,18 @@ export function ModalGuestList({
   }
   const usersArr = guestInGroup?.data?.quests || [];
   const addingGuestToGroup = async () => {
-    await setShouldFetchGuest(true); // Trigger the query
-    const guessData =
-      guestResult1?.data?.quest || guestResult2?.data?.quest || [];
-    console.log(guessData);
+    await setShouldFetchGuestEmail(true); // Trigger the query
+    await setShouldFetchGuestName(true); // Trigger the query
+
+    const guessData = (await guestResult1?.data?.quest) ||
+      (await guestResult2?.data?.quest) || { id: null };
     try {
-      if (guessData.length != 0) {
+      if (guessData.id != null) {
         let resultAddGroup = await addGuestToGroup({
           group_id: idGuessGroup,
           quest_ids: [guessData.id],
         });
-        let resultRegister = await registerService({
-          user: {
-            username: guessData.name,
-            name: guessData.name,
-            role: 0,
-            password: "123",
-            email: guessData.email,
-          },
-        });
+
         toast("Đã thêm khách mới thành công ùi", { type: "success" });
         refetchGuestInGroup();
       } else {
@@ -123,7 +118,12 @@ export function ModalGuestList({
           email: guestEmail,
           phone: "0903829122",
         });
-        const guessDataId = await resultAddGuest?.data?.id;
+        let guessDataId;
+        try {
+          guessDataId = await resultAddGuest.data.quest.id;
+        } catch {
+          guessDataId = await resultAddGuest.data.id;
+        }
         let resultAddGroup = await addGuestToGroup({
           group_id: idGuessGroup,
           quest_ids: [guessDataId],
@@ -140,6 +140,7 @@ export function ModalGuestList({
         toast("Đã thêm khách mới thành công với cài đặt mặc định ùi", {
           type: "success",
         });
+
         refetchGuestInGroup();
       }
     } catch {

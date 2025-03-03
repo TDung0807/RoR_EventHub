@@ -19,14 +19,27 @@ import { useQuery } from "react-query";
 import { getHotels } from "../../../service/Hotel";
 import { getAllTranspost } from "../../../service/Transport";
 import { getRestaurants } from "../../../service/Restaurant";
-import { toast } from "react-toastify";
+import { getAllEvent } from "../../../service/Event";
 
+import { toast } from "react-toastify";
+const formatTime = (isoString) => {
+  const date = new Date(isoString);
+  const hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  // Force the 13, 14, ... hours format
+  const formattedHours = hours.toString().padStart(2, "0");
+
+  return `${formattedHours}:${minutes} ${ampm}`;
+};
 export function GuessGroupModal({
   open,
   handleChangingGuessList = (id) => {},
   action,
   handleClose,
   basedData,
+  refetchFunc = () => {},
 }) {
   const [description, setDescription] = useState("");
   const [groupName, setGroupName] = useState("");
@@ -36,6 +49,7 @@ export function GuessGroupModal({
   const [hotelId, setHotelId] = useState("");
   const [transportId, setTransportId] = useState("");
   const [restaurantId, setRestauranttId] = useState("");
+  const [eventId, setEventId] = useState("");
 
   // Fetch Hotels & Transports
   const {
@@ -43,7 +57,11 @@ export function GuessGroupModal({
     isError: hotelIsError,
     isLoading: hotelIsLoading,
   } = useQuery(["hotelsTaking"], getHotels);
-
+  const {
+    data: eventRawsData,
+    error: eventIsError,
+    isLoading: eventIsLoading,
+  } = useQuery(["allEvent"], getAllEvent);
   const {
     data: transportRawsData,
     isError: transportIsError,
@@ -56,13 +74,20 @@ export function GuessGroupModal({
   } = useQuery(["restaurantTaking"], getRestaurants);
 
   // Xử lý trạng thái loading & error
-  const isLoading = hotelIsLoading || transportIsLoading || restaurantIsLoading;
-  const isError = hotelIsError || transportIsError || restauranttIsError;
+  const isLoading =
+    hotelIsLoading ||
+    transportIsLoading ||
+    restaurantIsLoading ||
+    eventIsLoading;
+  const isError =
+    hotelIsError || transportIsError || restauranttIsError || eventIsError;
 
   // Lấy danh sách Hotels & Transports từ API
   const hotelsData = hotelsRawsData?.data?.hotels || [];
   const transportData = transportRawsData?.data?.transports || [];
   const restaurantData = restaurantRawsData?.data?.restaurants || [];
+  const eventData = eventRawsData?.data || [];
+
   // Cập nhật dữ liệu khi `basedData` thay đổi
   useEffect(() => {
     if (basedData) {
@@ -71,6 +96,7 @@ export function GuessGroupModal({
       setHotelId(basedData.hotel_id || "");
       setTransportId(basedData.transport_id || "");
       setRestauranttId(basedData.restaurant_id || "");
+      setEventId(basedData.event_id || "");
     }
   }, [basedData]);
 
@@ -83,6 +109,7 @@ export function GuessGroupModal({
   const addingGroup = async () => {
     const payload = {
       group: {
+        event_id: eventId,
         description,
         group: groupName,
         hotel_id: hotelId,
@@ -95,7 +122,9 @@ export function GuessGroupModal({
         quantity: 0,
       },
     };
-    return await mutateAsync(payload);
+    const result = await mutateAsync(payload);
+    refetchFunc();
+    return result;
   };
 
   const modalStyle = {
@@ -191,7 +220,7 @@ export function GuessGroupModal({
               </Select>
             </FormControl>
 
-            <FormControl fullWidth>
+            <FormControl fullWidth sx={{ mb: 2 }}>
               <InputLabel>Restaurant</InputLabel>
               <Select
                 value={restaurantId}
@@ -200,6 +229,20 @@ export function GuessGroupModal({
                 {restaurantData.map((item) => (
                   <MenuItem key={item.id} value={item.id}>
                     {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth>
+              <InputLabel>Event</InputLabel>
+              <Select
+                value={eventId}
+                onChange={(e) => setEventId(e.target.value)}
+              >
+                {eventData.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.label}
                   </MenuItem>
                 ))}
               </Select>

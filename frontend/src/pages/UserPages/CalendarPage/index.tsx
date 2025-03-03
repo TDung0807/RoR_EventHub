@@ -15,7 +15,7 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { CalendarView, ModalEvent } from "../../../components";
 import { fakeEventsData } from "../../../mockdata";
 import { useQuery } from "react-query";
-import { getEventsByUserId } from "../../../service/Event";
+import { getEventsByUserEmail } from "../../../service/Event";
 import { useAccountAuthetication } from "../../../store";
 
 const formatTime = (isoString) => {
@@ -30,10 +30,10 @@ const formatTime = (isoString) => {
   return `${formattedHours}:${minutes} ${ampm}`;
 };
 export function UserCalendar() {
-  const userId = useAccountAuthetication((state) => state.userId);
+  const email = useAccountAuthetication((state) => state.email);
   const { data, error, isError, isLoading } = useQuery(
-    ["upcomingEvent", userId],
-    getEventsByUserId,
+    ["upcomingEvent", encodeURIComponent(email).replace(/\./g, "%2E")],
+    getEventsByUserEmail,
     { staleTime: 0 }
   );
   const [open, setOpen] = useState(false);

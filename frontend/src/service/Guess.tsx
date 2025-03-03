@@ -4,7 +4,8 @@ export const getAllGuessFromGroup = async ({ queryKey }) => {
   return client.get(`/groups/${id}/quests`);
 };
 export const getGuestByEmail = async (email) => {
-  return client.get(`/quests/find_by_email/${email}`);
+  const emailSended = await encodeURIComponent(email).replace(/\./g, "%2E");
+  return client.get(`/quests/find_by_email/${emailSended}`);
 };
 export const getGuestByName = async (name) => {
   return client.get(`/quests/find_by_name/${name}`);

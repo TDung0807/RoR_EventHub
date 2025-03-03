@@ -39,6 +39,7 @@ export function RestaurantModal({
       setContact(data.contact || "");
     }
   }, [data]); // Runs when `data` changes
+  const cuisineType = ["Việt", "Thái", "Trung", "Hàn", "Nhật", "Pháp"];
 
   const handleRestaurantChange = (event) => setRestaurant(event.target.value);
   const handleAddressChange = (event) => setAddress(event.target.value);
@@ -168,9 +169,9 @@ export function RestaurantModal({
           value={cuisine}
           onChange={handleCuisineChange}
         >
-          <MenuItem value="Restaurant A">Restaurant A</MenuItem>
-          <MenuItem value="Restaurant B">Restaurant B</MenuItem>
-          <MenuItem value="Restaurant C">Restaurant C</MenuItem>
+          {cuisineType.map((item, index) => (
+            <MenuItem value={item}>{item}</MenuItem>
+          ))}
         </Select>
       </FormControl>
 

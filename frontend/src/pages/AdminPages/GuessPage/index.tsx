@@ -13,12 +13,11 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { getAllGroup } from "../../../service/GuessGroup";
 export const AdminGuestPage = () => {
-  const { data, error, isError, isLoading } = useQuery(
+  const { data, error, isError, isLoading, refetch } = useQuery(
     ["guessgroups"],
     getAllGroup
   );
   const { hash, pathname, search } = location;
-  console.log(pathname);
   const [openGuessGroupModal, setOpenGuessGroupModal] = useState(false);
   const [openGuessListModal, setOpenGuessListModal] = useState(false);
   const [guessListId, setGuessListId] = useState({});
@@ -54,6 +53,7 @@ export const AdminGuestPage = () => {
     <div>
       {openGuessGroupModal == true ? (
         <GuessGroupModal
+          refetchFunc={refetch}
           open={openGuessGroupModal}
           handleClose={() => {
             setOpenGuessGroupModal(false);
