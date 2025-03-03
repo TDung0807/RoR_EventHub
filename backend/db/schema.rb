@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_19_161637) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_03_085342) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -53,6 +53,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_161637) do
     t.bigint "group_id", null: false
     t.index ["event_id", "group_id"], name: "index_events_groups_on_event_id_and_group_id"
     t.index ["group_id", "event_id"], name: "index_events_groups_on_group_id_and_event_id"
+  end
+
+  create_table "events_quests", id: false, force: :cascade do |t|
+    t.bigint "event_id", null: false
+    t.bigint "quest_id", null: false
+    t.index ["event_id", "quest_id"], name: "index_events_quests_on_event_id_and_quest_id", unique: true
+    t.index ["event_id"], name: "index_events_quests_on_event_id"
+    t.index ["quest_id"], name: "index_events_quests_on_quest_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -172,6 +180,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_161637) do
 
   add_foreign_key "dishes", "restaurants"
   add_foreign_key "events", "users"
+  add_foreign_key "events_quests", "events"
+  add_foreign_key "events_quests", "quests"
   add_foreign_key "groups", "hotels"
   add_foreign_key "groups", "restaurants"
   add_foreign_key "groups", "transports"

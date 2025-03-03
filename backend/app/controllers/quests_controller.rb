@@ -105,7 +105,18 @@ class QuestsController < ApplicationController
   def find_by_email
     Rails.logger.info "Looking for quest with email: #{params[:email]}"
     @quest = Quest.find_by(email: params[:email])
-  
     render json:  { quest: @quest ? @quest.as_json : nil }, status: :ok
   end
+
+  def events_by_email
+    @quest = Quest.find_by(email: params[:email])
+  
+    unless @quest
+      render json: { message: "Quest not found" }, status: :not_found
+      return
+    end
+    sorted_events = @quest.events.order(:date) 
+    render json: { events: sorted_events.as_json }, status: :ok
+  end
+  
 end

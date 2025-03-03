@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   
   resources :events, only: [:create, :index, :edit, :update, :destroy] do
     collection do
+      post 'add_quest', on: :member
       get :upcoming
       get 'user_events/:user_id', to: 'events#events_by_user'
     end
@@ -29,7 +30,7 @@ Rails.application.routes.draw do
     delete 'quests/:quest_id', to: 'groups#remove_quest'
     get 'quests', to: 'groups#quests'
   end
-
+  get 'quests/:email/events', to: 'quests#events_by_email'  
   resources :quests, only: [:create, :index, :show, :update, :destroy] do
     collection do
       get 'find_by_name/:name', to: 'quests#find_by_name'

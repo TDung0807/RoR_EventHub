@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   before_action :authenticate, only: [:create, :index, :update, :destroy, :upcoming, :events_by_user]
   def index
-    @events = Event.all
+    @events = Event.order(:date)
     render json: @events.as_json, status: :ok
   end
   
@@ -59,8 +59,8 @@ class EventsController < ApplicationController
     if current_user
       @user = User.find_by(id: params[:user_id])
       if @user
-        @events = @user.events
-        render json: { events: @events.any? ? @events.map(&:as_json) : nil }, status: :ok
+        @events = @user.events.order(:date) # Sort user events by date
+        render json: { events: @events.as_json }, status: :ok
       else
         render json: { error: "User not found" }, status: :ok
       end
@@ -68,9 +68,26 @@ class EventsController < ApplicationController
       render json: { error: "Unauthorized" }, status: :unauthorized
     end
   end
+  def add_quest
+    quest = Quest.find_by(email: params[:email]) # Identify quest by email
+    if quest.nil?
+      render json: { error: "Quest not found" }, status: :not_found
+      return
+    end
+    if @event.quests.include?(quest)
+      render json: { message: "Quest is already added to the event" }, status: :unprocessable_entity
+      return
+    end
+    
+    @event.quests << quest
+    if @event.save
+      render json: { message: "Quest added successfully", event: @event }, status: :ok
+    else
+      render json: { error: "Failed to add quest", details: @event.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
 
   private
-
   def event_params
     params.required(:event).permit(:label, :date, :description, :location, :participants, :startHour, :endHour, :groupLabel)
   end
