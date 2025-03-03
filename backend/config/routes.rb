@@ -6,9 +6,7 @@ Rails.application.routes.draw do
   
   resources :events, only: [:create, :index, :edit, :update, :destroy] do
     collection do
-      member do
-        get :by_email
-      end
+      get 'by_quest_email', to: 'events#events_by_quest_email'
       get :upcoming
       get 'user_events/:user_id', to: 'events#events_by_user'
     end

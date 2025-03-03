@@ -86,7 +86,13 @@ class EventsController < ApplicationController
       render json: { error: "Failed to add quest", details: @event.errors.full_messages }, status: :unprocessable_entity
     end
   end
-
+  def events_by_quest_email
+    quest = Quest.find_by(email: params[:email])
+    return render json: { error: "Quest not found" }, status: :not_found unless quest
+  
+    events = quest.events.order(:date)
+    render json: { events: events.as_json }, status: :ok
+  end
   private
   def event_params
     params.required(:event).permit(:label, :date, :description, :location, :participants, :startHour, :endHour, :groupLabel)
