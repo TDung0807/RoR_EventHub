@@ -13,6 +13,7 @@ class GroupsController < ApplicationController
       end
       @group = Group.new(group_params)
       if @group.save
+        auto_add_event_to_quests(@group)
         render json: @group.as_json, status: :ok
       else
         render json:{message:"Creating error", error:@group.errors.full_messages}, status: :bad_request
@@ -45,7 +46,7 @@ class GroupsController < ApplicationController
         if params[:quest_ids]
           @group.quests = Quest.find(params[:quest_ids])
         end
-  
+        auto_add_event_to_quests(@group)
         render json: { message: "Updated successfully", group: @group.as_json }, status: :ok
       else
         render json: { message: "Update failed", errors: @group.errors.full_messages }, status: :unprocessable_entity
@@ -106,7 +107,14 @@ class GroupsController < ApplicationController
       render json: { quests: @group.quests.as_json }, status: :ok
     end
     private
-
+    def auto_add_event_to_quests(group)
+      event_id = group.event_id
+      quest_ids = group.quests.pluck(:id)
+  
+      quest_ids.each do |quest_id|
+        EventsQuest.find_or_create_by(event_id: event_id, quest_id: quest_id)
+      end
+    end
     def update_quantity(group)
       group.update(quantity: group.quests.count)
     end

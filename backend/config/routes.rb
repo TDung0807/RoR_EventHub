@@ -32,7 +32,8 @@ Rails.application.routes.draw do
     delete 'quests/:quest_id', to: 'groups#remove_quest'
     get 'quests', to: 'groups#quests'
   end
-  get 'quests/:email/events', to: 'quests#events_by_email'  
+  
+  get 'quests/:email/events', to: 'quests#events_by_email'
   resources :quests, only: [:create, :index, :show, :update, :destroy] do
     collection do
       get 'find_by_name/:name', to: 'quests#find_by_name'
