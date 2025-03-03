@@ -17,7 +17,6 @@ class Event < ApplicationRecord
   belongs_to :user
   has_and_belongs_to_many :groups, join_table: 'events_groups'
   has_and_belongs_to_many :quests, after_add: :set_participants_count, after_remove: :set_participants_count
-  before_save :convert_hours_format
 
   # Custom JSON Serialization
   def as_json(options = {})
@@ -27,14 +26,10 @@ class Event < ApplicationRecord
     })
   end
   private
-  def convert_hours_format
-    self.start_hour = startHour if startHour.present?
-    self.end_hour = endHour if endHour.present?
-  end
   def start_and_end_hour_are_valid_times
-    if startHour.present?
+    if start_hour.present?
       begin
-        Time.parse(startHour.to_s) 
+        Time.parse(start_hour.to_s) 
       rescue ArgumentError
         errors.add(:start_hour, "must be a valid time")
       end
@@ -50,8 +45,8 @@ class Event < ApplicationRecord
   end
 
   def parse_and_calculate_duration
-    if startHour.present? && end_hour.present?
-      start_time = Time.parse(startHour.to_s)
+    if start_hour.present? && end_hour.present?
+      start_time = Time.parse(start_hour.to_s)
       end_time = Time.parse(end_hour.to_s)
       self.duration = ((end_time - start_time) / 1.hour).to_f.round(2)
     end
