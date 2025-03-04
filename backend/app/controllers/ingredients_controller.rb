@@ -1,6 +1,6 @@
 class IngredientsController < ApplicationController
   before_action :authenticate, only: [:create, :index, :show, :update, :destroy, :get_by_name]
-  validates :name, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: 100 }, allow_blank: false
+
   def create
     if current_user
       @ingredient = Ingredient.new(ingredient_params)

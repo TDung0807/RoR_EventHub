@@ -1,9 +1,5 @@
 class TransportsController < ApplicationController
     before_action :authenticate, only: [:create, :index, :update, :destroy, :get_transport_by_vendor_id]
-    validates :transport_type, presence: true, allow_blank: false
-    validates :brand, presence: true, allow_blank: false
-    validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
-    validates :vendor_id, presence: true
     private
   
     def transport_params
