@@ -36,17 +36,17 @@ class GroupsController < ApplicationController
 
   def update
     @group = Group.find_by(id: params[:id])
-
     unless @group
       render json: { message: "Group not found" }, status: :not_found
       return
     end
-
+  
     if @group.update(group_params)
       if params[:quest_ids]
         @group.quests = Quest.find(params[:quest_ids])
       end
       auto_add_event_to_quests(@group)
+      update_quantity(@group)  # Ensure event participants are updated
       render json: { message: "Updated successfully", group: @group.as_json }, status: :ok
     else
       render json: { message: "Update failed", errors: @group.errors.full_messages }, status: :unprocessable_entity
@@ -83,7 +83,7 @@ class GroupsController < ApplicationController
       render json: { message: "No quests found" }, status: :not_found
     else
       @group.quests << quests
-      update_quantity(@group)
+      update_quantity(@group)  # Auto-update event participants
       render json: { message: 'Quests added successfully', group: @group.as_json }, status: :ok
     end
   end
@@ -94,7 +94,7 @@ class GroupsController < ApplicationController
   
     if @group.quests.include?(@quest)
       @group.quests.delete(@quest)
-      update_quantity(@group)
+      update_quantity(@group)  # Auto-update event participants
       render json: { message: 'Quest removed successfully', group: @group.as_json }, status: :ok
     else
       render json: { message: 'Quest not found in this group' }, status: :not_found
@@ -107,6 +107,18 @@ class GroupsController < ApplicationController
     render json: { quests: @group.quests.as_json }, status: :ok
   end
   private
+  def update_event_participants(event_id)
+    event = Event.find_by(id: event_id)
+    return unless event
+    total_participants = Group.where(event_id: event_id).sum(:quantity)
+    event.update(participants: total_participants)
+  end
+
+  def update_quantity(group)
+    group.update(quantity: group.quests.count)
+    update_event_participants(group.event_id)
+  end
+
   def auto_add_event_to_quests(group)
     event_id = group.event_id
     quest_ids = group.quests.pluck(:id)
@@ -114,8 +126,5 @@ class GroupsController < ApplicationController
     quest_ids.each do |quest_id|
       EventsQuest.find_or_create_by(event_id: event_id, quest_id: quest_id)
     end
-  end
-  def update_quantity(group)
-    group.update(quantity: group.quests.count)
   end
 end
