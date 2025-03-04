@@ -1,6 +1,9 @@
 class GroupsController < ApplicationController
     before_action :authenticate, only: [:create, :index, :show, :update, :destroy]
-  
+    validates :group, presence: true, uniqueness: true, allow_blank: false
+    validates :groupStatus, presence: true, allow_blank: false
+    validates :quantity, numericality: { greater_than_or_equal_to: 0}
+    validates :description, length: { maximum: 500 }, allow_blank: true
     private
     def group_params
       params.require(:group).permit(:group, :groupStatus, :transport_id, :quantity, :description, :hotel_remark, :transport_remark, :dish_remark, :hotel_id, :restaurant_id, :event_id, dish_ids: [])

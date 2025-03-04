@@ -1,6 +1,8 @@
 class DishesController < ApplicationController
   before_action :authenticate, only: [:create, :index, :show, :update, :destroy]
-
+  validates :name, presence: true, uniqueness: { scope: :restaurant_id, message: "Dish name must be unique within a restaurant" }
+  validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :dish_type, presence: true, allow_blank: false
   def create
     if current_user
       @restaurant = Restaurant.find(params[:restaurant_id])

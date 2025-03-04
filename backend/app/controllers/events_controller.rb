@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   before_action :authenticate, only: [:create, :index, :update, :destroy, :upcoming, :events_by_user]
   before_action :set_event, only: [:update, :destroy, :add_quest]
-
+  validates :label, :date, :location, :participants, :start_hour, :end_hour, presence: true, allow_blank: false
   def index
     @events = Event.order(:date)
     render json: @events.as_json, status: :ok
