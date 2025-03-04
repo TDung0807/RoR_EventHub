@@ -46,10 +46,12 @@ export function UserCalendar() {
     eventsData =
       data.data?.map((event) => ({
         id: `${event.id}`,
-        label: `${event.label}`,
+        label: `${event.label} & ${formatTime(event.start_hour)} - ${formatTime(
+          event.end_hour
+        )}`,
         groupLabel: "Event",
-        startHour: formatTime(event.startHour),
-        endHour: formatTime(event.endHour),
+        startHour: formatTime(event.start_hour),
+        endHour: formatTime(event.end_hour),
         date: event.date.split("T")[0], // Lấy phần ngày
         location: event.location,
         description: event.description || "",
@@ -62,11 +64,11 @@ export function UserCalendar() {
         data.data?.events?.map((event) => ({
           id: `${event.id}`,
           label: `${event.label} & ${formatTime(
-            event.startHour
-          )} - ${formatTime(event.endHour)}`,
+            event.start_hour
+          )} - ${formatTime(event.end_hour)}`,
           groupLabel: "Event",
-          startHour: formatTime(event.startHour),
-          endHour: formatTime(event.endHour),
+          startHour: formatTime(event.start_hour),
+          endHour: formatTime(event.end_hour),
           date: event.date.split("T")[0], // Lấy phần ngày
           location: event.location,
           description: event.description || "",

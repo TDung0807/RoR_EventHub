@@ -50,15 +50,14 @@ export function DishedPage() {
       }
     }
   }, [JSON.stringify(intergrientDataQueries)]);
-
   const dishedRenderData = dishedData.map((dished, index) => {
-    const { description, created_at, updated_at, id, ...rest } = dished;
+    const { description, created_at, updated_at, restaurant_id, ...rest } =
+      dished;
     const ingredientData =
       // @ts-ignore
       intergrientDataQueries[index]?.data?.data?.ingredients || [];
-    return { ...rest, MainInter: ingredientData };
+    return { ...rest };
   });
-
   // Các hàm mở modal, chỉnh sửa...
   const handleOpen = () => setModalopen(true);
   const onEditModal = (item) => {
@@ -71,7 +70,6 @@ export function DishedPage() {
     setDetailDished(null);
     setAction("add");
   };
-
   // Bây giờ trong JSX, xử lý loading hoặc error bên trong giao diện
   return (
     <div>
@@ -83,6 +81,7 @@ export function DishedPage() {
         setOpen={setModalopen}
         open={modalOpen}
       />
+
       <Box sx={{ padding: 2 }}>
         <div className={styles.headerContainer}>
           <Link to="/admin/utility" style={{ width: "fit-content" }}>
@@ -106,7 +105,7 @@ export function DishedPage() {
         ) : (
           <MainTable
             editEvent={onEditModal}
-            utilityRows={["Dish", "Price", "Type ", "Main Ingredient ", ""]}
+            utilityRows={["Dish", "Price", "Type", ""]}
             utilityData={dishedRenderData}
           />
         )}

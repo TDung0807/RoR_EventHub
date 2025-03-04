@@ -31,9 +31,9 @@ export function UserHomePage() {
       ({
         date,
         description,
-        endHour,
+        end_hour,
         groupLabel,
-        startHour,
+        start_hour,
         updated_at,
         user_id,
         created_at,
@@ -48,9 +48,9 @@ export function UserHomePage() {
         ({
           date,
           description,
-          endHour,
+          end_hour,
           groupLabel,
-          startHour,
+          start_hour,
           updated_at,
           user_id,
           created_at,

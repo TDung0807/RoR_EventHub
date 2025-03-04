@@ -206,7 +206,6 @@ export function UtilityPage() {
     "Contact",
     "Cuisine type ",
     "No. dishes ",
-    "Main ingredient",
     "",
   ];
 

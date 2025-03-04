@@ -15,6 +15,10 @@ import { useMutation } from "@tanstack/react-query";
 
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
+const generatePassword = (guestName) => {
+  const random = Math.floor(Math.random() * 1000) + 1;
+  return `${guestName}${random}`;
+};
 
 export function ModalGuestList({
   open,
@@ -97,6 +101,7 @@ export function ModalGuestList({
     return <div>Error loading data. Please try again.</div>;
   }
   const usersArr = guestInGroup?.data?.quests || [];
+
   const addingGuestToGroup = async () => {
     await setShouldFetchGuestEmail(true); // Trigger the query
     await setShouldFetchGuestName(true); // Trigger the query
@@ -130,10 +135,10 @@ export function ModalGuestList({
         });
         let resultRegister = await registerService({
           user: {
-            username: guestName,
+            username: guestEmail,
             name: guestName,
             role: 0,
-            password: "123",
+            password: generatePassword(guestName),
             email: guestEmail,
           },
         });

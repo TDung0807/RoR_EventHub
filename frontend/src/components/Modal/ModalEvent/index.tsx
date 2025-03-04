@@ -74,8 +74,8 @@ export const ModalEvent = ({
     try {
       const result = await addingEventSer({
         label: eventName,
-        startHour: eventFrom,
-        endHour: eventTo,
+        start_hour: eventFrom,
+        end_hour: eventTo,
         date: eventDate,
         participants: eventParticipants,
         location: eventLocation,
@@ -110,8 +110,8 @@ export const ModalEvent = ({
       const result = await editEventSer({
         id: id,
         label: eventName,
-        startHour: eventFrom,
-        endHour: eventTo,
+        start_hour: eventFrom,
+        end_hour: eventTo,
         date: eventDate,
         participants: eventParticipants,
         location: eventLocation,

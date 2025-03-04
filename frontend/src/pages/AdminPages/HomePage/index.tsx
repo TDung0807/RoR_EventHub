@@ -23,9 +23,9 @@ export function AdminHomePage() {
       ({
         date,
         description,
-        endHour,
+        end_hour,
         groupLabel,
-        startHour,
+        start_hour,
         updated_at,
         user_id,
         created_at,
@@ -39,9 +39,9 @@ export function AdminHomePage() {
       ({
         date,
         description,
-        endHour,
+        end_hour,
         groupLabel,
-        startHour,
+        start_hour,
         updated_at,
         user_id,
         created_at,

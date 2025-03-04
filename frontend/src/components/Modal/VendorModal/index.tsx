@@ -60,7 +60,6 @@ export function VendorModal({
         contact: contact,
         time_limit: timeLimit,
         distance_limit: distanceLimit,
-        transport_type: transportType,
       });
       if (result.status != 404 && result.status != 500) {
         toast("Thêm thành công ùi", {
@@ -94,7 +93,6 @@ export function VendorModal({
         contact: contact,
         time_limit: timeLimit,
         distance_limit: distanceLimit,
-        transport_type: transportType,
       });
       if (result.status != 404 && result.status != 500) {
         toast("Sửa thành công ùi", {
@@ -120,8 +118,7 @@ export function VendorModal({
   };
 
   const handleVendorNameChange = (event) => setVendorName(event.target.value);
-  const handleTransportTypeChange = (event) =>
-    setServiceType(event.target.value);
+  const handleServiceTypeChange = (event) => setServiceType(event.target.value);
   const handleContactChange = (event) => setContact(event.target.value);
   const handleTimeLimitChange = (event) => setTimeLimit(event.target.value);
 
@@ -157,20 +154,17 @@ export function VendorModal({
         onChange={handleVendorNameChange}
         sx={{ width: "100%" }}
       ></MyTextFields>
-      <MyTextFields
-        id="outlined-password-input"
-        label="Service Type"
-        type="text"
-        variant="outlined"
-        style={{
-          marginLeft: "auto",
-          marginRight: "auto",
-          marginBottom: "20px",
-        }}
-        value={serviceType}
-        onChange={handleTransportTypeChange}
-        sx={{ width: "100%" }}
-      ></MyTextFields>
+      <FormControl fullWidth sx={{ mb: 2 }}>
+        <InputLabel id="vendor-label">Service Type</InputLabel>
+        <Select
+          labelId="vendor-label"
+          value={serviceType}
+          onChange={handleServiceTypeChange}
+        >
+          <MenuItem value="Part Time">Part Time</MenuItem>
+          <MenuItem value="Full Time">Full Time</MenuItem>
+        </Select>
+      </FormControl>
 
       <MyTextFields
         id="outlined-password-input"
@@ -186,22 +180,7 @@ export function VendorModal({
         onChange={handleContactChange}
         sx={{ width: "100%" }}
       ></MyTextFields>
-      <MyTextFields
-        id="outlined-password-input"
-        label="Transport Type"
-        type="text"
-        variant="outlined"
-        style={{
-          marginLeft: "auto",
-          marginRight: "auto",
-          marginBottom: "20px",
-        }}
-        value={transportType}
-        onChange={(e) => {
-          setTransportType(e.target.value);
-        }}
-        sx={{ width: "100%" }}
-      ></MyTextFields>
+
       <MyTextFields
         id="outlined-password-input"
         label="Time Limit"

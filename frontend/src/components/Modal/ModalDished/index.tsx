@@ -32,7 +32,6 @@ export const ModalDished = ({
   refetchDishedFunc,
 }) => {
   const handleClose = () => setOpen(false);
-
   // Các state quản lý thông tin của món ăn
   const [dishedName, setDishedName] = useState("");
   const [dishedPrice, setDishedPrice] = useState("");
@@ -50,7 +49,6 @@ export const ModalDished = ({
       setDishedId(detailDishedData.id || "");
     }
   }, [detailDishedData]);
-
   // Lấy danh sách tất cả nguyên liệu
   const {
     data: intergrientData,
@@ -90,7 +88,6 @@ export const ModalDished = ({
     () => getAllIntergrientByDishedId(ingredientId),
     { enabled: Boolean(ingredientId) }
   );
-
   // Nếu có lỗi thì hiển thị thông báo lỗi
   useEffect(() => {
     if (interError || interIdError) {
@@ -102,16 +99,15 @@ export const ModalDished = ({
   const isLoading = interLoading || interIdLoading;
 
   // Lấy dữ liệu nguyên liệu theo id
-  const intergrientDataIdRender =
-    intergrientIdData?.data?.ingredients?.[0] || {};
-
+  const intergrientDataIdRender = intergrientIdData?.data?.ingredients[0] || {};
   // Đồng bộ ingredientValue với dữ liệu lấy được nếu khác
   useEffect(() => {
     if (
+      ingredientValue == "" &&
       intergrientDataIdRender?.id &&
       intergrientDataIdRender.id !== ingredientValue
     ) {
-      setIngredientValue(intergrientDataIdRender.id);
+      setIngredientValue(intergrientDataIdRender.id || "");
     }
   }, [intergrientDataIdRender?.id, ingredientValue]);
 
@@ -171,7 +167,7 @@ export const ModalDished = ({
         ingredient_id: ingredientValue,
       });
       // Nếu nguyên liệu thay đổi thì xoá cũ và thêm mới
-      if (intergrientIdData?.data?.ingredients?.[0] != ingredientValue) {
+      if (intergrientIdData?.data?.ingredients[0] != ingredientValue) {
         await deleteIntergrientFunc({
           id: [resultDished.data.id],
         });
@@ -204,7 +200,6 @@ export const ModalDished = ({
       });
     }
   };
-
   return (
     <>
       {isLoading ? (
@@ -259,7 +254,11 @@ export const ModalDished = ({
                     <InputLabel>Ingredients</InputLabel>
                     <Select
                       value={ingredientValue}
-                      onChange={(e) => setIngredientValue(e.target.value)}
+                      onChange={(e) => {
+                        console.log(e.target.value);
+
+                        setIngredientValue(e.target.value);
+                      }}
                     >
                       {intergrientDataRender.map((item) => (
                         <MenuItem key={item.id} value={item.id}>
