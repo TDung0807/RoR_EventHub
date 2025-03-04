@@ -1,109 +1,121 @@
-class EventsController < ApplicationController
-  before_action :authenticate, only: [:create, :index, :update, :destroy, :upcoming, :events_by_user]
-  before_action :set_event, only: [:update, :destroy, :add_quest]
+class GroupsController < ApplicationController
+  before_action :authenticate, only: [:create, :index, :show, :update, :destroy]
 
-  def index
-    @events = Event.order(:date)
-    render json: @events.as_json, status: :ok
+  private
+  def group_params
+    params.require(:group).permit(:group, :groupStatus, :transport_id, :quantity, :description, :hotel_remark, :transport_remark, :dish_remark, :hotel_id, :restaurant_id, :event_id, dish_ids: [])
   end
 
+  public
   def create
-    if current_user
-      @event = current_user.events.build(event_params)
-
-      if @event.save
-        render json: @event.as_json, status: :ok
-      else
-        render json: { message: "Error creating event", errors: @event.errors.full_messages }, status: :unprocessable_entity
-      end
+    unless current_user
+      render json:{error:"Unauthorized"}, status: :unauthorized
+    end
+    @group = Group.new(group_params)
+    if @group.save
+      auto_add_event_to_quests(@group)
+      render json: @group.as_json, status: :ok
     else
-      render json: { error: "Unauthorized" }, status: :unauthorized
+      render json:{message:"Creating error", error:@group.errors.full_messages}, status: :bad_request
     end
   end
 
+  def index
+    groups = Group.includes(:restaurant, :transport, :hotel).all
+    render json: { groups: groups.as_json(include: [:restaurant, :transport, :hotel]) }, status: :ok
+  end
+
+  def show
+    @group = Group.includes(:restaurant, :transport, :hotel).find_by(id: params[:id])
+    unless @group
+      render json: { message: "Group not found" }, status: :not_found
+      return
+    end
+    render json: { group: @group.as_json(include: [:restaurant, :transport, :hotel]) }, status: :ok
+  end
+
   def update
-    if @event
-      if @event.update(event_params)
-        render json: @event.as_json, status: :ok
-      else
-        render json: { message: "Error updating event", errors: @event.errors.full_messages }, status: :unprocessable_entity
+    @group = Group.find_by(id: params[:id])
+
+    unless @group
+      render json: { message: "Group not found" }, status: :not_found
+      return
+    end
+
+    if @group.update(group_params)
+      if params[:quest_ids]
+        @group.quests = Quest.find(params[:quest_ids])
       end
+      auto_add_event_to_quests(@group)
+      render json: { message: "Updated successfully", group: @group.as_json }, status: :ok
     else
-      render json: { error: "Event not found or not authorized to update" }, status: :not_found
+      render json: { message: "Update failed", errors: @group.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def destroy
-    if @event.destroy
-      render json: { message: "Event deleted successfully" }, status: :ok
+    @group = Group.find_by(id: params[:id])
+    unless current_user
+      render json:{error:"Unauthorized"}, status: :unauthorized
+    end
+    unless @group
+      render json:{message:"Group not found"}, status: :not_found
+    end
+
+    if @group.destroy
+      render json: { message: "Deleted successfully" }, status: :ok
     else
-      render json: { message: "Error deleting event" }, status: :unprocessable_entity
+      render json: { message: "Deletion failed" }, status: :unprocessable_entity
     end
   end
-
-  def upcoming
-    upcoming_events = Event.where("date >= ?", Date.today).order(:date)
-    render json: { events: upcoming_events.as_json }, status: :ok
-  end
-
-  def events_by_user
-    if current_user
-      @user = User.find_by(id: params[:user_id])
-      if @user
-        @events = @user.events.order(:date)
-        render json: { events: @events.as_json }, status: :ok
-      else
-        render json: { error: "User not found" }, status: :not_found
-      end
-    else
-      render json: { error: "Unauthorized" }, status: :unauthorized
+  def add_quests
+    @group = Group.find(params[:group_id])
+    quest_ids = params[:quest_ids]
+  
+    if quest_ids.blank?
+      render json: { message: "No quests provided" }, status: :unprocessable_entity
+      return
     end
-  end
-
-  def add_quest
-    return render json: { error: "Event not found" }, status: :not_found unless @event
-
-    quest = Quest.find_by(email: params[:email])
-    return render json: { error: "Quest not found" }, status: :not_found unless quest
-
-    if @event.quests.include?(quest)
-      render json: { message: "Quest is already added to the event" }, status: :unprocessable_entity
+  
+    quests = Quest.find(quest_ids)
+  
+    if quests.empty?
+      render json: { message: "No quests found" }, status: :not_found
     else
-      @event.quests << quest
-      if @event.save
-        render json: { message: "Quest added successfully", event: @event }, status: :ok
-      else
-        render json: { error: "Failed to add quest", details: @event.errors.full_messages }, status: :unprocessable_entity
-      end
+      @group.quests << quests
+      update_quantity(@group)
+      render json: { message: 'Quests added successfully', group: @group.as_json }, status: :ok
     end
-  end
-
-  def events_by_quest_email
-    quest = Quest.find_by(email: params[:email])
-    return render json: { error: "Quest not found" }, status: :not_found unless quest
-
-    events = quest.events.order(:date)
-    render json: { events: events.as_json }, status: :ok
-  end
-
-  # New: Fetch all events for a given group
-  def events_by_group
-    group = Group.find_by(id: params[:group_id])
-    return render json: { error: "Group not found" }, status: :not_found unless group
-
-    events = group.events.order(:date)
-    render json: { events: events.as_json }, status: :ok
-  end
-
-  private
-
-  def event_params
-    params.require(:event).permit(:label, :date, :description, :location, :participants, :start_hour, :end_hour, :group_id)
-  end
-
-  def set_event
-    @event = Event.find_by(id: params[:id])
-    render json: { error: "Event not found" }, status: :not_found unless @event
   end
   
+  def remove_quest
+    @group = Group.find(params[:group_id])
+    @quest = Quest.find(params[:quest_id])
+  
+    if @group.quests.include?(@quest)
+      @group.quests.delete(@quest)
+      update_quantity(@group)
+      render json: { message: 'Quest removed successfully', group: @group.as_json }, status: :ok
+    else
+      render json: { message: 'Quest not found in this group' }, status: :not_found
+    end
+  end
+  
+
+  def quests
+    @group = Group.find(params[:group_id])
+    render json: { quests: @group.quests.as_json }, status: :ok
+  end
+  private
+  def auto_add_event_to_quests(group)
+    event_id = group.event_id
+    quest_ids = group.quests.pluck(:id)
+
+    quest_ids.each do |quest_id|
+      EventsQuest.find_or_create_by(event_id: event_id, quest_id: quest_id)
+    end
+  end
+  def update_quantity(group)
+    group.update(quantity: group.quests.count)
+  end
 end
