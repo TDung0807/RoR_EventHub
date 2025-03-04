@@ -33,7 +33,7 @@ export function UtilityPage() {
   const [expand, setExpand] = useState(false);
   const handleExpand = () => setExpand(!expand);
 
-  const changingBtn = ["Fnb", "Hotel", "Vendor"];
+  const changingBtn = ["FnB", "Hotel", "Vendor"];
   const [activeButton, setActiveButton] = useState(changingBtn[0]);
   const [openSideModal, setOpenSideModal] = useState(false);
   const [actionSideModal, setActionSideModal] = useState("Add");
@@ -366,7 +366,7 @@ export function UtilityPage() {
             />
           </Box>
         )}
-        {activeButton == "Fnb" && (
+        {activeButton == "FnB" && (
           <Box sx={{ padding: 2 }}>
             <Box
               sx={{
