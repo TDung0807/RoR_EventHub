@@ -5,6 +5,7 @@ import { HotelTypeModal } from "../HotelTypeModal";
 import { TransportModal } from "../TransportModal";
 
 export function OtherSideModal({
+  data = null,
   mainDataId = 1,
   open,
   handleClose,
@@ -12,6 +13,7 @@ export function OtherSideModal({
   action = "Add",
   roomDataQueries,
   transportDataQueries,
+  refetchFunc = () => {},
 }) {
   const modalStyle = {
     position: "absolute",
@@ -31,19 +33,21 @@ export function OtherSideModal({
         {option == "Hotel" && (
           <HotelTypeModal
             roomDataQueries={roomDataQueries}
-            data={null}
+            data={data}
             action={action}
             handleClose={handleClose}
             mainDataId={mainDataId}
+            refetchFunc={refetchFunc}
           ></HotelTypeModal>
         )}
         {option == "Vendor" && (
           <TransportModal
             transportDataQueries={transportDataQueries}
-            data={null}
+            data={data}
             action={action}
             handleClose={handleClose}
             mainDataId={mainDataId}
+            refetchFunc={refetchFunc}
           ></TransportModal>
         )}
       </Box>

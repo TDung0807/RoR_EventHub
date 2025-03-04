@@ -5,13 +5,7 @@ import {
   Typography,
   TextField,
   Button,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  IconButton,
   Rating,
-  Stack,
 } from "@mui/material";
 import { MyButton } from "../../index";
 import { addHotel, putHotel } from "../../../service/Hotel";
@@ -26,132 +20,86 @@ export function HotelModal({
   refetchHotels = null,
   ...props
 }) {
-  const hotelId = data != null && data.id != null ? data.id : "";
+  const hotelId = data?.id || "";
 
-  const [address, setAddress] = useState(
-    data != null && data.address != null ? data.address : ""
-  );
-  const [hotelName, setHotelName] = useState(
-    data != null && data.name != null ? data.name : ""
-  );
-  const [remark, setRemark] = useState(
-    data != null && data.remark ? data.remark : ""
-  );
-  const [distant, setDistant] = useState(
-    data != null && data.distance ? data.distance : ""
-  );
-  const [starValue, setStarValue] = useState(
-    data != null && data.star ? data.star : ""
-  );
-  const [checkinTime, setCheckinTime] = useState(
-    data != null && data.checkin_time != null
-      ? () => {
-          const date = new Date(data.checkin_time);
-          const hours = String(date.getHours()).padStart(2, "0");
-          const minutes = String(date.getMinutes()).padStart(2, "0");
-          return `${hours}:${minutes}`;
-        }
-      : ""
-  );
-  const [checkoutTime, setCheckoutTime] = useState(
-    data != null && data.checkout_time != null
-      ? () => {
-          const date = new Date(data.checkout_time);
-          const hours = String(date.getHours()).padStart(2, "0");
-          const minutes = String(date.getMinutes()).padStart(2, "0");
-          return `${hours}:${minutes}`;
-        }
-      : ""
-  );
-  const [contact, setContact] = useState(
-    data != null && data.contact != null ? data.contact : ""
-  );
-  const handleHotelNameChange = (event) => setHotelName(event.target.value);
-  const handleAddressChange = (event) => setAddress(event.target.value);
-  const handleRemarkChange = (event) => setRemark(event.target.value);
-  const handleStarChange = (event) => setStarValue(event.target.value);
-  const handleDistantChange = (event) => setDistant(event.target.value);
-  const handleContactChange = (event) => setContact(event.target.value);
+  const [formValues, setFormValues] = useState({
+    address: data?.address || "",
+    hotelName: data?.name || "",
+    remark: data?.remark || "",
+    distant: data?.distance || "",
+    starValue: data?.star || 0,
+    checkinTime: data?.checkin_time ? formatTime(data.checkin_time) : "",
+    checkoutTime: data?.checkout_time ? formatTime(data.checkout_time) : "",
+    contact: data?.contact || "",
+  });
+
+  const [errors, setErrors] = useState({});
 
   const { mutateAsync: addingHotelsFunc } = useMutation({
     mutationFn: addHotel,
   });
-  const { mutateAsync: putHotelFunc } = useMutation({
-    mutationFn: putHotel,
-  });
-  const addingHotels = async () => {
+  const { mutateAsync: putHotelFunc } = useMutation({ mutationFn: putHotel });
+
+  function formatTime(time) {
+    const date = new Date(time);
+    return `${String(date.getHours()).padStart(2, "0")}:${String(
+      date.getMinutes()
+    ).padStart(2, "0")}`;
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
     try {
-      const result = await addingHotelsFunc({
-        name: hotelName,
-        address: address,
-        rating: starValue,
-        star: starValue,
-        distance: distant,
-        contact: contact,
-        checkin_time: checkinTime,
-        checkout_time: checkoutTime,
+      setErrors({
+        ...errors,
+        [name]: value.trim() === "" ? "This field is required" : "",
       });
-      if (result.status != 404 && result.status != 500) {
-        toast("Thêm thành công ùi", {
-          autoClose: 3000,
-          type: "success",
-        });
-        if (refetchHotels != null) {
-          refetchHotels();
-        }
+    } catch {}
+  };
+
+  const validate = () => {
+    let tempErrors = {};
+    Object.keys(formValues).forEach((key) => {
+      if (!formValues[key] && key !== "remark") {
+        tempErrors[key] = "This field is required";
+      }
+    });
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  };
+
+  const handleSubmit = async () => {
+    if (!validate()) return;
+    const payload = {
+      name: formValues.hotelName,
+      address: formValues.address,
+      rating: formValues.starValue,
+      star: formValues.starValue,
+      distance: formValues.distant,
+      contact: formValues.contact,
+      checkin_time: formValues.checkinTime,
+      checkout_time: formValues.checkoutTime,
+      remark: formValues.remark,
+    };
+    try {
+      const result =
+        action === "Add"
+          ? await addingHotelsFunc(payload)
+          : await putHotelFunc({ id: hotelId, ...payload });
+      if (result.status !== 404 && result.status !== 500) {
+        toast(`${action} thành công`, { autoClose: 3000, type: "success" });
+        refetchHotels?.();
+        refetchGuessGroup?.();
       } else {
-        toast("Lỗi ùi nè bạn ui", {
-          autoClose: 3000,
-          type: "error",
-        });
+        toast("Lỗi rồi bạn ui", { autoClose: 3000, type: "error" });
       }
       handleClose();
     } catch {
-      toast("Lỗi ùi nè bạn ui", {
-        autoClose: 3000,
-        type: "error",
-      });
+      toast("Lỗi rồi bạn ui", { autoClose: 3000, type: "error" });
     }
   };
-  const editHotels = async () => {
-    try {
-      const result = await putHotelFunc({
-        id: hotelId,
-        name: hotelName,
-        address: address,
-        rating: starValue,
-        star: starValue,
-        distance: distant,
-        contact: contact,
-        checkin_time: checkinTime,
-        checkout_time: checkoutTime,
-        remark: remark,
-      });
-      if (result.status != 404 && result.status != 500) {
-        toast("Sửa thành công ùi", {
-          autoClose: 3000,
-          type: "success",
-        });
-        if (refetchHotels != null) {
-          refetchHotels();
-        }
-        if (refetchGuessGroup != null) {
-          refetchGuessGroup();
-        }
-      } else {
-        toast("Lỗi ùi nè bạn ui", {
-          autoClose: 3000,
-          type: "error",
-        });
-      }
-    } catch {
-      toast("Lỗi ùi nè bạn ui", {
-        autoClose: 3000,
-        type: "error",
-      });
-    }
-    handleClose();
-  };
+
   return (
     <div>
       <Box
@@ -170,112 +118,122 @@ export function HotelModal({
       <TextField
         fullWidth
         label="Hotel Name"
-        value={hotelName}
-        onChange={handleHotelNameChange}
+        name="hotelName"
+        value={formValues.hotelName}
+        onChange={handleChange}
         sx={{ mb: 3 }}
+        //@ts-ignore
+        error={!!errors.hotelName}
+        //@ts-ignore
+
+        helperText={errors.hotelName}
       />
 
       <TextField
         fullWidth
         label="Address"
-        value={address}
-        onChange={handleAddressChange}
-        sx={{ mb: 3 }}
+        name="address"
+        value={formValues.address}
+        onChange={handleChange}
+        sx={{ mb: 3 }} //@ts-ignore
+        error={!!errors.address}
+        //@ts-ignore
+
+        helperText={errors.address}
       />
+
       <TextField
         fullWidth
         label="Distant"
-        value={distant}
+        name="distant"
         type="number"
-        onChange={handleDistantChange}
+        value={formValues.distant}
+        onChange={handleChange}
         sx={{ mb: 3 }}
+        //@ts-ignore
+
+        error={!!errors.distant}
+        //@ts-ignore
+
+        helperText={errors.distant}
       />
+
       <TextField
         fullWidth
         label="Contact"
-        value={contact}
-        onChange={handleContactChange}
+        name="contact"
+        value={formValues.contact}
+        onChange={handleChange}
         sx={{ mb: 3 }}
+        //@ts-ignore
+
+        error={!!errors.contact}
+        //@ts-ignore
+
+        helperText={errors.contact}
       />
+
       <Box sx={{ display: "flex", gap: 2 }}>
         <TextField
-          value={checkinTime}
-          placeholder="Check in"
+          name="checkinTime"
           type="time"
-          required
+          value={formValues.checkinTime}
+          onChange={handleChange}
           fullWidth
-          onChange={(e) => {
-            setCheckinTime(e.target.value);
-          }}
+          //@ts-ignore
+          error={!!errors.checkin_time}
+          //@ts-ignore
+          helperText={errors.checkin_time}
         />
         <TextField
-          value={checkoutTime}
-          placeholder="Check out"
+          name="checkoutTime"
           type="time"
-          required
+          value={formValues.checkoutTime}
+          onChange={handleChange}
           fullWidth
-          onChange={(e) => {
-            setCheckoutTime(e.target.value);
-          }}
+          //@ts-ignore
+          error={!!errors.checkout_time}
+          //@ts-ignore
+          helperText={errors.checkout_time}
         />
       </Box>
-      <Typography sx={{ mb: 1, mt: 1, ml: 0.5 }}>Rating</Typography>
+
+      <Typography sx={{ mb: 1, mt: 1 }}>Rating</Typography>
       <Rating
-        sx={{ mb: 2 }}
-        name="half-rating"
-        defaultValue={2.5}
+        name="starValue"
         precision={0.5}
         size="large"
-        value={starValue}
-        onChange={handleStarChange}
+        value={parseFloat(formValues.starValue)}
+        onChange={(e, newValue) =>
+          handleChange({ target: { name: "starValue", value: newValue } })
+        }
+        sx={{ mb: 2 }}
       />
 
       <TextField
         fullWidth
         label="Remark"
-        value={remark}
-        onChange={handleRemarkChange}
+        name="remark"
+        value={formValues.remark}
+        onChange={handleChange}
         multiline
         rows={3}
         sx={{ mb: 3 }}
       />
 
-      {/* Buttons */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-      >
-        <div
-          className="btn_created"
-          style={{
-            marginTop: 20,
-          }}
-        >
-          <MyButton
-            label="Close"
-            variant="outlined"
-            sx={{ width: 120, height: "40px" }}
-            style={{ marginRight: 12 }}
-            onClick={handleClose}
-          ></MyButton>
-          {action == "Add" ? (
-            <MyButton
-              label="Add"
-              variant="contained"
-              sx={{ width: 120, height: "40px" }}
-              onClick={addingHotels}
-            ></MyButton>
-          ) : (
-            <MyButton
-              label="Edit"
-              variant="contained"
-              sx={{ width: 120, height: "40px" }}
-              onClick={editHotels}
-            ></MyButton>
-          )}
-        </div>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <MyButton
+          label="Close"
+          variant="outlined"
+          sx={{ width: 120, height: "40px", mr: 2 }}
+          onClick={handleClose}
+        />
+        <MyButton
+          label={action}
+          variant="contained"
+          sx={{ width: 120, height: "40px" }}
+          onClick={handleSubmit}
+        />
       </Box>
     </div>
   );

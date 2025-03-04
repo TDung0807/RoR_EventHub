@@ -9,6 +9,8 @@ export const putRestaurant = async (RestaurantData) => {
 export const getRestaurants = async () => {
   return client.get(`/restaurants`);
 };
-export const getRestaurantById = async (RestaurantId) => {
-  return client.get(`/restaurants/${RestaurantId}`);
+export const getRestaurantById = async ({ queryKey }) => {
+  const [_, id] = queryKey;
+
+  return client.get(`/restaurants/${id}`);
 };

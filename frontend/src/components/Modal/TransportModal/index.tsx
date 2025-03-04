@@ -24,6 +24,7 @@ export function TransportModal({
   mainDataId,
   transportDataQueries = null,
   refetchGuessGroup = null,
+  refetchFunc = null,
   ...props
 }) {
   const [type, setType] = useState("");
@@ -37,7 +38,7 @@ export function TransportModal({
   useEffect(() => {
     if (data) {
       setId(data.id || "");
-      setType(data.transport_type || "");
+      setType(data.transport_type || data.type || "");
       setBrand(data.brand || "");
       setPrice(data.price || "");
       setRemark(data.remark || "");
@@ -53,7 +54,7 @@ export function TransportModal({
     try {
       const result = await addTransportFunc({
         vendor_id: mainDataId,
-        transport_type: transportType[type],
+        transport_type: type,
         brand: brand,
         price: price,
         remark: remark,
@@ -84,7 +85,7 @@ export function TransportModal({
       const result = await putTransportFunc({
         id: id,
         vendor_id: mainDataId,
-        transport_type: transportType[type],
+        transport_type: type,
         brand: brand,
         price: price,
         remark: remark,
@@ -97,6 +98,9 @@ export function TransportModal({
         handleClose();
         if (refetchGuessGroup != null) {
           refetchGuessGroup();
+        }
+        if (refetchFunc != null) {
+          refetchFunc();
         }
       } else {
         toast("Lỗi ùi nè bạn ui", {
@@ -134,8 +138,8 @@ export function TransportModal({
       <FormControl fullWidth sx={{ mb: 2 }}>
         <InputLabel id="vendor-label">Type</InputLabel>
         <Select labelId="vendor-label" value={type} onChange={handleTypeChange}>
-          {transportType.map((item, index) => (
-            <MenuItem value={index}>{item}</MenuItem>
+          {transportType.map((item) => (
+            <MenuItem value={item}>{item}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -158,7 +162,7 @@ export function TransportModal({
       <MyTextFields
         id="outlined-password-input"
         label="Price"
-        type="number"
+        type="text"
         variant="outlined"
         style={{
           marginLeft: "auto",

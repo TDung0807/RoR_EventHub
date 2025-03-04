@@ -38,7 +38,6 @@ export const ModalDished = ({
   const [dishedType, setDishedType] = useState("");
   const [ingredientValue, setIngredientValue] = useState("");
   const [dishedId, setDishedId] = useState("");
-
   // Khi có dữ liệu detail thì cập nhật lại state
   useEffect(() => {
     if (detailDishedData) {

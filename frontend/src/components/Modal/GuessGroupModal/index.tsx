@@ -88,7 +88,7 @@ export function GuessGroupModal({
   const restaurantData = restaurantRawsData?.data?.restaurants || [];
   const eventData = eventRawsData?.data || [];
 
-  // Cập nhật dữ liệu khi `basedData` thay đổi
+  // Cập nhật dữ liệu khi basedData thay đổi
   useEffect(() => {
     if (basedData) {
       setDescription(basedData.description || "");
