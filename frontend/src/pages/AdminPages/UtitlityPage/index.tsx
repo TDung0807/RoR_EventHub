@@ -33,7 +33,7 @@ export function UtilityPage() {
   const [expand, setExpand] = useState(false);
   const handleExpand = () => setExpand(!expand);
 
-  const changingBtn = ["FnB", "Hotel", "Vendor"];
+  const changingBtn = ["FnB", "Hotel", "Transportation"];
   const [activeButton, setActiveButton] = useState(changingBtn[0]);
   const [openSideModal, setOpenSideModal] = useState(false);
   const [actionSideModal, setActionSideModal] = useState("Add");
