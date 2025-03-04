@@ -10,10 +10,15 @@ import { useQuery, useQueries } from "react-query";
 import { getAllDishedFromRestaurant } from "../../../service/Dish";
 import { getAllIntergrientByDishedId } from "../../../service/Ingredient";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { getRestaurantById } from "../../../service/Restaurant";
+import { ModalSideGuessinfo } from "../.././../components";
+import EditIcon from "@mui/icons-material/Edit";
 
 export function DishedPage() {
   const { id } = useParams();
   const [modalOpen, setModalopen] = useState(false);
+  const [modalRestaurant, setModalRestaurant] = useState(false);
+
   const [detailDished, setDetailDished] = useState(null);
   const [action, setAction] = useState("");
   const [interData, setInterData] = useState([]);
@@ -24,9 +29,17 @@ export function DishedPage() {
     isLoading: dishedIsLoading,
     refetch: refetchDishedFunc,
   } = useQuery(["dished", id], getAllDishedFromRestaurant);
-
+  const {
+    data: restaurantRawsData,
+    error: restaurantError,
+    isError: restaurantIsError,
+    isLoading: restaurantIsLoading,
+    refetch: refetchRestaurant,
+  } = useQuery(["restaurants", id], getRestaurantById);
+  console.log(restaurantRawsData);
   // Đảm bảo các hook dưới luôn được gọi
   const dishedData = dishedRawsData?.data?.dishes || [];
+  const restaurantData = restaurantRawsData?.data || [];
 
   const intergrientQuery = useMemo(() => {
     return dishedData.map((dished) => ({
@@ -81,14 +94,33 @@ export function DishedPage() {
         setOpen={setModalopen}
         open={modalOpen}
       />
-
+      <ModalSideGuessinfo
+        open={modalRestaurant}
+        handleClose={() => {
+          setModalRestaurant(false);
+        }}
+        action="Edit"
+        data={restaurantData}
+        option="Restaurant"
+      ></ModalSideGuessinfo>
       <Box sx={{ padding: 2 }}>
         <div className={styles.headerContainer}>
-          <Link to="/admin/utility" style={{ width: "fit-content" }}>
-            <button className={styles.backButton}>
-              <ArrowBackIcon />
+          <div style={{ width: "fit-content" }}>
+            <Link to="/admin/utility">
+              <button className={styles.backButton}>
+                <ArrowBackIcon />
+              </button>
+            </Link>
+            <button
+              className={styles.backButton}
+              onClick={() => {
+                setModalRestaurant(true);
+              }}
+            >
+              <EditIcon />
             </button>
-          </Link>
+          </div>
+
           <MyButton
             label="+ Created Dished"
             className={styles.publishButton}

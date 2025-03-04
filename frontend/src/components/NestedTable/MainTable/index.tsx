@@ -23,9 +23,10 @@ export function MainTable({
   action = [],
   addingSideData = false,
   addingSideDataFunc = (id) => {},
+  editSideDataFunc = (id, room) => {},
   editEvent = (item) => {},
   sideDataName = "",
-  itemsPerPage = 5,
+  itemsPerPage = 15,
 }) {
   const [itemOffset, setItemOffset] = useState(0);
   const endOffset = itemOffset + itemsPerPage;
@@ -74,6 +75,7 @@ export function MainTable({
                   row={utility}
                   action={action}
                   editEvent={editEvent}
+                  editSideDataFunc={editSideDataFunc}
                   addingSideDataFunc={addingSideDataFunc}
                   addingSideData={addingSideData}
                   sideDataName={sideDataName}

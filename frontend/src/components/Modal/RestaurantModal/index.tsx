@@ -39,7 +39,7 @@ export function RestaurantModal({
       setContact(data.contact || "");
     }
   }, [data]); // Runs when `data` changes
-  const cuisineType = ["Việt", "Thái", "Trung", "Hàn", "Nhật", "Pháp"];
+  const cuisineType = ["Việt", "Thái", "Trung", "Hàn", "Nhật", "Pháp", "Anh"];
 
   const handleRestaurantChange = (event) => setRestaurant(event.target.value);
   const handleAddressChange = (event) => setAddress(event.target.value);

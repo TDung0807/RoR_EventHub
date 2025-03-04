@@ -25,6 +25,8 @@ export function NestedRow({
   editEvent = (item) => {},
   addingSideData = false,
   addingSideDataFunc = (id) => {},
+  editSideDataFunc = (id, room) => {},
+
   sideDataName = "",
 }) {
   const [open, setOpen] = useState(false);
@@ -180,7 +182,6 @@ export function NestedRow({
                       {row[sideDataName].length != 0 &&
                         row[sideDataName].map((room, index) => (
                           <TableRow key={index}>
-                            <TableCell width={60}>{index + 1}</TableCell>
                             {Object.keys(room).map((key) =>
                               `${sizeOfItemSide}` == key ? (
                                 <TableCell width={140}>{room[key]}</TableCell>
@@ -188,6 +189,19 @@ export function NestedRow({
                                 <TableCell width={280}>{room[key]}</TableCell>
                               )
                             )}
+                            <TableCell>
+                              <div
+                                style={{
+                                  cursor: "pointer",
+                                  textAlign: "right",
+                                }}
+                                onClick={() => {
+                                  editSideDataFunc(row.id, room);
+                                }}
+                              >
+                                <EditIcon></EditIcon>
+                              </div>
+                            </TableCell>
                           </TableRow>
                         ))}
                     </TableBody>
@@ -212,7 +226,7 @@ export function NestedRow({
                     >
                       {sideDataName == "roomTypes" ? "+ Creating Room" : ""}
                       {sideDataName == "transportTypes"
-                        ? "+Creating Transport Types"
+                        ? "+ Creating Transport Types"
                         : ""}
                     </p>
                   </div>

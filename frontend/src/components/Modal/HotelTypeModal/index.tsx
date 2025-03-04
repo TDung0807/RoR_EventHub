@@ -23,13 +23,14 @@ export function HotelTypeModal({
   data,
   mainDataId,
   roomDataQueries = null,
+  refetchFunc = null,
   ...props
 }) {
   const [type, setType] = useState("");
   const [price, setPrice] = useState("");
   const [remark, setRemark] = useState("");
   const [id, setId] = useState("");
-
+  console.log(data);
   useEffect(() => {
     if (data) {
       setType(data.type || "");
@@ -70,7 +71,9 @@ export function HotelTypeModal({
           autoClose: 3000,
           type: "success",
         });
+
         roomDataQueries.forEach((query) => query.refetch());
+
         handleClose();
       } else {
         toast("Lỗi ùi nè bạn ui", {
@@ -90,7 +93,7 @@ export function HotelTypeModal({
       const result = await PutRoomTypeFunc({
         hotel_id: mainDataId,
         id: id,
-        name: roomTypeData[Number.parseInt(type) - 1],
+        name: type,
         price: price,
         room_type: type,
         remark: remark,
@@ -100,6 +103,9 @@ export function HotelTypeModal({
           autoClose: 3000,
           type: "success",
         });
+        if (refetchFunc != null) {
+          refetchFunc();
+        }
         handleClose();
       } else {
         toast("Lỗi ùi nè bạn ui", {
@@ -133,18 +139,18 @@ export function HotelTypeModal({
       <FormControl fullWidth sx={{ mb: 2 }}>
         <InputLabel id="vendor-label">Room Type</InputLabel>
         <Select labelId="vendor-label" value={type} onChange={handleTypeChange}>
-          <MenuItem value="1">Phòng Tổng Thống</MenuItem>
-          <MenuItem value="2">Phòng Queen</MenuItem>
-          <MenuItem value="3">Phòng Đơn</MenuItem>
-          <MenuItem value="4">Phòng Đôi</MenuItem>
-          <MenuItem value="5">Phòng Gia Đình</MenuItem>
+          <MenuItem value="Phòng Tổng Thống">Phòng Tổng Thống</MenuItem>
+          <MenuItem value="Phòng Queen">Phòng Queen</MenuItem>
+          <MenuItem value="Phòng Đơn">Phòng Đơn</MenuItem>
+          <MenuItem value="Phòng Đôi">Phòng Đôi</MenuItem>
+          <MenuItem value="Phòng Gia Đình">Phòng Gia Đình</MenuItem>
         </Select>
       </FormControl>
 
       <MyTextFields
         id="outlined-password-input"
         label="Price Per Night"
-        type="number"
+        type="text"
         variant="outlined"
         style={{
           marginLeft: "auto",

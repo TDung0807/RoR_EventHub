@@ -13,7 +13,7 @@ import styles from "./UtilityPage.module.scss";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-import { useQuery, useQueries } from "react-query";
+import { useQuery, useQueries, useQueryClient } from "react-query";
 import { getHotels } from "../../../service/Hotel";
 import { getAllVendor } from "../../../service/Vendor";
 import { getRestaurants } from "../../../service/Restaurant";
@@ -28,10 +28,12 @@ const formatPrice = (price) =>
   new Intl.NumberFormat("vi-VN").format(price) + " VND";
 
 export function UtilityPage() {
+  const queryClient = useQueryClient();
+
   const [expand, setExpand] = useState(false);
   const handleExpand = () => setExpand(!expand);
 
-  const changingBtn = ["Fnb", "Hotel", "Vendor"];
+  const changingBtn = ["FnB", "Hotel", "Vendor"];
   const [activeButton, setActiveButton] = useState(changingBtn[0]);
   const [openSideModal, setOpenSideModal] = useState(false);
   const [actionSideModal, setActionSideModal] = useState("Add");
@@ -43,7 +45,7 @@ export function UtilityPage() {
   const [roomData, setRoomData] = useState([]);
   const [transportData, setTransportData] = useState([]);
   const [transportQueries, setTransportQueries] = useState([]);
-
+  const [sideData, setSideData] = useState([]);
   // Fetch dữ liệu khách sạn, vendor, F&B
   const {
     data: hotelsRawsData,
@@ -153,6 +155,7 @@ export function UtilityPage() {
       // @ts-ignore
       const roomData = roomDataQueries[index]?.data?.data?.rooms || [];
       const roomTypes = roomData.map((room) => ({
+        id: room.id,
         type: room.name,
         price: formatPrice(room.price),
         remark: room.remark || "",
@@ -172,6 +175,7 @@ export function UtilityPage() {
         // @ts-ignore
         transportDataQueries[index]?.data?.data?.transports || [];
       const transportType = transportData.map((transportData) => ({
+        id: transportData.id,
         type: transportData.transport_type,
         brand: transportData.brand,
         price: formatPrice(transportData.price),
@@ -225,6 +229,7 @@ export function UtilityPage() {
           refetchRestaurantFunc={refetchRestaurantFunc}
         />
         <OtherSideModal
+          data={sideData}
           roomDataQueries={roomDataQueries}
           transportDataQueries={transportDataQueries}
           mainDataId={mainDataId}
@@ -234,6 +239,9 @@ export function UtilityPage() {
           }}
           option={activeButton}
           action={actionOtherSideModal}
+          refetchFunc={() => {
+            queryClient.refetchQueries();
+          }}
         />
         <div
           className={styles.flexingChanging}
@@ -264,7 +272,7 @@ export function UtilityPage() {
                   variant="h4"
                   marginBottom={0}
                 >
-                  Hotel Management
+                  Hotel Vendor Management
                 </Typography>
                 <MyButton
                   style={{ marginRight: 20 }}
@@ -291,6 +299,12 @@ export function UtilityPage() {
                   setOpenOtherSideModal(true);
                   setMainDataId(id);
                   setActionOtherSideModal("Add");
+                }}
+                editSideDataFunc={(id, room) => {
+                  setSideData(room);
+                  setActionOtherSideModal("Edit");
+                  setOpenOtherSideModal(true);
+                  setMainDataId(id);
                 }}
                 sideDataName="roomTypes"
               />
@@ -342,11 +356,17 @@ export function UtilityPage() {
                 setMainDataId(id);
                 setActionOtherSideModal("Add");
               }}
+              editSideDataFunc={(id, room) => {
+                setSideData(room);
+                setActionOtherSideModal("Edit");
+                setOpenOtherSideModal(true);
+                setMainDataId(id);
+              }}
               sideDataName="transportTypes"
             />
           </Box>
         )}
-        {activeButton == "Fnb" && (
+        {activeButton == "FnB" && (
           <Box sx={{ padding: 2 }}>
             <Box
               sx={{
@@ -363,7 +383,7 @@ export function UtilityPage() {
                 variant="h4"
                 marginBottom={0}
               >
-                FnB Management
+                Food and Beverage Management
               </Typography>
               <MyButton
                 style={{ marginRight: 20 }}

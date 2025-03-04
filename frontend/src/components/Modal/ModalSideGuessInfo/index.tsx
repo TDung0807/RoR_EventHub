@@ -67,7 +67,7 @@ export const ModalSideGuessinfo = ({
             refetchVendorsFunc={refetchVendorsFunc}
           ></VendorModal>
         )}
-        {option == "Fnb" && (
+        {option == "FnB" && (
           <RestaurantModal
             data={data}
             action={action}
