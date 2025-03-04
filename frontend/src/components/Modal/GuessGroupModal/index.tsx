@@ -261,13 +261,13 @@ export function GuessGroupModal({
                 try {
                   let guessGroupData = await addingGroup();
                   handleChangingGuessList(guessGroupData.data.id);
-                  toast("Thêm thành công ùi", {
+                  toast("Thêm thành công", {
                     autoClose: 3000,
                     type: "success",
                   });
                   handleClose();
                 } catch {
-                  toast("Chưa thêm Guess Group nè bạn ui", {
+                  toast("Chưa thêm Guess Group", {
                     autoClose: 3000,
                     type: "error",
                   });
@@ -294,13 +294,13 @@ export function GuessGroupModal({
                     ? () => {
                         try {
                           addingGroup();
-                          toast("Thêm thành công ùi", {
+                          toast("Thêm thành công", {
                             autoClose: 3000,
                             type: "success",
                           });
                           handleClose();
                         } catch {
-                          toast("Lỗi ùi nè bạn ui", {
+                          toast("Lỗi không xác định", {
                             autoClose: 3000,
                             type: "error",
                           });
