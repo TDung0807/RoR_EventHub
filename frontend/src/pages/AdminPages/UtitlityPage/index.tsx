@@ -187,9 +187,11 @@ export function UtilityPage() {
       };
     }
   );
-  const FnbData = fnbRawsDatas.map(({ created_at, updated_at, ...rest }) => {
-    return { ...rest };
-  });
+  const FnbData = fnbRawsDatas.map(
+    ({ created_at, updated_at, main_ingredient, ...rest }) => {
+      return { ...rest };
+    }
+  );
 
   const location = useLocation();
 
@@ -383,7 +385,7 @@ export function UtilityPage() {
                 variant="h4"
                 marginBottom={0}
               >
-                Food and Beverage Management
+                Food and Beverage
               </Typography>
               <MyButton
                 style={{ marginRight: 20 }}
