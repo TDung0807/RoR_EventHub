@@ -13,6 +13,8 @@ class Group < ApplicationRecord
   belongs_to :transport, optional: true
 
   # Validations
-  validates :groupStatus, presence: true
-  validates :quantity, numericality: { only_integer: true }
+  validates :group, presence: true, uniqueness: true, allow_blank: false
+  validates :groupStatus, presence: true, allow_blank: false
+  validates :quantity, numericality: { greater_than_or_equal_to: 0}
+  validates :description, length: { maximum: 500 }, allow_blank: true
 end

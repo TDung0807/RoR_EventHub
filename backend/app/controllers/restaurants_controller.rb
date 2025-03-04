@@ -1,9 +1,6 @@
 class RestaurantsController < ApplicationController
   before_action :authenticate, only: [:create, :index, :update, :destroy]
-  validates :name, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: 100 }, allow_blank: false
-  validates :address, presence: true, length: { maximum: 255 }, allow_blank: false
-  validates :contact, presence: true, format: { with: /\A\d{10,15}\z/, message: "must be a valid phone number" }, allow_blank: false
-  validates :cuisine, presence: true, length: { maximum: 50 }, allow_blank: false
+
   def create
     if current_user
       @restaurant = Restaurant.new(restaurant_params)
@@ -84,17 +81,22 @@ class RestaurantsController < ApplicationController
   def restaurant_data(restaurant)
     dishes = restaurant.dishes
     dish_total = dishes.count
-
-    main_ingredient = dishes.joins(:ingredients)
-                            .group('ingredients.name')
-                            .order('COUNT(ingredients.id) DESC')
-                            .limit(1)
-                            .pluck('ingredients.name')
-                            .first
-
+  
+    begin
+      main_ingredient = dishes.joins(:ingredients)
+                              .group('ingredients.name')
+                              .order('COUNT(ingredients.id) DESC')
+                              .limit(1)
+                              .pluck('ingredients.name')
+                              .first
+    rescue NameError => e
+      Rails.logger.error("Error fetching dish ingredients: #{e.message}")
+      main_ingredient = nil
+    end
+  
     restaurant.as_json.merge({
       dish_total: dish_total,
-      main_ingredient: main_ingredient
+      main_ingredient: main_ingredient || "Unknown"
     })
   end
 end

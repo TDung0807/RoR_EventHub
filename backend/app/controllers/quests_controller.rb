@@ -1,9 +1,7 @@
 class QuestsController < ApplicationController
   # Skipping authentication for all actions
   skip_before_action :authenticate, only: [:create, :index, :show, :update, :destroy, :find_by_name, :find_by_email]
-  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: false
-  validates :phone, presence: true, length: { minimum: 10, maximum: 15 }, numericality: true, allow_blank: false
-  validates :name, presence: true, allow_blank: false
+
   private
 
   def quest_params
