@@ -138,7 +138,7 @@ export function ModalGuestList({
             username: guestEmail,
             name: guestName,
             role: 0,
-            password: generatePassword(guestName),
+            password: generatePassword(guestEmail.split("@")[0]),
             email: guestEmail,
           },
         });
