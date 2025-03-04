@@ -127,6 +127,8 @@ export function DisplayGuessGroupSideInfo({
                 {guessGroupData?.hotel?.name}
               </h4>
               <p style={{ margin: "5px 0", color: "#555" }}>
+                <strong>Address: </strong>
+
                 {guessGroupData?.hotel?.address}
               </p>
               <p style={{ margin: "5px 0", color: "#555" }}>
