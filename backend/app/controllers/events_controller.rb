@@ -86,7 +86,7 @@ class EventsController < ApplicationController
     render json: { events: events.as_json }, status: :ok
   end
 
-  # New: Fetch all events for a given group
+  # Fetch all events for a given group
   def events_by_group
     group = Group.find_by(id: params[:group_id])
     return render json: { error: "Group not found" }, status: :not_found unless group
@@ -98,12 +98,11 @@ class EventsController < ApplicationController
   private
 
   def event_params
-    params.require(:event).permit(:label, :date, :description, :location, :participants, :start_hour, :end_hour, :group_id)
+    params.require(:event).permit(:label, :date, :description, :location, :participants, :start_hour, :end_hour)
   end
 
   def set_event
     @event = Event.find_by(id: params[:id])
     render json: { error: "Event not found" }, status: :not_found unless @event
   end
-  
 end

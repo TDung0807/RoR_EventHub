@@ -14,6 +14,7 @@ class GroupsController < ApplicationController
     @group = Group.new(group_params)
     if @group.save
       auto_add_event_to_quests(@group)
+      update_quantity(@group)
       render json: @group.as_json, status: :ok
     else
       render json:{message:"Creating error", error:@group.errors.full_messages}, status: :bad_request
@@ -109,7 +110,6 @@ class GroupsController < ApplicationController
   private
   def update_event_participants(event_id)
     event = Event.find_by(id: event_id)
-    return unless event
     total_participants = Group.where(event_id: event_id).sum(:quantity)
     event.update(participants: total_participants)
   end

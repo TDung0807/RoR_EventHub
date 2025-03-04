@@ -11,14 +11,14 @@ class Event < ApplicationRecord
 
   # Callbacks
   before_save :parse_and_calculate_duration
-  before_save :set_participants_count
 
   # Associations
   belongs_to :user
   has_and_belongs_to_many :groups, join_table: 'events_groups'
-  has_and_belongs_to_many :quests, after_add: :set_participants_count, after_remove: :set_participants_count
+  has_and_belongs_to_many :quests
 
   private
+
   def start_and_end_hour_are_valid_times
     if start_hour.present?
       begin
@@ -43,9 +43,5 @@ class Event < ApplicationRecord
       end_time = Time.parse(end_hour.to_s)
       self.duration = ((end_time - start_time) / 1.hour).to_f.round(2)
     end
-  end
-
-  def set_participants_count(_quest = nil)
-    self.participants = quests.count
   end
 end
