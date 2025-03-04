@@ -134,20 +134,20 @@ export const ModalDished = ({
         resultIntegriendient.status !== 404 &&
         resultIntegriendient.status !== 500
       ) {
-        toast("Thêm thành công ùi", {
+        toast("Thêm thành công", {
           autoClose: 3000,
           type: "success",
         });
         handleClose();
         refetchDishedFunc();
       } else {
-        toast("Lỗi ùi nè bạn ui", {
+        toast("Lỗi không xác định", {
           autoClose: 3000,
           type: "error",
         });
       }
     } catch {
-      toast("Lỗi ùi nè bạn ui", {
+      toast("Lỗi không xác định", {
         autoClose: 3000,
         type: "error",
       });
@@ -167,7 +167,6 @@ export const ModalDished = ({
       });
       // Nếu nguyên liệu thay đổi thì xoá cũ và thêm mới
       if (intergrientIdData?.data?.ingredients[0] != ingredientValue) {
-        console.log(resultDished);
         await deleteIntergrientFunc({
           id: [resultDished.data.id],
           ingredient_ids: [ingredientValue],
@@ -180,14 +179,14 @@ export const ModalDished = ({
           resultIntegriendientAdding.status !== 404 &&
           resultIntegriendientAdding.status !== 500
         ) {
-          toast("Sửa thành công ùi", {
+          toast("Sửa thành công", {
             autoClose: 3000,
             type: "success",
           });
           handleClose();
           refetchDishedFunc();
         } else {
-          toast("Lỗi ùi nè bạn ui", {
+          toast("Lỗi không xác định", {
             autoClose: 3000,
             type: "error",
           });
@@ -195,7 +194,7 @@ export const ModalDished = ({
         handleClose();
       }
     } catch {
-      toast("Lỗi ùi nè bạn ui", {
+      toast("Lỗi không xác định", {
         autoClose: 3000,
         type: "error",
       });

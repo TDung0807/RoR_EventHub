@@ -86,20 +86,20 @@ export const ModalEvent = ({
         result.status != 500 &&
         result.status != 422
       ) {
-        toast("Thêm thành công ùi", {
+        toast("Thêm thành công", {
           autoClose: 3000,
           type: "success",
         });
         refetch();
         handleClose();
       } else {
-        toast("Lỗi ùi nè bạn ui", {
+        toast("Lỗi không xác định", {
           autoClose: 3000,
           type: "error",
         });
       }
     } catch {
-      toast("Lỗi ùi nè bạn ui", {
+      toast("Lỗi không xác định", {
         autoClose: 3000,
         type: "error",
       });
@@ -122,20 +122,20 @@ export const ModalEvent = ({
         result.status != 500 &&
         result.status != 422
       ) {
-        toast("Sửa thành công ùi", {
+        toast("Sửa thành công", {
           autoClose: 3000,
           type: "success",
         });
         refetch();
         handleClose();
       } else {
-        toast("Lỗi ùi nè bạn ui", {
+        toast("Lỗi không xác định", {
           autoClose: 3000,
           type: "error",
         });
       }
     } catch {
-      toast("Lỗi ùi nè bạn ui", {
+      toast("Lỗi không xác định", {
         autoClose: 3000,
         type: "error",
       });

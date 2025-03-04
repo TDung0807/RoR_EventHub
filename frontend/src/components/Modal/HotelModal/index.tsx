@@ -92,11 +92,11 @@ export function HotelModal({
         refetchHotels?.();
         refetchGuessGroup?.();
       } else {
-        toast("Lỗi rồi bạn ui", { autoClose: 3000, type: "error" });
+        toast("Lỗi không xác định", { autoClose: 3000, type: "error" });
       }
       handleClose();
     } catch {
-      toast("Lỗi rồi bạn ui", { autoClose: 3000, type: "error" });
+      toast("Lỗi không xác định", { autoClose: 3000, type: "error" });
     }
   };
 

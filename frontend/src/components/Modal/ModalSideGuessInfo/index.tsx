@@ -59,7 +59,7 @@ export const ModalSideGuessinfo = ({
             mainDataId={mainDataId}
           ></TransportModal>
         )}
-        {option == "Vendor" && (
+        {option == "Transportation" && (
           <VendorModal
             data={data}
             action={action}

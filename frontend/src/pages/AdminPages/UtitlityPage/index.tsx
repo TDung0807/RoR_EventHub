@@ -33,7 +33,7 @@ export function UtilityPage() {
   const [expand, setExpand] = useState(false);
   const handleExpand = () => setExpand(!expand);
 
-  const changingBtn = ["FnB", "Hotel", "Vendor"];
+  const changingBtn = ["FnB", "Hotel", "Transportation"];
   const [activeButton, setActiveButton] = useState(changingBtn[0]);
   const [openSideModal, setOpenSideModal] = useState(false);
   const [actionSideModal, setActionSideModal] = useState("Add");
@@ -187,9 +187,11 @@ export function UtilityPage() {
       };
     }
   );
-  const FnbData = fnbRawsDatas.map(({ created_at, updated_at, ...rest }) => {
-    return { ...rest };
-  });
+  const FnbData = fnbRawsDatas.map(
+    ({ created_at, updated_at, main_ingredient, ...rest }) => {
+      return { ...rest };
+    }
+  );
 
   const location = useLocation();
 
@@ -311,7 +313,7 @@ export function UtilityPage() {
             </Box>
           </Box>
         )}
-        {activeButton == "Vendor" && (
+        {activeButton == "Transportation" && (
           <Box sx={{ padding: 2 }}>
             <Box
               sx={{
@@ -383,7 +385,7 @@ export function UtilityPage() {
                 variant="h4"
                 marginBottom={0}
               >
-                Food and Beverage Management
+                Food and Beverage
               </Typography>
               <MyButton
                 style={{ marginRight: 20 }}
