@@ -6,7 +6,7 @@ class Event < ApplicationRecord
   validates :participants, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
   validates :start_hour, presence: true
   validates :end_hour, presence: true
-  validates :label, :date, :location, :participants, :start_hour, :end_hour, presence: true, allow_blank: false
+
   validate :start_and_end_hour_are_valid_times
 
   # Callbacks

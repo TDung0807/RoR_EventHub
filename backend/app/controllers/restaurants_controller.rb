@@ -81,22 +81,17 @@ class RestaurantsController < ApplicationController
   def restaurant_data(restaurant)
     dishes = restaurant.dishes
     dish_total = dishes.count
-  
-    begin
-      main_ingredient = dishes.joins(:ingredients)
-                              .group('ingredients.name')
-                              .order('COUNT(ingredients.id) DESC')
-                              .limit(1)
-                              .pluck('ingredients.name')
-                              .first
-    rescue NameError => e
-      Rails.logger.error("Error fetching dish ingredients: #{e.message}")
-      main_ingredient = nil
-    end
-  
+
+    main_ingredient = dishes.joins(:ingredients)
+                            .group('ingredients.name')
+                            .order('COUNT(ingredients.id) DESC')
+                            .limit(1)
+                            .pluck('ingredients.name')
+                            .first
+
     restaurant.as_json.merge({
       dish_total: dish_total,
-      main_ingredient: main_ingredient || "Unknown"
+      main_ingredient: main_ingredient
     })
   end
 end

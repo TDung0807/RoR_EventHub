@@ -1,5 +1,6 @@
 class DishesController < ApplicationController
   before_action :authenticate, only: [:create, :index, :show, :update, :destroy]
+
   def create
     if current_user
       @restaurant = Restaurant.find(params[:restaurant_id])
