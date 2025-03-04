@@ -226,7 +226,7 @@ export function NestedRow({
                     >
                       {sideDataName == "roomTypes" ? "+ Creating Room" : ""}
                       {sideDataName == "transportTypes"
-                        ? "+ Creating Transport Types"
+                        ? "+ Creating Transport"
                         : ""}
                     </p>
                   </div>

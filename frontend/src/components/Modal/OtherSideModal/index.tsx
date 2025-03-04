@@ -40,7 +40,7 @@ export function OtherSideModal({
             refetchFunc={refetchFunc}
           ></HotelTypeModal>
         )}
-        {option == "Vendor" && (
+        {option == "Transportation" && (
           <TransportModal
             transportDataQueries={transportDataQueries}
             data={data}
