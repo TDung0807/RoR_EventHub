@@ -15,6 +15,7 @@ import {
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
 export function NestedRow({
   row,
@@ -26,7 +27,8 @@ export function NestedRow({
   addingSideData = false,
   addingSideDataFunc = (id) => {},
   editSideDataFunc = (id, room) => {},
-
+  deleteSideDataFunc = (id, room) => {},
+  handleDeleteMainData = (row) => {},
   sideDataName = "",
 }) {
   const [open, setOpen] = useState(false);
@@ -85,16 +87,25 @@ export function NestedRow({
                       >
                         <EditIcon></EditIcon>
                       </Link>
+                      <DeleteIcon
+                        onClick={(row) => {
+                          handleDeleteMainData(row);
+                        }}
+                      ></DeleteIcon>
                     </div>
                   ) : (
                     <div
                       onClick={() => {
-                        console.log(row);
                         editEvent(row);
                       }}
                       style={{ cursor: "pointer" }}
                     >
                       <EditIcon></EditIcon>
+                      <DeleteIcon
+                        onClick={(row) => {
+                          handleDeleteMainData(row);
+                        }}
+                      ></DeleteIcon>
                     </div>
                   )}
                 </TableCell>
@@ -200,6 +211,17 @@ export function NestedRow({
                                 }}
                               >
                                 <EditIcon></EditIcon>
+                              </div>
+                              <div
+                                style={{
+                                  cursor: "pointer",
+                                  textAlign: "right",
+                                }}
+                                onClick={() => {
+                                  deleteSideDataFunc(row.id, room);
+                                }}
+                              >
+                                <DeleteIcon></DeleteIcon>
                               </div>
                             </TableCell>
                           </TableRow>

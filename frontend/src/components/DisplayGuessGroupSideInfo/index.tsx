@@ -71,7 +71,7 @@ export function DisplayGuessGroupSideInfo({
                 borderRadius: 10,
                 margin: 0,
               }}
-              src="https://vinfast-binhduong.vn/wp-content/uploads/2024/05/img9.webp"
+              src="https://media.discordapp.net/attachments/1275330228637536333/1346499469247512616/transport.png?ex=67c868da&is=67c7175a&hm=957e8af7a64c94e933342edafbfbc79348c90f7876ea215cc0abc8a514f3e498&=&format=webp&quality=lossless"
             ></img>
 
             <div style={{ flex: 1 }}>
@@ -119,7 +119,7 @@ export function DisplayGuessGroupSideInfo({
                 borderRadius: 10,
                 margin: 0,
               }}
-              src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/375261727.jpg?k=4f4e47cc7b14899307b6d9e6643f0ecbfd847f3dd42066d978107f0c2fbce37a&o=&hp=1"
+              src="https://media.discordapp.net/attachments/1275330228637536333/1346499468639604736/hotel.png?ex=67c868da&is=67c7175a&hm=6785b3a648edb3651d217727e1264a1a1bd4af41ba089b9404d5861fe29a9ed9&=&format=webp&quality=lossless&width=849&height=856"
             ></img>
 
             <div style={{ flex: 1 }}>
@@ -168,7 +168,7 @@ export function DisplayGuessGroupSideInfo({
                 borderRadius: 10,
                 margin: 0,
               }}
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm-sV3bNJlRSXFJqzRl1KyD694gHNZ4TZILg&s"
+              src="https://media.discordapp.net/attachments/1275330228637536333/1346499467867586652/restaurant.png?ex=67c868d9&is=67c71759&hm=41460abae3541929579b91ceb97af96f5f8510fd2b6d2710c7f91f4cc296f792&=&format=webp&quality=lossless"
             ></img>
 
             <div style={{ flex: 1 }}>
@@ -224,6 +224,17 @@ export function DisplayGuessGroupSideInfo({
         >
           Response
         </h3>
+        <p
+          style={{
+            marginTop: "-5px",
+            marginBottom: 19,
+            color: "#f5faff",
+            fontSize: 14,
+            textAlign: "center",
+          }}
+        >
+          Thông tin sẽ được cập nhật sau khi liên hệ với dịch vụ
+        </p>
       </div>
     </div>
   );

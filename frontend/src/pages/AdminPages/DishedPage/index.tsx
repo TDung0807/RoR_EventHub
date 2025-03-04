@@ -6,13 +6,17 @@ import { ModalDished, MainTable, MyButton } from "../../../components";
 import { fakeDishedData } from "../../../mockdata";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { useQuery, useQueries } from "react-query";
-import { getAllDishedFromRestaurant } from "../../../service/Dish";
+import { useQuery, useQueries, useMutation } from "react-query";
+import {
+  getAllDishedFromRestaurant,
+  deleteDishedById,
+} from "../../../service/Dish";
 import { getAllIntergrientByDishedId } from "../../../service/Ingredient";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { getRestaurantById } from "../../../service/Restaurant";
 import { ModalSideGuessinfo } from "../.././../components";
 import EditIcon from "@mui/icons-material/Edit";
+import { toast } from "react-toastify";
 
 export function DishedPage() {
   const { id } = useParams();
@@ -22,6 +26,9 @@ export function DishedPage() {
   const [detailDished, setDetailDished] = useState(null);
   const [action, setAction] = useState("");
   const [interData, setInterData] = useState([]);
+  const { mutateAsync: deleteDishedByIdFunc } = useMutation({
+    mutationFn: deleteDishedById,
+  });
   const {
     data: dishedRawsData,
     error: dishedError,
@@ -36,7 +43,6 @@ export function DishedPage() {
     isLoading: restaurantIsLoading,
     refetch: refetchRestaurant,
   } = useQuery(["restaurants", id], getRestaurantById);
-  console.log(restaurantRawsData);
   // Đảm bảo các hook dưới luôn được gọi
   const dishedData = dishedRawsData?.data?.dishes || [];
   const restaurantData = restaurantRawsData?.data || [];
@@ -82,6 +88,14 @@ export function DishedPage() {
     handleOpen();
     setDetailDished(null);
     setAction("add");
+  };
+  const handleDeleteMainData = (row) => {
+    try {
+      deleteDishedByIdFunc(row.id);
+      toast("Xóa thành công");
+    } catch {
+      toast("Xóa thất bại");
+    }
   };
   // Bây giờ trong JSX, xử lý loading hoặc error bên trong giao diện
   return (
@@ -136,6 +150,7 @@ export function DishedPage() {
           <Typography>Error: Loading Dished</Typography>
         ) : (
           <MainTable
+            handleDeleteMainData={handleDeleteMainData}
             editEvent={onEditModal}
             utilityRows={["Dish", "Price", "Type", ""]}
             utilityData={dishedRenderData}

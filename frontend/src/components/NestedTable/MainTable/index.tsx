@@ -25,6 +25,8 @@ export function MainTable({
   addingSideDataFunc = (id) => {},
   editSideDataFunc = (id, room) => {},
   editEvent = (item) => {},
+  deleteSideDataFunc = (id, room) => {},
+  handleDeleteMainData = (row) => {},
   sideDataName = "",
   itemsPerPage = 15,
 }) {
@@ -79,6 +81,8 @@ export function MainTable({
                   addingSideDataFunc={addingSideDataFunc}
                   addingSideData={addingSideData}
                   sideDataName={sideDataName}
+                  deleteSideDataFunc={deleteSideDataFunc}
+                  handleDeleteMainData={handleDeleteMainData}
                 />
               ))}
             </TableBody>

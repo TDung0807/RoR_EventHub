@@ -13,15 +13,16 @@ import styles from "./UtilityPage.module.scss";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-import { useQuery, useQueries, useQueryClient } from "react-query";
-import { getHotels } from "../../../service/Hotel";
-import { getAllVendor } from "../../../service/Vendor";
-import { getRestaurants } from "../../../service/Restaurant";
-import { getRoomByHotelId } from "../../../service/Room";
+import { useQuery, useQueries, useQueryClient, useMutation } from "react-query";
+import { getHotels, deleteHotel } from "../../../service/Hotel";
+import { getAllVendor, deleteVendor } from "../../../service/Vendor";
+import { getRestaurants, deleteRestaurant } from "../../../service/Restaurant";
+import { deleteRoom, getRoomByHotelId } from "../../../service/Room";
 import {
-  addTranspost,
+  deleteTranspost,
   getTransportByVendorId,
 } from "../../../service/Transport";
+import { toast } from "react-toastify";
 
 // Hàm định dạng giá tiền thành VND
 const formatPrice = (price) =>
@@ -46,6 +47,23 @@ export function UtilityPage() {
   const [transportData, setTransportData] = useState([]);
   const [transportQueries, setTransportQueries] = useState([]);
   const [sideData, setSideData] = useState([]);
+  const { mutateAsync: deleteRoomSer } = useMutation({
+    mutationFn: deleteRoom,
+  });
+  const { mutateAsync: deleteTranspostSer } = useMutation({
+    mutationFn: deleteTranspost,
+  });
+
+  const { mutateAsync: deleteRestaurantSer } = useMutation({
+    mutationFn: deleteRestaurant,
+  });
+  const { mutateAsync: deleteHotelSer } = useMutation({
+    mutationFn: deleteHotel,
+  });
+  const { mutateAsync: deleteVendorSer } = useMutation({
+    mutationFn: deleteVendor,
+  });
+
   // Fetch dữ liệu khách sạn, vendor, F&B
   const {
     data: hotelsRawsData,
@@ -187,6 +205,59 @@ export function UtilityPage() {
       };
     }
   );
+
+  const deleteRoomHandle = async (id, room) => {
+    const deleteRoomResult = await deleteRoomSer({
+      hotel_id: id,
+      id: room.id,
+    });
+    if (deleteRoomResult.status !== 404 && deleteRoomResult.status !== 500) {
+      toast("Xoá thành công", {
+        autoClose: 3000,
+        type: "success",
+      });
+      queryClient.refetchQueries();
+    } else {
+      toast("Lỗi không xác định", {
+        autoClose: 3000,
+        type: "error",
+      });
+    }
+  };
+  const deleteTransportHandle = async (id, room) => {
+    const deleteRoomResult = await deleteTranspostSer({
+      hotel_id: id,
+      id: room.id,
+    });
+    if (deleteRoomResult.status !== 404 && deleteRoomResult.status !== 500) {
+      toast("Xóa thành công", {
+        autoClose: 3000,
+        type: "success",
+      });
+      queryClient.refetchQueries();
+    } else {
+      toast("Lỗi không xác định", {
+        autoClose: 3000,
+        type: "error",
+      });
+    }
+  };
+  const handleDeleteMainData = (row) => {
+    try {
+      if (activeButton == "Fnb") {
+        deleteRestaurantSer(row.id);
+      }
+      if (activeButton == "Hotel") {
+        deleteHotelSer(row.id);
+      }
+      if (activeButton == "Transportation") {
+        deleteVendorSer(row.id);
+      }
+      toast("Xóa thành công");
+    } catch {
+      toast("Xóa thất bại");
+    }
+  };
   const FnbData = fnbRawsDatas.map(
     ({ created_at, updated_at, main_ingredient, ...rest }) => {
       return { ...rest };
@@ -291,6 +362,7 @@ export function UtilityPage() {
                 utilityData={hotelsData}
                 sideData="roomTypes"
                 action={["edit", "delete"]}
+                handleDeleteMainData={handleDeleteMainData}
                 editEvent={(item) => {
                   setCurrentSideData(item);
                   setOpenSideModal(true);
@@ -307,6 +379,9 @@ export function UtilityPage() {
                   setActionOtherSideModal("Edit");
                   setOpenOtherSideModal(true);
                   setMainDataId(id);
+                }}
+                deleteSideDataFunc={(id, room) => {
+                  deleteRoomHandle(id, room);
                 }}
                 sideDataName="roomTypes"
               />
@@ -364,6 +439,7 @@ export function UtilityPage() {
                 setOpenOtherSideModal(true);
                 setMainDataId(id);
               }}
+              deleteSideDataFunc={deleteTransportHandle}
               sideDataName="transportTypes"
             />
           </Box>

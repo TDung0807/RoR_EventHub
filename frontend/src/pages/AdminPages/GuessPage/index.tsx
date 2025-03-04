@@ -10,13 +10,17 @@ import { useNavigate } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
 import { fakeGuessGroupData } from "../../../mockdata";
 import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { getAllGroup } from "../../../service/GuessGroup";
+import { useMutation, useQuery } from "react-query";
+import { getAllGroup, deleteGroupById } from "../../../service/GuessGroup";
+import { toast } from "react-toastify";
 export const AdminGuestPage = () => {
   const { data, error, isError, isLoading, refetch } = useQuery(
     ["guessgroups"],
     getAllGroup
   );
+  const { mutateAsync: deleteGroupByIdFunc } = useMutation({
+    mutationFn: deleteGroupById,
+  });
   const { hash, pathname, search } = location;
   const [openGuessGroupModal, setOpenGuessGroupModal] = useState(false);
   const [openGuessListModal, setOpenGuessListModal] = useState(false);
@@ -49,6 +53,14 @@ export const AdminGuestPage = () => {
       updated_at: formatDate(updated_at),
     })
   );
+  const handleDeleteMainData = (row) => {
+    try {
+      deleteGroupByIdFunc(row.id);
+      toast("Xóa thành công");
+    } catch {
+      toast("Xóa thất bại");
+    }
+  };
   return (
     <div>
       {openGuessGroupModal == true ? (
@@ -113,6 +125,7 @@ export const AdminGuestPage = () => {
             </Box>
           </Box>
           <MainTable
+            handleDeleteMainData={handleDeleteMainData}
             editPre={`${pathname}`}
             editRef={true}
             utilityRows={guessGroupRows}

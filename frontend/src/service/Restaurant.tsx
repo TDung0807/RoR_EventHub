@@ -14,3 +14,6 @@ export const getRestaurantById = async ({ queryKey }) => {
 
   return client.get(`/restaurants/${id}`);
 };
+export const deleteRestaurant = async (id) => {
+  return client.delete(`/restaurants/${id}`);
+};

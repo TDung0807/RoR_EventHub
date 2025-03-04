@@ -14,6 +14,6 @@ export const putRoom = async (roomData) => {
     roomData
   );
 };
-export const deleteRoom = async (hotelId, roomId) => {
-  return client.delete(`/hotels/${hotelId}/rooms/${roomId}`);
+export const deleteRoom = async (roomData) => {
+  return client.delete(`/hotels/${roomData.hotel_id}/rooms/${roomData.id}`);
 };
