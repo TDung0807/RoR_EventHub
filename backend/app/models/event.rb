@@ -46,6 +46,6 @@ class Event < ApplicationRecord
   end
 
   def set_participants_count(_quest = nil)
-    self.participants = quests.sum(:participants_count)
+    self.participants = quests.count
   end
 end
