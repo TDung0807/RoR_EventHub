@@ -168,8 +168,10 @@ export const ModalDished = ({
       });
       // Nếu nguyên liệu thay đổi thì xoá cũ và thêm mới
       if (intergrientIdData?.data?.ingredients[0] != ingredientValue) {
+        console.log(resultDished);
         await deleteIntergrientFunc({
           id: [resultDished.data.id],
+          ingredient_ids: [ingredientValue],
         });
         const resultIntegriendientAdding = await addingIntegrient({
           dish_id: resultDished?.data?.id || 1,

@@ -10,5 +10,5 @@ export const createdDished = async (dishedData) => {
   );
 };
 export const editDished = async (dishedData) => {
-  return client.put(`/dished/${dishedData.id}`, dishedData);
+  return client.put(`/dishes/${dishedData.id}`, dishedData);
 };
