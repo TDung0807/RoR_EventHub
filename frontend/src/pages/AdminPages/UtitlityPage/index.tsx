@@ -30,6 +30,7 @@ const formatPrice = (price) =>
 
 export function UtilityPage() {
   const queryClient = useQueryClient();
+  const location = useLocation();
 
   const [expand, setExpand] = useState(false);
   const handleExpand = () => setExpand(!expand);
@@ -273,8 +274,6 @@ export function UtilityPage() {
       return { ...rest };
     }
   );
-
-  const location = useLocation();
 
   const hotelRows = ["Hotel", "Address", "Star", "Distance", "Contact", ""];
 
