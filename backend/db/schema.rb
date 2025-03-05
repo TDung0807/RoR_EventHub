@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_05_040557) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_05_044558) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -76,6 +76,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_05_040557) do
     t.bigint "transport_id", null: false
     t.bigint "hotel_id", null: false
     t.bigint "restaurant_id", null: false
+    t.bigint "event_id"
     t.index ["hotel_id"], name: "index_groups_on_hotel_id"
     t.index ["restaurant_id"], name: "index_groups_on_restaurant_id"
     t.index ["transport_id"], name: "index_groups_on_transport_id"

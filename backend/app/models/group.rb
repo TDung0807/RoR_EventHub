@@ -11,6 +11,7 @@ class Group < ApplicationRecord
   belongs_to :hotel
   belongs_to :restaurant
   belongs_to :transport, optional: true
+  belongs_to :event
 
   # Validations
   validates :groupStatus, presence: true
