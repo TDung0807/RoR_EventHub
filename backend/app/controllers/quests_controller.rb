@@ -107,18 +107,22 @@ class QuestsController < ApplicationController
   end
 
   def events_by_quest
+    # Find the quest by email
     @quest = Quest.find_by(email: params[:email])
     return render json: { message: "Quest not found" }, status: :not_found unless @quest
     groups = Group.where(id: @quest.group_ids)
-    events = Event.joins(:groups).where(groups: { id: groups.pluck(:id) }).order(:date)
+    if groups.empty?
+      return render json: { message: "No groups found for this quest" }, status: :not_found
+    end
+    events = Event.joins(groups: :events).where(groups: { id: groups.pluck(:id) }).order(:date)
     event_data = events.map do |event|
       event_json = event.as_json
       groups_with_details = event.groups.map do |group|
         {
           group: group.as_json,
-          restaurant: group.restaurant ? group.restaurant.as_json : nil,
-          hotel: group.hotel ? group.hotel.as_json : nil,
-          transport: group.transport ? group.transport.as_json : nil
+          restaurant: group.restaurant ? group.restaurant.as_json : [],
+          hotel: group.hotel ? group.hotel.as_json : [],
+          transport: group.transport ? group.transport.as_json : []
         }
       end
       event_json.merge!(groups: groups_with_details)
