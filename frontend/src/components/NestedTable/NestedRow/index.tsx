@@ -184,8 +184,10 @@ export function NestedRow({
                         )}
                       </TableCell>
                     </>
-                  ) : (
+                  ) : key != "id" ? (
                     <TableCell align="center">{row[key]}</TableCell>
+                  ) : (
+                    ""
                   )}
                 </>
               );

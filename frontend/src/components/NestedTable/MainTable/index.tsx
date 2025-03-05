@@ -48,13 +48,6 @@ export function MainTable({
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
-              {utilityData[sideDataName] != undefined &&
-              utilityData[sideDataName].length != 0 ? (
-                <TableCell align="center"> No </TableCell>
-              ) : (
-                <TableCell align="center"> </TableCell>
-              )}
-
               {utilityRows.map((item, key) => (
                 <TableCell align="center" key={key}>
                   {item}
