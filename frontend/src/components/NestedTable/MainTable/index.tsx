@@ -82,7 +82,7 @@ export function MainTable({
           )}
         </Table>
       </TableContainer>
-      <div style={{ textAlign: "center", marginLeft: "40%", marginTop: 8 }}>
+      <div style={{ textAlign: "center", marginLeft: "47%", marginTop: 8 }}>
         <ReactPaginate
           nextLabel=">"
           onPageChange={handlePageClick}
