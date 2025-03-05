@@ -67,7 +67,7 @@ export function HotelTypeModal({
         remark: remark,
       });
       if (result.status != 404 && result.status != 500) {
-        toast("Thêm thành công", {
+        toast("Adding Succesfully", {
           autoClose: 3000,
           type: "success",
         });
@@ -76,13 +76,13 @@ export function HotelTypeModal({
 
         handleClose();
       } else {
-        toast("Lỗi không xác định", {
+        toast("Adding Failure", {
           autoClose: 3000,
           type: "error",
         });
       }
     } catch {
-      toast("Lỗi không xác định", {
+      toast("Adding Failure", {
         autoClose: 3000,
         type: "error",
       });
@@ -99,7 +99,7 @@ export function HotelTypeModal({
         remark: remark,
       });
       if (result.status != 404 && result.status != 500) {
-        toast("Sửa thành công", {
+        toast("Edit Succesfully", {
           autoClose: 3000,
           type: "success",
         });
@@ -108,13 +108,13 @@ export function HotelTypeModal({
         }
         handleClose();
       } else {
-        toast("Lỗi không xác định", {
+        toast("Edit Failure", {
           autoClose: 3000,
           type: "error",
         });
       }
     } catch {
-      toast("Lỗi không xác định", {
+      toast("Edit Failure", {
         autoClose: 3000,
         type: "error",
       });

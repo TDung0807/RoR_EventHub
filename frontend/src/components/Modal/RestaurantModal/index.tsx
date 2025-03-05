@@ -62,7 +62,7 @@ export function RestaurantModal({
         cuisine: cuisine,
       });
       if (result.status != 404 && result.status != 500) {
-        toast("Thêm thành công ùi", {
+        toast("Adding Successfully", {
           autoClose: 3000,
           type: "success",
         });
@@ -71,13 +71,13 @@ export function RestaurantModal({
         }
         handleClose();
       } else {
-        toast("Lỗi ùi nè bạn ui", {
+        toast("Adding Failure", {
           autoClose: 3000,
           type: "error",
         });
       }
     } catch {
-      toast("Lỗi ùi nè bạn ui", {
+      toast("Adding Failure", {
         autoClose: 3000,
         type: "error",
       });
@@ -93,7 +93,7 @@ export function RestaurantModal({
         cuisine: cuisine,
       });
       if (result.status != 404 && result.status != 500) {
-        toast("Sửa thành công ùi", {
+        toast("Edit Successfully", {
           autoClose: 3000,
           type: "success",
         });
@@ -102,13 +102,13 @@ export function RestaurantModal({
           refetchGuessGroup();
         }
       } else {
-        toast("Lỗi ùi nè bạn ui", {
+        toast("Edit Failure", {
           autoClose: 3000,
           type: "error",
         });
       }
     } catch {
-      toast("Lỗi ùi nè bạn ui", {
+      toast("Edit Failure", {
         autoClose: 3000,
         type: "error",
       });

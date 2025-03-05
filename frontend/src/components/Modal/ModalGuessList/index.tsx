@@ -115,7 +115,7 @@ export function ModalGuestList({
           quest_ids: [guessData.id],
         });
 
-        toast("Đã thêm khách mới thành công", { type: "success" });
+        toast("Adding New Guest Successfully", { type: "success" });
         refetchGuestInGroup();
       } else {
         let resultAddGuest = await createGuestService({
@@ -142,14 +142,14 @@ export function ModalGuestList({
             email: guestEmail,
           },
         });
-        toast("Đã thêm khách mới thành công với cài đặt mặc định", {
+        toast("Adding New Guest Successfully with default value", {
           type: "success",
         });
 
         refetchGuestInGroup();
       }
     } catch {
-      toast("Lỗi không xác định", {
+      toast("Adding Failure", {
         type: "error",
       });
     }
