@@ -12,10 +12,17 @@ import { fakeGuessGroupData } from "../../../mockdata";
 import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getAllGroup, deleteGroupById } from "../../../service/GuessGroup";
+import { getAllEvent } from "../../../service/Event";
+
 import { toast } from "react-toastify";
 export const AdminGuestPage = () => {
   const queryClient = useQueryClient();
 
+  const {
+    data: EventDataRaws,
+    isLoading: eventIsLoading,
+    isError: eventIsError,
+  } = useQuery(["eventGroup"], getAllEvent);
   const { data, error, isError, isLoading, refetch } = useQuery(
     ["guessgroups"],
     getAllGroup
@@ -27,13 +34,15 @@ export const AdminGuestPage = () => {
   const [openGuessGroupModal, setOpenGuessGroupModal] = useState(false);
   const [openGuessListModal, setOpenGuessListModal] = useState(false);
   const [guessListId, setGuessListId] = useState({});
-  if (isLoading) {
+  if (isLoading || eventIsLoading) {
     return <div>Loading...</div>;
   }
   let groupData = !data ? [] : data.data.groups;
+  let eventData = !EventDataRaws ? [] : EventDataRaws.data;
 
   const guessGroupRows = [
     "Group",
+    "Event Name",
     "Group Status ",
     "Quantity",
     "Date Created ",
@@ -44,16 +53,29 @@ export const AdminGuestPage = () => {
     const date = new Date(isoString);
     return date.toISOString().replace("T", " ").substring(0, 19);
   };
-
   const transformedData = groupData.map(
-    ({ id, group, groupStatus, quantity, created_at, updated_at }) => ({
+    ({
       id,
       group,
       groupStatus,
       quantity,
-      created_at: formatDate(created_at),
-      updated_at: formatDate(updated_at),
-    })
+      created_at,
+      updated_at,
+      event_id,
+    }) => {
+      const eventDataName = eventData.find(
+        (event) => event.id == event_id
+      ).label;
+      return {
+        id,
+        group,
+        eventDataName,
+        groupStatus,
+        quantity,
+        created_at: formatDate(created_at),
+        updated_at: formatDate(updated_at),
+      };
+    }
   );
   const handleDeleteMainData = (row) => {
     let result = confirm("Are you sure delete this");
