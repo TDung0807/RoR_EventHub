@@ -174,7 +174,7 @@ export function UtilityPage() {
       const roomData = roomDataQueries[index]?.data?.data?.rooms || [];
       const roomTypes = roomData.map((room) => ({
         id: room.id,
-        type: room.name,
+        type: room.room_type,
         price: formatPrice(room.price),
         remark: room.remark || "",
       }));
