@@ -12,7 +12,7 @@ class QuestsController < ApplicationController
 
   def create
     @quest = Quest.find_by(email: quest_params[:email])
-  
+
     if @quest
       if params[:group_ids]
         @quest.groups = Group.find(params[:group_ids])
@@ -38,7 +38,6 @@ class QuestsController < ApplicationController
       end
     end
   end
-  
 
   def index
     quests = Quest.all
@@ -57,12 +56,12 @@ class QuestsController < ApplicationController
 
   def update
     @quest = Quest.find_by(id: params[:id])
-  
+
     unless @quest
       render json: { message: "Quest not found" }, status: :not_found
       return
     end
-  
+
     if @quest.update(quest_params)
       if params[:group_ids]
         @quest.groups = Group.find(params[:group_ids])
@@ -74,7 +73,6 @@ class QuestsController < ApplicationController
       render json: { message: "Update failed", errors: @quest.errors.full_messages }, status: :unprocessable_entity
     end
   end
-  
 
   def destroy
     @quest = Quest.find_by(id: params[:id])
@@ -98,7 +96,7 @@ class QuestsController < ApplicationController
 
   def find_by_name
     @quest = Quest.find_by(name: params[:name])
-  
+
     render json: { quest: @quest ? @quest.as_json : nil }, status: :ok
   end
 
@@ -107,10 +105,11 @@ class QuestsController < ApplicationController
     @quest = Quest.find_by(email: params[:email])
     render json:  { quest: @quest ? @quest.as_json : nil }, status: :ok
   end
-  
+
   def events_by_quest
     @quest = Quest.find_by(email: params[:email])
     return render json: { message: "Quest not found" }, status: :not_found unless @quest
+
     events = Event.where(id: @quest.groups.joins(:events).pluck(:event_id).compact.uniq).order(:date)
     event_data = events.map do |event|
       event_json = event.as_json
@@ -125,12 +124,7 @@ class QuestsController < ApplicationController
       event_json.merge!(groups: groups_with_details)
       event_json
     end
-  
-    render json: { events: event_data }, status: :ok
-  end
-  
-  
-  
+
     render json: { events: event_data }, status: :ok
   end
 end
