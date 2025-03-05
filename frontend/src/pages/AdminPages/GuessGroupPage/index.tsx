@@ -115,12 +115,16 @@ export function GuessGroupPage() {
           >
             <DeleteIcon
               onClick={async () => {
-                let result = await mutateAsync({
+                let result = confirm("Are you sure delete this");
+                if (result == false) {
+                  return;
+                }
+
+                let addingCustomer = await mutateAsync({
                   group_id: id,
                   quest_id: params.row.id,
                 });
                 refetchGuestInGroup();
-                alert("Bạn muốn xóa User này");
               }}
             ></DeleteIcon>
           </div>

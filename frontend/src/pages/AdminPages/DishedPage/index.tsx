@@ -91,12 +91,16 @@ export function DishedPage() {
     setAction("add");
   };
   const handleDeleteMainData = (row) => {
+    let result = confirm("Are you sure delete this");
+    if (result == false) {
+      return;
+    }
     try {
       deleteDishedByIdFunc(row.id);
       queryClient.refetchQueries({ queryKey: ["dished"] });
-      toast("Xóa thành công");
+      toast("Delete Succesfully");
     } catch {
-      toast("Xóa thất bại");
+      toast("Delete Failure");
     }
   };
   // Bây giờ trong JSX, xử lý loading hoặc error bên trong giao diện

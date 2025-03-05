@@ -62,7 +62,7 @@ export function VendorModal({
         distance_limit: distanceLimit,
       });
       if (result.status != 404 && result.status != 500) {
-        toast("Thêm thành công", {
+        toast("Adding Successfully", {
           autoClose: 3000,
           type: "success",
         });
@@ -71,13 +71,13 @@ export function VendorModal({
         }
         handleClose();
       } else {
-        toast("Lỗi không xác định", {
+        toast("Adding Failure", {
           autoClose: 3000,
           type: "error",
         });
       }
     } catch {
-      toast("Lỗi không xác định", {
+      toast("Adding Failure", {
         autoClose: 3000,
         type: "error",
       });
@@ -95,7 +95,7 @@ export function VendorModal({
         distance_limit: distanceLimit,
       });
       if (result.status != 404 && result.status != 500) {
-        toast("Sửa thành công", {
+        toast("Edit Successfully", {
           autoClose: 3000,
           type: "success",
         });
@@ -104,13 +104,13 @@ export function VendorModal({
         }
         handleClose();
       } else {
-        toast("Lỗi không xác định", {
+        toast("Edit Failure", {
           autoClose: 3000,
           type: "error",
         });
       }
     } catch {
-      toast("Lỗi không xác định", {
+      toast("Edit Failure", {
         autoClose: 3000,
         type: "error",
       });

@@ -89,20 +89,20 @@ export const ModalEvent = ({
         result.status != 500 &&
         result.status != 422
       ) {
-        toast("Thêm thành công", {
+        toast("Adding Successfully", {
           autoClose: 3000,
           type: "success",
         });
         refetch();
         handleClose();
       } else {
-        toast("Lỗi không xác định", {
+        toast("Adding Failure", {
           autoClose: 3000,
           type: "error",
         });
       }
     } catch {
-      toast("Lỗi không xác định", {
+      toast("Adding Failure", {
         autoClose: 3000,
         type: "error",
       });
@@ -125,26 +125,30 @@ export const ModalEvent = ({
         result.status != 500 &&
         result.status != 422
       ) {
-        toast("Sửa thành công", {
+        toast("Edit Succesfully", {
           autoClose: 3000,
           type: "success",
         });
         refetch();
         handleClose();
       } else {
-        toast("Lỗi không xác định", {
+        toast("Edit Failure", {
           autoClose: 3000,
           type: "error",
         });
       }
     } catch {
-      toast("Lỗi không xác định", {
+      toast("Edit Failure", {
         autoClose: 3000,
         type: "error",
       });
     }
   };
   const deleteEventHandle = async () => {
+    let result = confirm("Are you sure delete this");
+    if (result == false) {
+      return;
+    }
     try {
       const result = await deleteEventSer(id);
       if (
@@ -155,20 +159,20 @@ export const ModalEvent = ({
         //@ts-ignore
         result.status != 422
       ) {
-        toast("Xóa thành công", {
+        toast("Delete Succesfully", {
           autoClose: 3000,
           type: "success",
         });
         refetch();
         handleClose();
       } else {
-        toast("Lỗi không xác định", {
+        toast("Delete Failure", {
           autoClose: 3000,
           type: "error",
         });
       }
     } catch {
-      toast("Lỗi không xác định", {
+      toast("Delete Failure", {
         autoClose: 3000,
         type: "error",
       });

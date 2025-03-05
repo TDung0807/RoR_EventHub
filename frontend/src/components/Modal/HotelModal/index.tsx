@@ -88,15 +88,15 @@ export function HotelModal({
           ? await addingHotelsFunc(payload)
           : await putHotelFunc({ id: hotelId, ...payload });
       if (result.status !== 404 && result.status !== 500) {
-        toast(`${action} thành công`, { autoClose: 3000, type: "success" });
+        toast(`${action} Succesfully`, { autoClose: 3000, type: "success" });
         refetchHotels?.();
         refetchGuessGroup?.();
       } else {
-        toast("Lỗi không xác định", { autoClose: 3000, type: "error" });
+        toast(`${action} Failure`, { autoClose: 3000, type: "error" });
       }
       handleClose();
     } catch {
-      toast("Lỗi không xác định", { autoClose: 3000, type: "error" });
+      toast(`${action} Failure`, { autoClose: 3000, type: "error" });
     }
   };
 
