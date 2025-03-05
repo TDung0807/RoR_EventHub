@@ -56,6 +56,10 @@ export const AdminGuestPage = () => {
     })
   );
   const handleDeleteMainData = (row) => {
+    let result = confirm("Bạn có chắc xóa không");
+    if (result == false) {
+      return;
+    }
     try {
       deleteGroupByIdFunc(row.id);
       toast("Xóa thành công");

@@ -91,6 +91,10 @@ export function DishedPage() {
     setAction("add");
   };
   const handleDeleteMainData = (row) => {
+    let result = confirm("Bạn có chắc xóa không");
+    if (result == false) {
+      return;
+    }
     try {
       deleteDishedByIdFunc(row.id);
       queryClient.refetchQueries({ queryKey: ["dished"] });

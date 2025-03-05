@@ -211,6 +211,10 @@ export function UtilityPage() {
       hotel_id: id,
       id: room.id,
     });
+    let result = confirm("Bạn có chắc xóa không");
+    if (result == false) {
+      return;
+    }
     if (deleteRoomResult.status !== 404 && deleteRoomResult.status !== 500) {
       toast("Xoá thành công", {
         autoClose: 3000,
@@ -226,6 +230,10 @@ export function UtilityPage() {
   };
   const deleteTransportHandle = async (id, room) => {
     const deleteRoomResult = await deleteTranspostSer(id);
+    let result = confirm("Bạn có chắc xóa không");
+    if (result == false) {
+      return;
+    }
     if (deleteRoomResult.status !== 404 && deleteRoomResult.status !== 500) {
       toast("Xóa thành công", {
         autoClose: 3000,
@@ -240,6 +248,10 @@ export function UtilityPage() {
     }
   };
   const handleDeleteMainData = (row) => {
+    let result = confirm("Bạn có chắc xóa không");
+    if (result == false) {
+      return;
+    }
     try {
       if (activeButton == "FnB") {
         deleteRestaurantSer(row.id);

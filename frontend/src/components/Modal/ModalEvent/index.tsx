@@ -145,6 +145,10 @@ export const ModalEvent = ({
     }
   };
   const deleteEventHandle = async () => {
+    let result = confirm("Bạn có chắc xóa không");
+    if (result == false) {
+      return;
+    }
     try {
       const result = await deleteEventSer(id);
       if (
