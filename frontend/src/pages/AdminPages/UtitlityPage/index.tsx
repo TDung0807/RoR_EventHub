@@ -212,18 +212,18 @@ export function UtilityPage() {
       hotel_id: id,
       id: room.id,
     });
-    let result = confirm("Bạn có chắc xóa không");
+    let result = confirm("Are you sure delete this");
     if (result == false) {
       return;
     }
     if (deleteRoomResult.status !== 404 && deleteRoomResult.status !== 500) {
-      toast("Xoá thành công", {
+      toast("Delete Succesfully", {
         autoClose: 3000,
         type: "success",
       });
       queryClient.refetchQueries({ queryKey: ["roomCurrently"] });
     } else {
-      toast("Lỗi không xác định", {
+      toast("Delete Failure", {
         autoClose: 3000,
         type: "error",
       });
@@ -231,25 +231,25 @@ export function UtilityPage() {
   };
   const deleteTransportHandle = async (id, room) => {
     const deleteRoomResult = await deleteTranspostSer(id);
-    let result = confirm("Bạn có chắc xóa không");
+    let result = confirm("Are you sure delete this");
     if (result == false) {
       return;
     }
     if (deleteRoomResult.status !== 404 && deleteRoomResult.status !== 500) {
-      toast("Xóa thành công", {
+      toast("Delete Successfully", {
         autoClose: 3000,
         type: "success",
       });
       queryClient.refetchQueries({ queryKey: ["transportCurrently"] });
     } else {
-      toast("Lỗi không xác định", {
+      toast("Delete Failure", {
         autoClose: 3000,
         type: "error",
       });
     }
   };
   const handleDeleteMainData = (row) => {
-    let result = confirm("Bạn có chắc xóa không");
+    let result = confirm("Are you sure delete this");
     if (result == false) {
       return;
     }
@@ -264,9 +264,9 @@ export function UtilityPage() {
         deleteVendorSer(row.id);
       }
       queryClient.refetchQueries({ queryKey: ["hotels", "vendors", "Fnb"] });
-      toast("Xóa thành công");
+      toast("Delete Successfully");
     } catch {
-      toast("Xóa thất bại");
+      toast("Delete Failure");
     }
   };
   const FnbData = fnbRawsDatas.map(

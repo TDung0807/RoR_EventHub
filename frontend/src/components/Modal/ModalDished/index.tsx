@@ -127,20 +127,20 @@ export const ModalDished = ({
       });
 
       if (resultDished.status !== 404 && resultDished.status !== 500) {
-        toast("Thêm thành công", {
+        toast("Adding Successfully", {
           autoClose: 3000,
           type: "success",
         });
         handleClose();
         refetchDishedFunc();
       } else {
-        toast("Lỗi không xác định", {
+        toast("Adding Failure", {
           autoClose: 3000,
           type: "error",
         });
       }
     } catch {
-      toast("Lỗi không xác định", {
+      toast("Adding Failure", {
         autoClose: 3000,
         type: "error",
       });
@@ -172,14 +172,14 @@ export const ModalDished = ({
           resultIntegriendientAdding.status !== 404 &&
           resultIntegriendientAdding.status !== 500
         ) {
-          toast("Sửa thành công", {
+          toast("Edit Successffuly", {
             autoClose: 3000,
             type: "success",
           });
           handleClose();
           refetchDishedFunc();
         } else {
-          toast("Lỗi không xác định", {
+          toast("Edit Failure", {
             autoClose: 3000,
             type: "error",
           });
@@ -187,7 +187,7 @@ export const ModalDished = ({
         handleClose();
       }
     } catch {
-      toast("Lỗi không xác định", {
+      toast("Edit Failure", {
         autoClose: 3000,
         type: "error",
       });

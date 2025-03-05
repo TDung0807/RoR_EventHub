@@ -56,16 +56,16 @@ export const AdminGuestPage = () => {
     })
   );
   const handleDeleteMainData = (row) => {
-    let result = confirm("Bạn có chắc xóa không");
+    let result = confirm("Are you sure delete this");
     if (result == false) {
       return;
     }
     try {
       deleteGroupByIdFunc(row.id);
-      toast("Xóa thành công");
+      toast("Delete Successfully");
       queryClient.refetchQueries({ queryKey: ["guessgroups"] });
     } catch {
-      toast("Xóa thất bại", { type: "error" });
+      toast("Delete Failure", { type: "error" });
     }
   };
   return (

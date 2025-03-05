@@ -233,7 +233,7 @@ export function DisplayGuessGroupSideInfo({
             textAlign: "center",
           }}
         >
-          Thông tin sẽ được cập nhật sau khi liên hệ với dịch vụ
+          The information will be updating after contacting service prodiver
         </p>
       </div>
     </div>
