@@ -14,7 +14,7 @@ class Event < ApplicationRecord
 
   # Associations
   belongs_to :user
-  has_and_belongs_to_many :groups, join_table: 'events_groups'
+  has_and_belongs_to_many :groups, join_table: 'events_groups', dependent: :destroy
   has_and_belongs_to_many :quests
 
   private
