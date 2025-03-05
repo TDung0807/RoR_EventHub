@@ -46,9 +46,7 @@ export function UserCalendar() {
     eventsData =
       data.data?.map((event) => ({
         id: `${event.id}`,
-        label: `${event.label} & ${formatTime(event.start_hour)} - ${formatTime(
-          event.end_hour
-        )}`,
+        label: `${event.label}`,
         groupLabel: "Event",
         startHour: formatTime(event.start_hour),
         endHour: formatTime(event.end_hour),
@@ -63,9 +61,7 @@ export function UserCalendar() {
       eventsData =
         data.data?.events?.map((event) => ({
           id: `${event.id}`,
-          label: `${event.label} & ${formatTime(
-            event.start_hour
-          )} - ${formatTime(event.end_hour)}`,
+          label: `${event.label}`,
           groupLabel: "Event",
           startHour: formatTime(event.start_hour),
           endHour: formatTime(event.end_hour),

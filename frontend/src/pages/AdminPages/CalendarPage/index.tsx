@@ -33,7 +33,7 @@ export function CalendarPage() {
   const [action, setAction] = useState("");
   const handleOpen = () => setOpen(true);
   const { data, error, isError, isLoading, refetch } = useQuery(
-    ["upcomingEvent"],
+    ["event"],
     getAllEvent,
     { staleTime: 0 }
   );
@@ -45,9 +45,7 @@ export function CalendarPage() {
     // Chuyển đổi dữ liệu
     eventsData = data.data.map((event) => ({
       id: `${event.id}`,
-      label: `${event.label} & ${formatTime(event.start_hour)} - ${formatTime(
-        event.end_hour
-      )}`,
+      label: `${event.label}`,
       groupLabel: "Event",
       startHour: formatTime(event.start_hour),
       endHour: formatTime(event.end_hour),
@@ -60,9 +58,7 @@ export function CalendarPage() {
     // Chuyển đổi dữ liệu
     eventsData = data.data.events.map((event) => ({
       id: `${event.id}`,
-      label: `${event.label} & ${formatTime(event.start_hour)} - ${formatTime(
-        event.end_hour
-      )}`,
+      label: `${event.label}`,
       groupLabel: "Event",
       startHour: formatTime(event.start_hour),
       endHour: formatTime(event.end_hour),
