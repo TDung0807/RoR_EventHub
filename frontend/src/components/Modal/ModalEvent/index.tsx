@@ -11,7 +11,7 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
-import { addEvent, putEvent } from "../../../service/Event";
+import { addEvent, putEvent, deleteEvent } from "../../../service/Event";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
@@ -69,6 +69,9 @@ export const ModalEvent = ({
   };
   const { mutateAsync: addingEventSer } = useMutation({ mutationFn: addEvent });
   const { mutateAsync: editEventSer } = useMutation({ mutationFn: putEvent });
+  const { mutateAsync: deleteEventSer } = useMutation({
+    mutationFn: deleteEvent,
+  });
 
   const addingEvent = async () => {
     try {
@@ -141,6 +144,36 @@ export const ModalEvent = ({
       });
     }
   };
+  const deleteEventHandle = async () => {
+    try {
+      const result = await deleteEventSer(id);
+      if (
+        //@ts-ignore
+        result.status != 404 &&
+        //@ts-ignore
+        result.status != 500 &&
+        //@ts-ignore
+        result.status != 422
+      ) {
+        toast("Xóa thành công", {
+          autoClose: 3000,
+          type: "success",
+        });
+        refetch();
+        handleClose();
+      } else {
+        toast("Lỗi không xác định", {
+          autoClose: 3000,
+          type: "error",
+        });
+      }
+    } catch {
+      toast("Lỗi không xác định", {
+        autoClose: 3000,
+        type: "error",
+      });
+    }
+  };
   return (
     <>
       {action == "detail" && (
@@ -191,7 +224,7 @@ export const ModalEvent = ({
               <IconButton onClick={handleEditButton}>
                 <EditIcon />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={deleteEventHandle}>
                 <DeleteIcon />
               </IconButton>
             </Box>

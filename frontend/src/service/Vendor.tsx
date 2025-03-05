@@ -8,6 +8,6 @@ export const getAllVendor = async () => {
 export const putVendor = async (vendorData) => {
   return client.put(`/vendors/${vendorData.id}`, vendorData);
 };
-export const deleteVendor = async (vendorData) => {
-  return client.delete(`/vendors/${vendorData.id}`);
+export const deleteVendor = async (id) => {
+  return client.delete(`/vendors/${id}`);
 };

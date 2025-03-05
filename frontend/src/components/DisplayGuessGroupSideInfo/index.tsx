@@ -226,10 +226,10 @@ export function DisplayGuessGroupSideInfo({
         </h3>
         <p
           style={{
-            marginTop: "-5px",
+            fontWeight: 700,
+            marginTop: "5%",
             marginBottom: 19,
-            color: "#f5faff",
-            fontSize: 14,
+            fontSize: 20,
             textAlign: "center",
           }}
         >

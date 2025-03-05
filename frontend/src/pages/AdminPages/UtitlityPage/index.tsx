@@ -216,7 +216,7 @@ export function UtilityPage() {
         autoClose: 3000,
         type: "success",
       });
-      queryClient.refetchQueries();
+      queryClient.refetchQueries({ queryKey: ["roomCurrently"] });
     } else {
       toast("Lỗi không xác định", {
         autoClose: 3000,
@@ -231,7 +231,7 @@ export function UtilityPage() {
         autoClose: 3000,
         type: "success",
       });
-      queryClient.refetchQueries();
+      queryClient.refetchQueries({ queryKey: ["transportCurrently"] });
     } else {
       toast("Lỗi không xác định", {
         autoClose: 3000,
@@ -250,7 +250,7 @@ export function UtilityPage() {
       if (activeButton == "Transportation") {
         deleteVendorSer(row.id);
       }
-      queryClient.refetchQueries();
+      queryClient.refetchQueries({ queryKey: ["hotels", "vendors", "Fnb"] });
       toast("Xóa thành công");
     } catch {
       toast("Xóa thất bại");
