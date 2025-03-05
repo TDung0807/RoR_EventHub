@@ -126,14 +126,7 @@ export const ModalDished = ({
         ingredient_id: ingredientValue,
       });
 
-      const resultIntegriendient = await addingIntegrient({
-        dish_id: resultDished?.data?.id || 1,
-        name: ingredientValue,
-      });
-      if (
-        resultIntegriendient.status !== 404 &&
-        resultIntegriendient.status !== 500
-      ) {
+      if (resultDished.status !== 404 && resultDished.status !== 500) {
         toast("Thêm thành công", {
           autoClose: 3000,
           type: "success",
