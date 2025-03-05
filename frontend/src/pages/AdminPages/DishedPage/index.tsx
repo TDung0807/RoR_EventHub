@@ -6,7 +6,7 @@ import { ModalDished, MainTable, MyButton } from "../../../components";
 import { fakeDishedData } from "../../../mockdata";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { useQuery, useQueries, useMutation } from "react-query";
+import { useQuery, useQueries, useMutation, useQueryClient } from "react-query";
 import {
   getAllDishedFromRestaurant,
   deleteDishedById,
@@ -19,6 +19,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { toast } from "react-toastify";
 
 export function DishedPage() {
+  const queryClient = useQueryClient();
   const { id } = useParams();
   const [modalOpen, setModalopen] = useState(false);
   const [modalRestaurant, setModalRestaurant] = useState(false);
@@ -92,6 +93,7 @@ export function DishedPage() {
   const handleDeleteMainData = (row) => {
     try {
       deleteDishedByIdFunc(row.id);
+      queryClient.refetchQueries({ queryKey: ["dished"] });
       toast("Xóa thành công");
     } catch {
       toast("Xóa thất bại");
