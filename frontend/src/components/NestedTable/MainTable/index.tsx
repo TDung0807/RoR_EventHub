@@ -28,7 +28,7 @@ export function MainTable({
   deleteSideDataFunc = (id, room) => {},
   handleDeleteMainData = (row) => {},
   sideDataName = "",
-  itemsPerPage = 15,
+  itemsPerPage = 10,
 }) {
   const [itemOffset, setItemOffset] = useState(0);
   const endOffset = itemOffset + itemsPerPage;
