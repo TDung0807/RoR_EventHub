@@ -61,6 +61,19 @@ export const UserNavbar = () => {
               {isExpanded && <span>Calendar</span>}
             </Link>
           </li>
+          <li>
+            <Link className={`${styles.item_nav}`} to="/user/guests">
+              <PeopleAltIcon
+                style={{
+                  width: 28,
+                  height: 28,
+                  marginLeft: 15,
+                  marginRight: 18,
+                }}
+              ></PeopleAltIcon>
+              {isExpanded && <span>Calendar</span>}
+            </Link>
+          </li>
         </ul>
       </nav>
     </div>

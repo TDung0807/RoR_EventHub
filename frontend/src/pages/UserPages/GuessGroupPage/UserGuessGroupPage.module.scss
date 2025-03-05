@@ -1,0 +1,59 @@
+.grayLayout {
+  background-color: #f7f7f7;
+  margin-left: -80px;
+  min-height: 1200px;
+}
+.cardSection {
+  background-color: #f5f5f5;
+  padding-top: 41px;
+  margin-bottom: 35px;
+  margin-right: 20px;
+}
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  padding-left: 0;
+  color: #000;
+}
+.flexingChanging {
+  display: flex;
+  justify-content: space-between;
+}
+.backButton {
+  background: none;
+  border: none;
+  color: #005fb3;
+  font-weight: 700;
+  font-size: 24px;
+  cursor: pointer;
+}
+.tabsContainer {
+  flex-grow: 1;
+  display: flex;
+  padding-left: 0;
+}
+.tabButton {
+  background: none;
+  border: none;
+  color: #000;
+  font-size: 16px;
+  cursor: pointer;
+  padding-right: 20px;
+}
+.publishButton {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 200px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.blueDivider {
+  border-bottom: 4px solid #0583f2;
+  width: 80%;
+  height: 4px;
+  margin-left: 4px;
+}

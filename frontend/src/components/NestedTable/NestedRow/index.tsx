@@ -23,6 +23,7 @@ export function NestedRow({
   editRef = false,
   editPre = "",
   action,
+  deleteSignal = true,
   editEvent = (item) => {},
   addingSideData = false,
   addingSideDataFunc = (id) => {},
@@ -95,7 +96,7 @@ export function NestedRow({
                         }}
                         style={{ cursor: "pointer" }}
                       >
-                        <DeleteIcon></DeleteIcon>
+                        {deleteSignal && <DeleteIcon></DeleteIcon>}
                       </div>
                     </>
                   ) : (
@@ -114,7 +115,7 @@ export function NestedRow({
                         }}
                         style={{ cursor: "pointer" }}
                       >
-                        <DeleteIcon></DeleteIcon>
+                        {deleteSignal && <DeleteIcon></DeleteIcon>}
                       </div>
                     </div>
                   )}
@@ -161,7 +162,7 @@ export function NestedRow({
                               }}
                               style={{ cursor: "pointer" }}
                             >
-                              <DeleteIcon></DeleteIcon>
+                              {deleteSignal && <DeleteIcon></DeleteIcon>}
                             </div>
                           </>
                         ) : (
@@ -178,7 +179,7 @@ export function NestedRow({
                               }}
                               style={{ cursor: "pointer" }}
                             >
-                              <DeleteIcon></DeleteIcon>
+                              {deleteSignal && <DeleteIcon></DeleteIcon>}
                             </div>
                           </>
                         )}
@@ -253,7 +254,7 @@ export function NestedRow({
                                   deleteSideDataFunc(row.id, room);
                                 }}
                               >
-                                <DeleteIcon></DeleteIcon>
+                                {deleteSignal && <DeleteIcon></DeleteIcon>}
                               </div>
                             </TableCell>
                           </TableRow>

@@ -22,6 +22,7 @@ export function MainTable({
   editPre = "",
   action = [],
   addingSideData = false,
+  deleteSignal = true,
   addingSideDataFunc = (id) => {},
   editSideDataFunc = (id, room) => {},
   editEvent = (item) => {},
@@ -83,6 +84,7 @@ export function MainTable({
                   sideDataName={sideDataName}
                   deleteSideDataFunc={deleteSideDataFunc}
                   handleDeleteMainData={handleDeleteMainData}
+                  deleteSignal={deleteSignal}
                 />
               ))}
             </TableBody>

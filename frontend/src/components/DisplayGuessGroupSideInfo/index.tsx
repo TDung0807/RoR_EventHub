@@ -22,6 +22,7 @@ export function DisplayGuessGroupSideInfo({
   remark = "",
   options = "Restaurant",
   editFunc,
+  editSignal = true,
   ...props
 }) {
   return (
@@ -51,7 +52,7 @@ export function DisplayGuessGroupSideInfo({
             style={{ cursor: "pointer", marginBottom: 19 }}
             onClick={editFunc}
           >
-            <EditIcon></EditIcon>
+            {editSignal && <EditIcon></EditIcon>}
           </div>
         </div>
         {options == "Transport" && (

@@ -105,9 +105,10 @@ export function ModalGuestList({
   const addingGuestToGroup = async () => {
     await setShouldFetchGuestEmail(true); // Trigger the query
     await setShouldFetchGuestName(true); // Trigger the query
-
+    setTimeout(() => {}, 2000);
     const guessData = (await guestResult1?.data?.quest) ||
       (await guestResult2?.data?.quest) || { id: null };
+    console.log(guessData);
     try {
       if (guessData.id != null) {
         let resultAddGroup = await addGuestToGroup({

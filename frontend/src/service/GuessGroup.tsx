@@ -6,6 +6,10 @@ export const getGroupById = async ({ queryKey }) => {
   const [_, id] = queryKey;
   return client.get(`/groups/${id}`);
 };
+export const getGroupByIdGuest = async ({ queryKey }) => {
+  const [_, id] = queryKey;
+  return client.get(`/quests/${id}/groups`);
+};
 export const createdGroup = async (groupData) => {
   return client.post(`/groups`, groupData);
 };

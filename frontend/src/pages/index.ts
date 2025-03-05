@@ -1,5 +1,10 @@
 export { LoginPage } from "./LoginPage";
-export { UserHomePage, UserCalendar } from "./UserPages";
+export {
+  UserHomePage,
+  UserCalendar,
+  UserGuessPage,
+  UserGuessGroupPage,
+} from "./UserPages";
 export {
   AdminGuestPage,
   GuessGroupPage,
