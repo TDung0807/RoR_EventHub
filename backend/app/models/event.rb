@@ -16,14 +16,16 @@ class Event < ApplicationRecord
   belongs_to :user
   has_and_belongs_to_many :groups, join_table: 'events_groups', dependent: :destroy
   has_and_belongs_to_many :quests
+
   # Overriding the destroy method
   def destroy
-    # First, dissociate the event from its groups
+    # Dissociate the event from its groups
     groups.each do |group|
-      group.events.delete(self)
+      group.events.delete(self)  # Remove the event from the group association
     end
-    super # Then, delete the event
+    super # Proceed to delete the event
   end
+
   private
 
   def start_and_end_hour_are_valid_times
