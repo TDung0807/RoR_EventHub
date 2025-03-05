@@ -28,7 +28,7 @@ export function MainTable({
   deleteSideDataFunc = (id, room) => {},
   handleDeleteMainData = (row) => {},
   sideDataName = "",
-  itemsPerPage = 10,
+  itemsPerPage = 15,
 }) {
   const [itemOffset, setItemOffset] = useState(0);
   const endOffset = itemOffset + itemsPerPage;
@@ -41,13 +41,20 @@ export function MainTable({
     const newOffset = (event.selected * itemsPerPage) % utilityData.length;
     setItemOffset(newOffset);
   };
-
   return (
     <div>
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
+              {utilityData[0] != undefined &&
+              utilityData[0][sideDataName] != undefined &&
+              utilityData[0][sideDataName].length != 0 ? (
+                <TableCell align="center"> </TableCell>
+              ) : (
+                ""
+              )}
+
               {utilityRows.map((item, key) => (
                 <TableCell align="center" key={key}>
                   {item}
@@ -82,7 +89,7 @@ export function MainTable({
           )}
         </Table>
       </TableContainer>
-      <div style={{ textAlign: "center", marginLeft: "47%", marginTop: 8 }}>
+      <div style={{ textAlign: "center", marginLeft: "40%", marginTop: 8 }}>
         <ReactPaginate
           nextLabel=">"
           onPageChange={handlePageClick}
