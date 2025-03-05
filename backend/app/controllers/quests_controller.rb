@@ -12,15 +12,14 @@ class QuestsController < ApplicationController
 
   def create
     @quest = Quest.find_by(email: quest_params[:email])
-
+  
     if @quest
       if params[:group_ids]
         @quest.groups = Group.find(params[:group_ids])
       end
       if @quest.update(quest_params)
-        # Send email notification if the quest is added to a group
         NotifierMailer.group_assignment_notification(@quest).deliver_later
-        render json: { message: "Quest updated successfully", quest: @quest.as_json }, status: :ok
+        render json: { message: "Quest updated successfully", quest: @quest.as_json.merge(group_ids: @quest.group_ids) }, status: :ok
       else
         render json: { message: "Update failed", errors: @quest.errors.full_messages }, status: :unprocessable_entity
       end
@@ -30,14 +29,14 @@ class QuestsController < ApplicationController
         if params[:group_ids]
           @quest.groups = Group.find(params[:group_ids])
         end
-        # Send email notification if the quest is added to a group
         NotifierMailer.group_assignment_notification(@quest).deliver_later
-        render json: @quest.as_json, status: :ok
+        render json: @quest.as_json.merge(group_ids: @quest.group_ids), status: :ok
       else
         render json: { message: "Creation error", error: @quest.errors.full_messages }, status: :bad_request
       end
     end
   end
+  
 
   def index
     quests = Quest.all
@@ -46,33 +45,32 @@ class QuestsController < ApplicationController
 
   def show
     @quest = Quest.find_by(id: params[:id])
-
+  
     unless @quest
       render json: { message: "Quest not found" }, status: :not_found
     else
-      render json: { quest: @quest.as_json }, status: :ok
+      render json: { quest: @quest.as_json.merge(group_ids: @quest.group_ids) }, status: :ok
     end
   end
-
   def update
     @quest = Quest.find_by(id: params[:id])
-
+  
     unless @quest
       render json: { message: "Quest not found" }, status: :not_found
       return
     end
-
+  
     if @quest.update(quest_params)
       if params[:group_ids]
         @quest.groups = Group.find(params[:group_ids])
       end
-      # Send email notification if the quest is added to a group
       NotifierMailer.group_assignment_notification(@quest).deliver_later
-      render json: { message: "Updated successfully", quest: @quest.as_json }, status: :ok
+      render json: { message: "Updated successfully", quest: @quest.as_json.merge(group_ids: @quest.group_ids) }, status: :ok
     else
       render json: { message: "Update failed", errors: @quest.errors.full_messages }, status: :unprocessable_entity
     end
   end
+  
 
   def destroy
     @quest = Quest.find_by(id: params[:id])
@@ -96,38 +94,21 @@ class QuestsController < ApplicationController
 
   def find_by_name
     @quest = Quest.find_by(name: params[:name])
-
+  
     render json: { quest: @quest ? @quest.as_json : nil }, status: :ok
   end
 
   def find_by_email
     Rails.logger.info "Looking for quest with email: #{params[:email]}"
     @quest = Quest.find_by(email: params[:email])
-    render json:  { quest: @quest ? @quest.as_json : nil }, status: :ok
+    render json: { quest: @quest ? @quest.as_json.merge(group_ids: @quest.group_ids) : nil }, status: :ok
   end
-
+  
   def events_by_quest
-    # Find the quest by email
     @quest = Quest.find_by(email: params[:email])
     return render json: { message: "Quest not found" }, status: :not_found unless @quest
-    groups = Group.where(id: @quest.group_ids)
-    if groups.empty?
-      return render json: { message: "No groups found for this quest" }, status: :not_found
-    end
-    events = Event.joins(groups: :events).where(groups: { id: groups.pluck(:id) }).order(:date)
-    event_data = events.map do |event|
-      event_json = event.as_json
-      groups_with_details = event.groups.map do |group|
-        {
-          group: group.as_json,
-          restaurant: group.restaurant ? group.restaurant.as_json : [],
-          hotel: group.hotel ? group.hotel.as_json : [],
-          transport: group.transport ? group.transport.as_json : []
-        }
-      end
-      event_json.merge!(groups: groups_with_details)
-      event_json
-    end
-    render json: { events: event_data }, status: :ok
+  
+    events = Event.where(id: @quest.groups.pluck(:event_id).compact.uniq).order(:date)
+    render json: { events: events.as_json }, status: :ok
   end
 end
