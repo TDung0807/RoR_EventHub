@@ -10,10 +10,12 @@ import { useNavigate } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
 import { fakeGuessGroupData } from "../../../mockdata";
 import React, { useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getAllGroup, deleteGroupById } from "../../../service/GuessGroup";
 import { toast } from "react-toastify";
 export const AdminGuestPage = () => {
+  const queryClient = useQueryClient();
+
   const { data, error, isError, isLoading, refetch } = useQuery(
     ["guessgroups"],
     getAllGroup
@@ -57,8 +59,9 @@ export const AdminGuestPage = () => {
     try {
       deleteGroupByIdFunc(row.id);
       toast("Xóa thành công");
+      queryClient.refetchQueries({ queryKey: ["guessgroups"] });
     } catch {
-      toast("Xóa thất bại");
+      toast("Xóa thất bại", { type: "error" });
     }
   };
   return (

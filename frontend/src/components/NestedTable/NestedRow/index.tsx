@@ -80,32 +80,42 @@ export function NestedRow({
                 item != "checkin_time" ? (
                 <TableCell align="center">
                   {editRef ? (
-                    <div style={{ cursor: "pointer" }}>
-                      <Link
-                        to={`${editPre}/${row[item]}`}
-                        style={{ color: "black" }}
+                    <>
+                      <div style={{ cursor: "pointer" }}>
+                        <Link
+                          to={`${editPre}/${row[item]}`}
+                          style={{ color: "black" }}
+                        >
+                          <EditIcon></EditIcon>
+                        </Link>
+                      </div>
+                      <div
+                        onClick={() => {
+                          handleDeleteMainData(row);
+                        }}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <DeleteIcon></DeleteIcon>
+                      </div>
+                    </>
+                  ) : (
+                    <div>
+                      <div
+                        onClick={() => {
+                          editEvent(row);
+                        }}
+                        style={{ cursor: "pointer" }}
                       >
                         <EditIcon></EditIcon>
-                      </Link>
-                      <DeleteIcon
-                        onClick={(row) => {
+                      </div>
+                      <div
+                        onClick={() => {
                           handleDeleteMainData(row);
                         }}
-                      ></DeleteIcon>
-                    </div>
-                  ) : (
-                    <div
-                      onClick={() => {
-                        editEvent(row);
-                      }}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <EditIcon></EditIcon>
-                      <DeleteIcon
-                        onClick={(row) => {
-                          handleDeleteMainData(row);
-                        }}
-                      ></DeleteIcon>
+                        style={{ cursor: "pointer" }}
+                      >
+                        <DeleteIcon></DeleteIcon>
+                      </div>
                     </div>
                   )}
                 </TableCell>
@@ -136,21 +146,41 @@ export function NestedRow({
                       <TableCell align="center">{row[key]}</TableCell>
                       <TableCell align="center">
                         {editRef ? (
-                          <div style={{ cursor: "pointer" }}>
-                            <Link
-                              to={`${editPre}/${row["id"]}`}
-                              style={{ color: "black" }}
+                          <>
+                            <div style={{ cursor: "pointer", marginRight: 8 }}>
+                              <Link
+                                to={`${editPre}/${row["id"]}`}
+                                style={{ color: "black" }}
+                              >
+                                <EditIcon />
+                              </Link>
+                            </div>
+                            <div
+                              onClick={() => {
+                                handleDeleteMainData(row);
+                              }}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <DeleteIcon></DeleteIcon>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div
+                              style={{ cursor: "pointer" }}
+                              onClick={() => editEvent(row)}
                             >
                               <EditIcon />
-                            </Link>
-                          </div>
-                        ) : (
-                          <div
-                            style={{ cursor: "pointer" }}
-                            onClick={() => editEvent(row)}
-                          >
-                            <EditIcon />
-                          </div>
+                            </div>
+                            <div
+                              onClick={() => {
+                                handleDeleteMainData(row);
+                              }}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <DeleteIcon></DeleteIcon>
+                            </div>
+                          </>
                         )}
                       </TableCell>
                     </>

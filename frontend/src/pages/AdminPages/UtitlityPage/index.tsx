@@ -216,7 +216,7 @@ export function UtilityPage() {
         autoClose: 3000,
         type: "success",
       });
-      queryClient.refetchQueries();
+      queryClient.refetchQueries({ queryKey: ["roomCurrently"] });
     } else {
       toast("Lỗi không xác định", {
         autoClose: 3000,
@@ -225,16 +225,13 @@ export function UtilityPage() {
     }
   };
   const deleteTransportHandle = async (id, room) => {
-    const deleteRoomResult = await deleteTranspostSer({
-      hotel_id: id,
-      id: room.id,
-    });
+    const deleteRoomResult = await deleteTranspostSer(id);
     if (deleteRoomResult.status !== 404 && deleteRoomResult.status !== 500) {
       toast("Xóa thành công", {
         autoClose: 3000,
         type: "success",
       });
-      queryClient.refetchQueries();
+      queryClient.refetchQueries({ queryKey: ["transportCurrently"] });
     } else {
       toast("Lỗi không xác định", {
         autoClose: 3000,
@@ -244,7 +241,7 @@ export function UtilityPage() {
   };
   const handleDeleteMainData = (row) => {
     try {
-      if (activeButton == "Fnb") {
+      if (activeButton == "FnB") {
         deleteRestaurantSer(row.id);
       }
       if (activeButton == "Hotel") {
@@ -253,6 +250,7 @@ export function UtilityPage() {
       if (activeButton == "Transportation") {
         deleteVendorSer(row.id);
       }
+      queryClient.refetchQueries({ queryKey: ["hotels", "vendors", "Fnb"] });
       toast("Xóa thành công");
     } catch {
       toast("Xóa thất bại");
@@ -441,6 +439,7 @@ export function UtilityPage() {
               }}
               deleteSideDataFunc={deleteTransportHandle}
               sideDataName="transportTypes"
+              handleDeleteMainData={handleDeleteMainData}
             />
           </Box>
         )}
@@ -479,6 +478,7 @@ export function UtilityPage() {
               utilityRows={FnbRows}
               utilityData={FnbData}
               action={["edit", "delete"]}
+              handleDeleteMainData={handleDeleteMainData}
             />
           </Box>
         )}
