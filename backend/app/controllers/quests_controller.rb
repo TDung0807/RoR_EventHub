@@ -18,9 +18,8 @@ class QuestsController < ApplicationController
         @quest.groups = Group.find(params[:group_ids])
       end
       if @quest.update(quest_params)
-        # Send email notification if the quest is added to a group
         NotifierMailer.group_assignment_notification(@quest).deliver_later
-        render json: { message: "Quest updated successfully", quest: @quest.as_json }, status: :ok
+        render json: { message: "Quest updated successfully", quest: @quest.as_json.merge(group_ids: @quest.group_ids) }, status: :ok
       else
         render json: { message: "Update failed", errors: @quest.errors.full_messages }, status: :unprocessable_entity
       end
@@ -30,9 +29,8 @@ class QuestsController < ApplicationController
         if params[:group_ids]
           @quest.groups = Group.find(params[:group_ids])
         end
-        # Send email notification if the quest is added to a group
         NotifierMailer.group_assignment_notification(@quest).deliver_later
-        render json: @quest.as_json, status: :ok
+        render json: @quest.as_json.merge(group_ids: @quest.group_ids), status: :ok
       else
         render json: { message: "Creation error", error: @quest.errors.full_messages }, status: :bad_request
       end
@@ -47,14 +45,13 @@ class QuestsController < ApplicationController
 
   def show
     @quest = Quest.find_by(id: params[:id])
-
+  
     unless @quest
       render json: { message: "Quest not found" }, status: :not_found
     else
-      render json: { quest: @quest.as_json }, status: :ok
+      render json: { quest: @quest.as_json.merge(group_ids: @quest.group_ids) }, status: :ok
     end
   end
-
   def update
     @quest = Quest.find_by(id: params[:id])
   
@@ -67,9 +64,8 @@ class QuestsController < ApplicationController
       if params[:group_ids]
         @quest.groups = Group.find(params[:group_ids])
       end
-      # Send email notification if the quest is added to a group
       NotifierMailer.group_assignment_notification(@quest).deliver_later
-      render json: { message: "Updated successfully", quest: @quest.as_json }, status: :ok
+      render json: { message: "Updated successfully", quest: @quest.as_json.merge(group_ids: @quest.group_ids) }, status: :ok
     else
       render json: { message: "Update failed", errors: @quest.errors.full_messages }, status: :unprocessable_entity
     end
@@ -105,7 +101,7 @@ class QuestsController < ApplicationController
   def find_by_email
     Rails.logger.info "Looking for quest with email: #{params[:email]}"
     @quest = Quest.find_by(email: params[:email])
-    render json:  { quest: @quest ? @quest.as_json : nil }, status: :ok
+    render json: { quest: @quest ? @quest.as_json.merge(group_ids: @quest.group_ids) : nil }, status: :ok
   end
   
   def events_by_quest

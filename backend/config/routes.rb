@@ -37,7 +37,7 @@ Rails.application.routes.draw do
 resources :quests, only: [:create, :index, :show, :update, :destroy] do
   collection do
     get 'find_by_name/:name', to: 'quests#find_by_name'
-    get 'find_by_email/:email', to: 'quests#find_by_email'
+    get 'find_by_email', to: 'quests#find_by_email'
     get 'events', to: 'quests#events_by_quest'
   end
   member do
