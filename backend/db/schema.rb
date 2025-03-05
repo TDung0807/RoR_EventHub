@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_03_101039) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_05_040557) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -39,12 +39,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_03_101039) do
     t.float "duration"
     t.string "location"
     t.integer "participants"
-    t.time "startHour"
+    t.time "start_hour"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.string "groupLabel"
-    t.time "endHour"
+    t.time "end_hour"
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
@@ -76,8 +76,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_03_101039) do
     t.bigint "transport_id", null: false
     t.bigint "hotel_id", null: false
     t.bigint "restaurant_id", null: false
-    t.bigint "event_id", null: false
-    t.index ["event_id"], name: "index_groups_on_event_id"
     t.index ["hotel_id"], name: "index_groups_on_hotel_id"
     t.index ["restaurant_id"], name: "index_groups_on_restaurant_id"
     t.index ["transport_id"], name: "index_groups_on_transport_id"
@@ -182,9 +180,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_03_101039) do
 
   add_foreign_key "dishes", "restaurants"
   add_foreign_key "events", "users"
+  add_foreign_key "events_groups", "events", on_delete: :cascade
   add_foreign_key "events_quests", "events"
   add_foreign_key "events_quests", "quests"
-  add_foreign_key "groups", "events"
   add_foreign_key "groups", "hotels"
   add_foreign_key "groups", "restaurants"
   add_foreign_key "groups", "transports"
