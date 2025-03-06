@@ -14,7 +14,12 @@ import {
 import { MyButton } from "../../index";
 import CloseIcon from "@mui/icons-material/Close";
 
-export function DeleteModal({ open, handleClose, handleDelete, ...props }) {
+export function DeleteModal({
+  open,
+  handleClose = () => {},
+  handleDelete,
+  ...props
+}) {
   return (
     <div>
       <Modal open={open} onClose={handleClose}>
@@ -62,6 +67,7 @@ export function DeleteModal({ open, handleClose, handleDelete, ...props }) {
               <Button
                 onClick={() => {
                   handleDelete();
+                  handleClose();
                 }}
                 variant="contained"
                 color="primary"

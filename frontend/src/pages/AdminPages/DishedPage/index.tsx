@@ -98,10 +98,6 @@ export function DishedPage() {
     setAction("add");
   };
   const handleDeleteMainData = async (row) => {
-    let result = confirm("Are you sure delete this");
-    if (result == false) {
-      return;
-    }
     try {
       await deleteDishedByIdFunc(row.id);
       await queryClient.refetchQueries({ queryKey: ["dished"] });

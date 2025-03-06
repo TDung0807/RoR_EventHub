@@ -215,10 +215,7 @@ export function UtilityPage() {
       hotel_id: id,
       id: room.id,
     });
-    let result = confirm("Are you sure delete this");
-    if (result == false) {
-      return;
-    }
+
     if (deleteRoomResult.status !== 404 && deleteRoomResult.status !== 500) {
       toast("Delete Succesfully", {
         autoClose: 3000,
@@ -234,10 +231,6 @@ export function UtilityPage() {
   };
   const deleteTransportHandle = async (id, room) => {
     const deleteRoomResult = await deleteTranspostSer(id);
-    let result = confirm("Are you sure delete this");
-    if (result == false) {
-      return;
-    }
     if (deleteRoomResult.status !== 404 && deleteRoomResult.status !== 500) {
       toast("Delete Successfully", {
         autoClose: 3000,
