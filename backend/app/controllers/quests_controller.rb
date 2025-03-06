@@ -111,20 +111,25 @@ class QuestsController < ApplicationController
     events = Event.where(id: @quest.groups.pluck(:event_id).compact.uniq).order(:date)
     render json: { events: events.as_json }, status: :ok
   end
+
   def update_status
     @quest = Quest.find_by(email: params[:email])
-    return render json: { message: "Quest not found" }, status: :not_found unless @quest
+    
+    unless @quest
+      return render json: { message: "Quest not found" }, status: :not_found
+    end
   
-    @group = Group.find_by(id: params[:group_id])
-    return render json: { message: "Group not found" }, status: :not_found unless @group
+    @group_quest = GroupQuest.find_by(quest: @quest, group_id: params[:group_id])
   
-    group_quest = GroupQuest.find_by(quest_id: @quest.id, group_id: @group.id)
-    return render json: { message: "Quest is not in this group" }, status: :not_found unless group_quest
+    unless @group_quest
+      return render json: { message: "Quest is not in this group" }, status: :not_found
+    end
   
-    if group_quest.update(status: params[:status])
-      render json: { message: "Status updated successfully", group_quest: group_quest }, status: :ok
+    if @group_quest.update(status: params[:status])
+      render json: { message: "Status updated successfully", group_quest: @group_quest }, status: :ok
     else
-      render json: { message: "Update failed", errors: group_quest.errors.full_messages }, status: :unprocessable_entity
+      render json: { message: "Update failed", errors: @group_quest.errors.full_messages }, status: :unprocessable_entity
     end
   end
+  
 end
