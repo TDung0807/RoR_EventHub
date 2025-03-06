@@ -80,10 +80,6 @@ export const AdminGuestPage = () => {
     }
   );
   const handleDeleteMainData = async (row) => {
-    let result = confirm("Are you sure delete this");
-    if (result == false) {
-      return;
-    }
     try {
       await deleteGroupByIdFunc(row.id);
       toast("Delete Successfully");

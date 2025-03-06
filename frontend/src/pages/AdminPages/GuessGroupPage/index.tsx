@@ -126,6 +126,7 @@ export function GuessGroupPage() {
                     });
                     refetchGuestInGroup();
                     toast("Delete Successfully", { type: "success" });
+                    setOpenDeleteModal(false);
                   } catch {
                     toast("Delete Failure", { type: "error" });
                   }
