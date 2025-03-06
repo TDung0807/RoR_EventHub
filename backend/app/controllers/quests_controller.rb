@@ -122,11 +122,13 @@ class QuestsController < ApplicationController
     @group_quest = GroupQuest.find_by(quest: @quest, group_id: params[:group_id])
   
     unless @group_quest
+      Rails.logger.error "❌ GroupQuest not found for quest: #{@quest.id}, group_id: #{params[:group_id]}"
       return render json: { message: "Quest is not in this group" }, status: :not_found
     end
   
-    # Directly assign the status without validation checks
-    if @group_quest.update_column(:status, params[:status])
+    Rails.logger.info "✅ Found GroupQuest: #{@group_quest.inspect}"
+  
+    if @group_quest.update_column(:status, params[:status]) # Skips validation
       render json: { message: "Status updated successfully", group_quest: @group_quest }, status: :ok
     else
       render json: { message: "Update failed" }, status: :unprocessable_entity
