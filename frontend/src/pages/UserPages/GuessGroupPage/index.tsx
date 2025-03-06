@@ -130,7 +130,7 @@ export const UserGuessGroupPage = () => {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "No", width: 120 },
-    { field: "name", headerName: "Name", width: 500 },
+    { field: "name", headerName: "Name", width: 120 },
     { field: "email", headerName: "Email", width: 500 },
 
     {
@@ -183,35 +183,41 @@ export const UserGuessGroupPage = () => {
             >
               <ArrowBackIcon />
             </button>
-            {statusColor[result[0].status] && (
-              <Chip
-                style={{ marginLeft: 8, width: "fit-content" }}
-                label={result[0].status}
-                color={statusColor[result[0].status]}
-              />
-            )}
+            {result.length > 0 &&
+              result[0].status &&
+              statusColor[result[0].status] && (
+                <Chip
+                  style={{ marginLeft: 8, width: "fit-content" }}
+                  label={result[0].status}
+                  color={statusColor[result[0].status]}
+                />
+              )}
           </div>
 
           <div>
-            {result[0].status != "accepted" && (
-              <MyButton
-                label={` Attending`}
-                className={styles.publishButton}
-                sx={{ height: "38px" }}
-                variant="contained"
-                onClick={acceptAttending}
-              ></MyButton>
-            )}
-            {result[0].status != "declined" && (
-              <MyButton
-                label={`Decline `}
-                className={styles.publishButton}
-                sx={{ height: "38px" }}
-                variant="contained"
-                onClick={declinedAttending}
-                style={{ backgroundColor: "#e53935" }}
-              ></MyButton>
-            )}
+            {result.length > 0 &&
+              result[0].status &&
+              result[0].status != "accepted" && (
+                <MyButton
+                  label={` Attending`}
+                  className={styles.publishButton}
+                  sx={{ height: "38px" }}
+                  variant="contained"
+                  onClick={acceptAttending}
+                ></MyButton>
+              )}
+            {result.length > 0 &&
+              result[0].status &&
+              result[0].status != "declined" && (
+                <MyButton
+                  label={`Decline `}
+                  className={styles.publishButton}
+                  sx={{ height: "38px" }}
+                  variant="contained"
+                  onClick={declinedAttending}
+                  style={{ backgroundColor: "#e53935" }}
+                ></MyButton>
+              )}
           </div>
         </div>
         <div className={styles.tabsContainer}>
