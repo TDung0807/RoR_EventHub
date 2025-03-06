@@ -10,7 +10,7 @@ export const CalendarView = ({ events, onClickEventFunc = (item) => {} }) => {
     options: {
       transitionMode: "zoom", // or fade
       startWeekOn: "mon", // or sun
-      defaultMode: "day", // or week | day | timeline
+      defaultMode: "month", // or week | day | timeline
       minWidth: 540,
       maxWidth: 540,
       minHeight: 540,
