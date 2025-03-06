@@ -125,11 +125,11 @@ class QuestsController < ApplicationController
       return render json: { message: "Quest is not in this group" }, status: :not_found
     end
   
-    if @group_quest.update(status: params[:status])
+    # Directly assign the status without validation checks
+    if @group_quest.update_column(:status, params[:status])
       render json: { message: "Status updated successfully", group_quest: @group_quest }, status: :ok
     else
-      render json: { message: "Update failed", errors: @group_quest.errors.full_messages }, status: :unprocessable_entity
+      render json: { message: "Update failed" }, status: :unprocessable_entity
     end
   end
-  
 end
