@@ -50,6 +50,9 @@ class Event < ApplicationRecord
     if start_hour.present? && end_hour.present?
       start_time = Time.parse(start_hour.to_s)
       end_time = Time.parse(end_hour.to_s)
+      if end_time < start_time
+        start_time, end_time = end_time, start_time
+      end
       self.duration = ((end_time - start_time) / 1.hour).to_f.round(2)
     end
   end
