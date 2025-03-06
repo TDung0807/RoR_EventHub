@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_06_023356) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_06_024931) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -96,6 +96,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_06_023356) do
   create_table "groups_quests", id: false, force: :cascade do |t|
     t.bigint "group_id", null: false
     t.bigint "quest_id", null: false
+    t.string "status", default: "pending", null: false
     t.index ["group_id", "quest_id"], name: "index_groups_quests_on_group_id_and_quest_id"
     t.index ["quest_id", "group_id"], name: "index_groups_quests_on_quest_id_and_group_id"
   end
