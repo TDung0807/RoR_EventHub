@@ -68,7 +68,7 @@ export function UserHomePage() {
       <main className={styles.main}>
         <header
           style={{
-            backgroundImage: `url(${bannerBackGround.bannerHomePage})`,
+            backgroundImage: `url(https://media.discordapp.net/attachments/1275330228637536333/1347190441023377429/Banner.png?ex=67caec5e&is=67c99ade&hm=1c993ace13d820680734e3b1c1364f84bf200e534363cc58dcbd9f67b3a2d94d&=&format=webp&quality=lossless)`,
             minHeight: 418,
             color: "white",
             textAlign: "center",

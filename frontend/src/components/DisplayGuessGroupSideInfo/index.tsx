@@ -72,7 +72,7 @@ export function DisplayGuessGroupSideInfo({
                 borderRadius: 10,
                 margin: 0,
               }}
-              src={MockImage.Transport}
+              src="https://media.discordapp.net/attachments/1275330228637536333/1347190331724005397/transport.png?ex=67caec44&is=67c99ac4&hm=31bcbef677005556a4529db67869f9084fecef0a93b78c89fe6986392fc807f5&=&format=webp&quality=lossless"
             ></img>
 
             <div style={{ flex: 1 }}>
@@ -120,7 +120,7 @@ export function DisplayGuessGroupSideInfo({
                 borderRadius: 10,
                 margin: 0,
               }}
-              src={MockImage.Hotel}
+              src="https://media.discordapp.net/attachments/1275330228637536333/1347190330948059187/hotel.png?ex=67caec44&is=67c99ac4&hm=de397f5379385ae1714c816753c4c892ecc8358c76ed3aac011a830c85d49254&=&format=webp&quality=lossless&width=849&height=856"
             ></img>
 
             <div style={{ flex: 1 }}>
@@ -169,7 +169,7 @@ export function DisplayGuessGroupSideInfo({
                 borderRadius: 10,
                 margin: 0,
               }}
-              src={MockImage.Restaurant}
+              src="https://media.discordapp.net/attachments/1275330228637536333/1347190331342454886/restaurant.png?ex=67caec44&is=67c99ac4&hm=74ddcb053b82631113d163518f66e901871d8276bc9c538ef21b539b063e6287&=&format=webp&quality=lossless"
             ></img>
 
             <div style={{ flex: 1 }}>
