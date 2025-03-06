@@ -1,6 +1,6 @@
 import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
-
+import { MockImage } from "../../assets/index";
 export function DisplayGuessGroupSideInfo({
   title = "Transport information",
   guessGroupData,
@@ -72,7 +72,7 @@ export function DisplayGuessGroupSideInfo({
                 borderRadius: 10,
                 margin: 0,
               }}
-              src="https://media.discordapp.net/attachments/1275330228637536333/1346499469247512616/transport.png?ex=67c868da&is=67c7175a&hm=957e8af7a64c94e933342edafbfbc79348c90f7876ea215cc0abc8a514f3e498&=&format=webp&quality=lossless"
+              src={MockImage.Transport}
             ></img>
 
             <div style={{ flex: 1 }}>
@@ -120,7 +120,7 @@ export function DisplayGuessGroupSideInfo({
                 borderRadius: 10,
                 margin: 0,
               }}
-              src="https://media.discordapp.net/attachments/1275330228637536333/1346499468639604736/hotel.png?ex=67c868da&is=67c7175a&hm=6785b3a648edb3651d217727e1264a1a1bd4af41ba089b9404d5861fe29a9ed9&=&format=webp&quality=lossless&width=849&height=856"
+              src={MockImage.Hotel}
             ></img>
 
             <div style={{ flex: 1 }}>
@@ -169,7 +169,7 @@ export function DisplayGuessGroupSideInfo({
                 borderRadius: 10,
                 margin: 0,
               }}
-              src="https://media.discordapp.net/attachments/1275330228637536333/1346499467867586652/restaurant.png?ex=67c868d9&is=67c71759&hm=41460abae3541929579b91ceb97af96f5f8510fd2b6d2710c7f91f4cc296f792&=&format=webp&quality=lossless"
+              src={MockImage.Restaurant}
             ></img>
 
             <div style={{ flex: 1 }}>

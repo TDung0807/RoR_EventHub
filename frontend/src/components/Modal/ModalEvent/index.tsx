@@ -14,6 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { addEvent, putEvent, deleteEvent } from "../../../service/Event";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { DeleteModal } from "../ModalConfirmDelete";
 
 export const ModalEvent = ({
   open,
@@ -31,6 +32,8 @@ export const ModalEvent = ({
   const [eventLocation, setEventLocation] = useState("");
   const [eventDescription, setEventDescription] = useState("");
   const [id, setId] = useState("");
+  const [deleteFunc, setDeleteFunc] = useState(() => {});
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   useEffect(() => {
     if (detailEventData) {
       setId(detailEventData.id || "");
@@ -145,10 +148,6 @@ export const ModalEvent = ({
     }
   };
   const deleteEventHandle = async () => {
-    let result = confirm("Are you sure delete this");
-    if (result == false) {
-      return;
-    }
     try {
       const result = await deleteEventSer(id);
       if (
@@ -181,6 +180,13 @@ export const ModalEvent = ({
   };
   return (
     <>
+      <DeleteModal
+        open={openDeleteModal}
+        handleClose={() => {
+          setOpenDeleteModal(false);
+        }}
+        handleDelete={deleteFunc}
+      ></DeleteModal>
       {action == "detail" && (
         <Modal open={open} onClose={handleClose}>
           <Box
@@ -229,7 +235,13 @@ export const ModalEvent = ({
               <IconButton onClick={handleEditButton}>
                 <EditIcon />
               </IconButton>
-              <IconButton onClick={deleteEventHandle}>
+              <IconButton
+                onClick={() => {
+                  setOpen(false);
+                  setDeleteFunc(() => () => deleteEventHandle());
+                  setOpenDeleteModal(true);
+                }}
+              >
                 <DeleteIcon />
               </IconButton>
             </Box>

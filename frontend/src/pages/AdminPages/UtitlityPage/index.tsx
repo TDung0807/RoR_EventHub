@@ -8,6 +8,7 @@ import {
   MyButton,
   ModalSideGuessinfo,
   OtherSideModal,
+  DeleteModal,
 } from "../../../components";
 import styles from "./UtilityPage.module.scss";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -48,6 +49,8 @@ export function UtilityPage() {
   const [transportData, setTransportData] = useState([]);
   const [transportQueries, setTransportQueries] = useState([]);
   const [sideData, setSideData] = useState([]);
+  const [deleteFunc, setDeleteFunc] = useState(() => {});
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { mutateAsync: deleteRoomSer } = useMutation({
     mutationFn: deleteRoom,
   });
@@ -249,10 +252,6 @@ export function UtilityPage() {
     }
   };
   const handleDeleteMainData = async (row) => {
-    let result = confirm("Are you sure delete this");
-    if (result == false) {
-      return;
-    }
     try {
       if (activeButton == "FnB") {
         await deleteRestaurantSer(row.id);
@@ -312,6 +311,13 @@ export function UtilityPage() {
           refetchVendorsFunc={refetchVendorsFunc}
           refetchRestaurantFunc={refetchRestaurantFunc}
         />
+        <DeleteModal
+          open={openDeleteModal}
+          handleClose={() => {
+            setOpenDeleteModal(false);
+          }}
+          handleDelete={deleteFunc}
+        ></DeleteModal>
         <OtherSideModal
           data={sideData}
           roomDataQueries={roomDataQueries}
@@ -373,7 +379,10 @@ export function UtilityPage() {
                 utilityData={hotelsData}
                 sideData="roomTypes"
                 action={["edit", "delete"]}
-                handleDeleteMainData={handleDeleteMainData}
+                handleDeleteMainData={(row) => {
+                  setDeleteFunc(() => () => handleDeleteMainData(row));
+                  setOpenDeleteModal(true);
+                }}
                 editEvent={(item) => {
                   setCurrentSideData(item);
                   setOpenSideModal(true);
@@ -392,7 +401,8 @@ export function UtilityPage() {
                   setMainDataId(id);
                 }}
                 deleteSideDataFunc={(id, room) => {
-                  deleteRoomHandle(id, room);
+                  setDeleteFunc(() => () => deleteRoomHandle(id, room));
+                  setOpenDeleteModal(true);
                 }}
                 sideDataName="roomTypes"
               />
@@ -450,9 +460,15 @@ export function UtilityPage() {
                 setOpenOtherSideModal(true);
                 setMainDataId(id);
               }}
-              deleteSideDataFunc={deleteTransportHandle}
+              deleteSideDataFunc={(id, room) => {
+                setDeleteFunc(() => () => deleteTransportHandle(id, room));
+                setOpenDeleteModal(true);
+              }}
               sideDataName="transportTypes"
-              handleDeleteMainData={handleDeleteMainData}
+              handleDeleteMainData={(row) => {
+                setDeleteFunc(() => () => handleDeleteMainData(row));
+                setOpenDeleteModal(true);
+              }}
             />
           </Box>
         )}
@@ -491,7 +507,10 @@ export function UtilityPage() {
               utilityRows={FnbRows}
               utilityData={FnbData}
               action={["edit", "delete"]}
-              handleDeleteMainData={handleDeleteMainData}
+              handleDeleteMainData={(row) => {
+                setDeleteFunc(() => () => handleDeleteMainData(row));
+                setOpenDeleteModal(true);
+              }}
             />
           </Box>
         )}

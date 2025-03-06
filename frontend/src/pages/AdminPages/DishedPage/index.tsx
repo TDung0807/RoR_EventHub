@@ -2,7 +2,12 @@ import React, { useState, useEffect, useMemo } from "react";
 import styles from "./Dishedpage.module.scss";
 
 import { Box, Typography } from "@mui/material";
-import { ModalDished, MainTable, MyButton } from "../../../components";
+import {
+  ModalDished,
+  MainTable,
+  MyButton,
+  DeleteModal,
+} from "../../../components";
 import { fakeDishedData } from "../../../mockdata";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -27,6 +32,8 @@ export function DishedPage() {
   const [detailDished, setDetailDished] = useState(null);
   const [action, setAction] = useState("");
   const [interData, setInterData] = useState([]);
+  const [deleteFunc, setDeleteFunc] = useState(() => {});
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { mutateAsync: deleteDishedByIdFunc } = useMutation({
     mutationFn: deleteDishedById,
   });
@@ -106,6 +113,13 @@ export function DishedPage() {
   // Bây giờ trong JSX, xử lý loading hoặc error bên trong giao diện
   return (
     <div>
+      <DeleteModal
+        open={openDeleteModal}
+        handleClose={() => {
+          setOpenDeleteModal(false);
+        }}
+        handleDelete={deleteFunc}
+      ></DeleteModal>
       <ModalDished
         refetchDishedFunc={refetchDishedFunc}
         restaurant_id={id}
@@ -156,7 +170,10 @@ export function DishedPage() {
           <Typography>Error: Loading Dished</Typography>
         ) : (
           <MainTable
-            handleDeleteMainData={handleDeleteMainData}
+            handleDeleteMainData={(row) => {
+              setDeleteFunc(() => () => handleDeleteMainData(row));
+              setOpenDeleteModal(true);
+            }}
             editEvent={onEditModal}
             utilityRows={["Dish", "Price", "Type", ""]}
             utilityData={dishedRenderData}

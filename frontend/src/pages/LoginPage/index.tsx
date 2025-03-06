@@ -7,6 +7,7 @@ import { useLogin } from "../../hooks";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAccountAuthetication } from "../../store"; // import store
 import { jwtDecode } from "jwt-decode"; // import dependency
+import { toast } from "react-toastify";
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -20,13 +21,17 @@ export const LoginPage: React.FC = () => {
   const login = useLogin();
 
   const onLogin = async () => {
-    const { isAdmin, isUser } = await login(email, password);
-    if (isAdmin) {
-      navigate("/admin/homepage");
-    } else if (isUser) {
-      navigate("/user/homepage");
-    } else {
-      alert("Invalid credentials. Please try again.");
+    try {
+      const { isAdmin, isUser } = await login(email, password);
+      if (isAdmin) {
+        navigate("/admin/homepage");
+      } else if (isUser) {
+        navigate("/user/homepage");
+      } else {
+        alert("Invalid credentials. Please try again.");
+      }
+    } catch {
+      toast("Wrong Username or Password", { type: "error" });
     }
   };
 

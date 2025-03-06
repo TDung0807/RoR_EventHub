@@ -8,11 +8,20 @@ import transportImg from "./NavbarIcon/transport.png";
 import homeImg from "./NavbarIcon/home.png";
 import bannerHomePage from "./BannerCover/Banner.png";
 import noData from "./SideIcon/NoData.png";
+import Restaurant from "./MockImage/restaurant.png";
+import Hotel from "./MockImage/hotel.png";
+import Transport from "./MockImage/transport.png";
+
 export const bannerBackGround = { bannerHomePage };
 export const sideIcon = { noData };
 export const logo = {
   MediumLogoWithType,
   SmallLogoWithoutType,
+};
+export const MockImage = {
+  Restaurant,
+  Hotel,
+  Transport,
 };
 
 export const navbarImage = {

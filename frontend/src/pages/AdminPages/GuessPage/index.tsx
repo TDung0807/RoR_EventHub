@@ -2,6 +2,7 @@ import {
   MainTable,
   GuessGroupModal,
   ModalGuestList,
+  DeleteModal,
 } from "../../../components";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import styles from "./GuessPage.module.scss";
@@ -34,6 +35,8 @@ export const AdminGuestPage = () => {
   const [openGuessGroupModal, setOpenGuessGroupModal] = useState(false);
   const [openGuessListModal, setOpenGuessListModal] = useState(false);
   const [guessListId, setGuessListId] = useState({});
+  const [deleteFunc, setDeleteFunc] = useState(() => {});
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   if (isLoading || eventIsLoading) {
     return <div>Loading...</div>;
   }
@@ -92,6 +95,13 @@ export const AdminGuestPage = () => {
   };
   return (
     <div>
+      <DeleteModal
+        open={openDeleteModal}
+        handleClose={() => {
+          setOpenDeleteModal(false);
+        }}
+        handleDelete={deleteFunc}
+      ></DeleteModal>
       {openGuessGroupModal == true ? (
         <GuessGroupModal
           refetchFunc={refetch}
@@ -154,7 +164,10 @@ export const AdminGuestPage = () => {
             </Box>
           </Box>
           <MainTable
-            handleDeleteMainData={handleDeleteMainData}
+            handleDeleteMainData={(row) => {
+              setDeleteFunc(() => () => handleDeleteMainData(row));
+              setOpenDeleteModal(true);
+            }}
             editPre={`${pathname}`}
             editRef={true}
             utilityRows={guessGroupRows}

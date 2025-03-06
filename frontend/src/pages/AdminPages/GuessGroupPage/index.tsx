@@ -6,6 +6,7 @@ import {
   GroupChoosingButton,
   DisplayGuessGroupSideInfo,
   ModalSideGuessinfo,
+  DeleteModal,
 } from "../../../components";
 import styles from "./GuessGroupPage.module.scss";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
@@ -36,6 +37,8 @@ export function GuessGroupPage() {
   const [openSideModal, setOpenSideModal] = useState(false);
   const [actionSideModal, setActionSideModal] = useState("Add");
   const navigate = useNavigate();
+  const [deleteFunc, setDeleteFunc] = useState(() => {});
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { id } = useParams();
   const {
     data: guessGroupData,
@@ -95,11 +98,9 @@ export function GuessGroupPage() {
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "No", width: 120 },
     { field: "name", headerName: "Name", width: 300 },
     { field: "email", headerName: "Email", width: 300 },
     { field: "status", headerName: "Status", width: 120 },
-
     {
       headerName: "",
       field: "actionFields",
@@ -116,16 +117,19 @@ export function GuessGroupPage() {
           >
             <DeleteIcon
               onClick={async () => {
-                let result = confirm("Are you sure delete this");
-                if (result == false) {
-                  return;
-                }
-
-                let addingCustomer = await mutateAsync({
-                  group_id: id,
-                  quest_id: params.row.id,
+                setOpenDeleteModal(true);
+                setDeleteFunc(async () => {
+                  try {
+                    let addingCustomer = await mutateAsync({
+                      group_id: id,
+                      quest_id: params.row.id,
+                    });
+                    refetchGuestInGroup();
+                    toast("Delete Succesfully", { type: "success" });
+                  } catch {
+                    toast("Delete Failure", { type: "error" });
+                  }
                 });
-                refetchGuestInGroup();
               }}
             ></DeleteIcon>
           </div>
@@ -139,6 +143,13 @@ export function GuessGroupPage() {
 
   return (
     <div>
+      <DeleteModal
+        open={openDeleteModal}
+        handleClose={() => {
+          setOpenDeleteModal(false);
+        }}
+        handleDelete={deleteFunc}
+      ></DeleteModal>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <ModalSideGuessinfo
           data={editData}
