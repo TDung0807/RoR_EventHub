@@ -33,17 +33,17 @@ Rails.application.routes.draw do
     get 'quests', to: 'groups#quests'
   end
   
-
-resources :quests, only: [:create, :index, :show, :update, :destroy] do
-  collection do
-    get 'find_by_name/:name', to: 'quests#find_by_name'
-    get 'find_by_email', to: 'quests#find_by_email'
-    get 'events', to: 'quests#events_by_quest'
+  patch '/quests/update_status', to: 'quests#update_status'
+  resources :quests, only: [:create, :index, :show, :update, :destroy] do
+    collection do
+      get 'find_by_name/:name', to: 'quests#find_by_name'
+      get 'find_by_email', to: 'quests#find_by_email'
+      get 'events', to: 'quests#events_by_quest'
+    end
+    member do
+      get 'groups', to: 'quests#groups'
+    end
   end
-  member do
-    get 'groups', to: 'quests#groups'
-  end
-end
 
   resources :restaurants, only: [:create, :index, :show, :update, :destroy] do
     resources :dishes, only: [:create, :index]
