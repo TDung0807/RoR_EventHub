@@ -4,7 +4,7 @@ class TransportsController < ApplicationController
   private
 
   def transport_params
-    params.require(:transport).permit(:transport_type, :brand, :price, :vendor_id)
+    params.require(:transport).permit(:transport_type, :brand, :price,:remark , :vendor_id)
   end
 
   public
