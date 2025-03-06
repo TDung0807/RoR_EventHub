@@ -163,6 +163,7 @@ export const ModalEvent = ({
           autoClose: 3000,
           type: "success",
         });
+        setTimeout(() => {}, 2000);
         refetch();
         handleClose();
       } else {

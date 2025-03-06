@@ -15,19 +15,24 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   getAllGuessFromGroup,
-  deleteGuestsFromGroup,
+  changedGuestStatus,
 } from "../../../service/Guess";
 import { getGroupById, deleteGroupById } from "../../../service/GuessGroup";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { useMutation } from "@tanstack/react-query";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { toast } from "react-toastify";
-
+import { useAccountAuthetication } from "../../../store";
+import { Chip } from "@mui/material";
+const filterByEmail = (data, email) => {
+  return data.filter((item) => item.email === email);
+};
 const formatDate = (isoString) => {
   const date = new Date(isoString);
   return date.toISOString().replace("T", " ").substring(0, 19);
 };
 export const UserGuessGroupPage = () => {
+  const email = useAccountAuthetication((state) => state.email);
   const [serviceSignal, setServiceSignal] = useState(true);
   const [informationSignal, setInformationSignal] = useState(false);
   const [editData, setEditData] = useState({});
@@ -35,6 +40,7 @@ export const UserGuessGroupPage = () => {
   const [activeButton, setActiveButton] = useState(changingBtn[0]);
   const [openSideModal, setOpenSideModal] = useState(false);
   const [actionSideModal, setActionSideModal] = useState("Add");
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { id } = useParams();
   const {
@@ -51,8 +57,7 @@ export const UserGuessGroupPage = () => {
     isLoading: guestInGroupIsLoading,
     refetch: refetchGuestInGroup,
   } = useQuery(["guestIngroup", id], getAllGuessFromGroup);
-  const { mutateAsync } = useMutation({ mutationFn: deleteGuestsFromGroup });
-
+  const { mutateAsync } = useMutation({ mutationFn: changedGuestStatus });
   // Handle loading and error states
   if (guestInGroupIsLoading || guessGroupDataIsLoading) {
     return <div>Loading...</div>;
@@ -63,6 +68,8 @@ export const UserGuessGroupPage = () => {
   }
   const guessGroupDataRender = guessGroupData?.data?.group || [];
   const usersArr = guestInGroup?.data?.quests || [];
+
+  const result = filterByEmail(usersArr, email);
   const changeServiceTabs = () => {
     setServiceSignal(true);
     setInformationSignal(false);
@@ -71,6 +78,33 @@ export const UserGuessGroupPage = () => {
     setInformationSignal(true);
     setServiceSignal(false);
   };
+  const acceptAttending = async () => {
+    try {
+      const result = await mutateAsync({
+        email,
+        group_id: id,
+        status: "accepted",
+      });
+      toast("Confirm Succesfully", { type: "success" });
+      queryClient.refetchQueries();
+    } catch {
+      toast("Confirm Failure", { type: "error" });
+    }
+  };
+  const declinedAttending = async () => {
+    try {
+      const result = await mutateAsync({
+        email,
+        group_id: id,
+        status: "declined",
+      });
+      toast("Decline Succesfully", { type: "success" });
+      queryClient.refetchQueries();
+    } catch {
+      toast("Decline Failure", { type: "error" });
+    }
+  };
+
   const openEditTabs = (rows) => {
     setOpenSideModal(true);
     if (activeButton == "Restaurant") {
@@ -113,29 +147,19 @@ export const UserGuessGroupPage = () => {
               textAlign: "right",
             }}
           >
-            <DeleteIcon
-              onClick={async () => {
-                let result = confirm("Are you sure delete this");
-                if (result == false) {
-                  return;
-                }
-
-                let addingCustomer = await mutateAsync({
-                  group_id: id,
-                  quest_id: params.row.id,
-                });
-                refetchGuestInGroup();
-              }}
-            ></DeleteIcon>
+            <DeleteIcon onClick={async () => {}}></DeleteIcon>
           </div>
         );
       },
       sortable: false,
     },
   ];
-
+  const statusColor = {
+    accepted: "success",
+    pending: "warning",
+    declined: "error",
+  };
   const paginationModel = { page: 0, pageSize: 5 };
-
   return (
     <div>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -150,17 +174,47 @@ export const UserGuessGroupPage = () => {
           action={actionSideModal}
         />
         <div className={styles.headerContainer}>
-          <button
-            onClick={() => {
-              navigate("/user/guests");
-            }}
-            className={styles.backButton}
-          >
-            <ArrowBackIcon />
-          </button>
+          <div>
+            <button
+              onClick={() => {
+                navigate("/user/guests");
+              }}
+              className={styles.backButton}
+            >
+              <ArrowBackIcon />
+            </button>
+            {statusColor[result[0].status] && (
+              <Chip
+                style={{ marginLeft: 8, width: "fit-content" }}
+                label={result[0].status}
+                color={statusColor[result[0].status]}
+              />
+            )}
+          </div>
+
+          <div>
+            {result[0].status != "accepted" && (
+              <MyButton
+                label={` Attending`}
+                className={styles.publishButton}
+                sx={{ height: "38px" }}
+                variant="contained"
+                onClick={acceptAttending}
+              ></MyButton>
+            )}
+            {result[0].status != "declined" && (
+              <MyButton
+                label={`Decline `}
+                className={styles.publishButton}
+                sx={{ height: "38px" }}
+                variant="contained"
+                onClick={declinedAttending}
+                style={{ backgroundColor: "#e53935" }}
+              ></MyButton>
+            )}
+          </div>
         </div>
         <div className={styles.tabsContainer}>
-          <div className="item_container"></div>
           <div className="item_container">
             <button
               className={`${styles.tabButton}`}

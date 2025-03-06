@@ -28,6 +28,7 @@
   font-weight: 700;
   font-size: 24px;
   cursor: pointer;
+  margin-top: -8px;
 }
 .tabsContainer {
   flex-grow: 1;
@@ -47,8 +48,9 @@
   color: #fff;
   border: none;
   padding: 10px 20px;
-  border-radius: 200px;
+  border-radius: 200px !important;
   font-size: 16px;
+  margin-left: 8px;
   cursor: pointer;
 }
 .blueDivider {

@@ -71,7 +71,7 @@ export const UserNavbar = () => {
                   marginRight: 18,
                 }}
               ></PeopleAltIcon>
-              {isExpanded && <span>Calendar</span>}
+              {isExpanded && <span>Guest Group</span>}
             </Link>
           </li>
         </ul>
