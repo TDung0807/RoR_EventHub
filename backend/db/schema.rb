@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_05_044558) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_06_023356) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -58,6 +58,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_05_044558) do
   create_table "events_quests", id: false, force: :cascade do |t|
     t.bigint "event_id", null: false
     t.bigint "quest_id", null: false
+    t.string "status", default: "pending", null: false
     t.index ["event_id", "quest_id"], name: "index_events_quests_on_event_id_and_quest_id", unique: true
     t.index ["event_id"], name: "index_events_quests_on_event_id"
     t.index ["quest_id"], name: "index_events_quests_on_quest_id"
