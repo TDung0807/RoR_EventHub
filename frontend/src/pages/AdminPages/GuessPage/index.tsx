@@ -77,15 +77,15 @@ export const AdminGuestPage = () => {
       };
     }
   );
-  const handleDeleteMainData = (row) => {
+  const handleDeleteMainData = async (row) => {
     let result = confirm("Are you sure delete this");
     if (result == false) {
       return;
     }
     try {
-      deleteGroupByIdFunc(row.id);
+      await deleteGroupByIdFunc(row.id);
       toast("Delete Successfully");
-      queryClient.refetchQueries({ queryKey: ["guessgroups"] });
+      await queryClient.refetchQueries({ queryKey: ["guessgroups"] });
     } catch {
       toast("Delete Failure", { type: "error" });
     }

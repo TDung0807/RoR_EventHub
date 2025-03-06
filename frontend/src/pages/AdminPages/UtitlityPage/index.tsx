@@ -248,25 +248,27 @@ export function UtilityPage() {
       });
     }
   };
-  const handleDeleteMainData = (row) => {
+  const handleDeleteMainData = async (row) => {
     let result = confirm("Are you sure delete this");
     if (result == false) {
       return;
     }
     try {
       if (activeButton == "FnB") {
-        deleteRestaurantSer(row.id);
+        await deleteRestaurantSer(row.id);
       }
       if (activeButton == "Hotel") {
-        deleteHotelSer(row.id);
+        await deleteHotelSer(row.id);
       }
       if (activeButton == "Transportation") {
-        deleteVendorSer(row.id);
+        await deleteVendorSer(row.id);
       }
-      queryClient.refetchQueries({ queryKey: ["hotels", "vendors", "Fnb"] });
-      toast("Delete Successfully");
+      await queryClient.refetchQueries({
+        queryKey: ["hotels", "vendors", "Fnb"],
+      });
+      toast("Delete Successfully", { type: "success" });
     } catch {
-      toast("Delete Failure");
+      toast("Delete Failure", { type: "error" });
     }
   };
   const FnbData = fnbRawsDatas.map(
