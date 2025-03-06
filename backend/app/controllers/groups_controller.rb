@@ -105,7 +105,11 @@ class GroupsController < ApplicationController
 
   def quests
     @group = Group.find(params[:group_id])
-    render json: { quests: @group.quests.as_json }, status: :ok
+    quests_with_status = @group.quests.map do |quest|
+      group_quest = GroupQuest.find_by(group_id: @group.id, quest_id: quest.id)
+      quest.as_json.merge(status: group_quest&.status)
+    end
+    render json: { quests: quests_with_status }, status: :ok
   end
   private
   def update_event_participants(event_id)
