@@ -114,24 +114,17 @@ class QuestsController < ApplicationController
 
   def update_status
     @quest = Quest.find_by(email: params[:email])
-    
+  
     unless @quest
       return render json: { message: "Quest not found" }, status: :not_found
     end
-  
-    @group_quest = GroupQuest.find_by(quest: @quest, group_id: params[:group_id])
-  
-    unless @group_quest
-      Rails.logger.error "❌ GroupQuest not found for quest: #{@quest.id}, group_id: #{params[:group_id]}"
-      return render json: { message: "Quest is not in this group" }, status: :not_found
-    end
-  
-    Rails.logger.info "✅ Found GroupQuest: #{@group_quest.inspect}"
-  
-    if @group_quest.update_column(:status, params[:status]) # Skips validation
-      render json: { message: "Status updated successfully", group_quest: @group_quest }, status: :ok
+    updated_rows = GroupQuest.where(quest_id: @quest.id, group_id: params[:group_id])
+                             .update_all(status: params[:status])
+    if updated_rows > 0
+      render json: { message: "Status updated successfully" }, status: :ok
     else
-      render json: { message: "Update failed" }, status: :unprocessable_entity
+      render json: { message: "Quest is not in this group or update failed" }, status: :not_found
     end
   end
+  
 end
