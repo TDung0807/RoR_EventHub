@@ -96,8 +96,9 @@ export function GuessGroupPage() {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "No", width: 120 },
-    { field: "name", headerName: "Name", width: 500 },
-    { field: "email", headerName: "Email", width: 500 },
+    { field: "name", headerName: "Name", width: 300 },
+    { field: "email", headerName: "Email", width: 300 },
+    { field: "status", headerName: "Status", width: 120 },
 
     {
       headerName: "",
@@ -240,7 +241,7 @@ export function GuessGroupPage() {
               </div>
             </div>
           )}
-        </div>{" "}
+        </div>
       </LocalizationProvider>
     </div>
   );

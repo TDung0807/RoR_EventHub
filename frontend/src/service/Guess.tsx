@@ -13,6 +13,9 @@ export const getGuestByName = async (name) => {
 export const addGuestsToGroup = async (guessData) => {
   return client.post(`/groups/${guessData.group_id}/quests`, guessData);
 };
+export const changedGuestStatus = async (guessData) => {
+  return client.patch(`/quests/update_status`, guessData);
+};
 export const deleteGuestsFromGroup = async (guessData) => {
   return client.delete(
     `/groups/${guessData.group_id}/quests/${guessData.quest_id}`

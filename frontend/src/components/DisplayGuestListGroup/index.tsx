@@ -21,7 +21,6 @@ export const DisplayGuestListGroup: React.FC<DisplayGuestListGroupProps> = ({
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <div
       style={{

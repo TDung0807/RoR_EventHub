@@ -90,17 +90,17 @@ export function DishedPage() {
     setDetailDished(null);
     setAction("add");
   };
-  const handleDeleteMainData = (row) => {
+  const handleDeleteMainData = async (row) => {
     let result = confirm("Are you sure delete this");
     if (result == false) {
       return;
     }
     try {
-      deleteDishedByIdFunc(row.id);
-      queryClient.refetchQueries({ queryKey: ["dished"] });
-      toast("Delete Succesfully");
+      await deleteDishedByIdFunc(row.id);
+      await queryClient.refetchQueries({ queryKey: ["dished"] });
+      toast("Delete Succesfully", { type: "success" });
     } catch {
-      toast("Delete Failure");
+      toast("Delete Failure", { type: "error" });
     }
   };
   // Bây giờ trong JSX, xử lý loading hoặc error bên trong giao diện
