@@ -66,9 +66,8 @@ export const AdminGuestPage = () => {
       updated_at,
       event_id,
     }) => {
-      const eventDataName = eventData.find(
-        (event) => event.id == event_id
-      ).label;
+      const eventDataName =
+        eventData.find((event) => event.id == event_id)?.label || "";
       return {
         id,
         group,

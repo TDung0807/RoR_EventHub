@@ -118,14 +118,14 @@ export function GuessGroupPage() {
             <DeleteIcon
               onClick={async () => {
                 setOpenDeleteModal(true);
-                setDeleteFunc(async () => {
+                setDeleteFunc(() => async () => {
                   try {
                     let addingCustomer = await mutateAsync({
                       group_id: id,
                       quest_id: params.row.id,
                     });
                     refetchGuestInGroup();
-                    toast("Delete Succesfully", { type: "success" });
+                    toast("Delete Successfully", { type: "success" });
                   } catch {
                     toast("Delete Failure", { type: "error" });
                   }
@@ -147,8 +147,12 @@ export function GuessGroupPage() {
         open={openDeleteModal}
         handleClose={() => {
           setOpenDeleteModal(false);
+          setDeleteFunc(() => {}); // Reset function to avoid memory leak
         }}
-        handleDelete={deleteFunc}
+        handleDelete={() => {
+          //@ts-ignore
+          deleteFunc();
+        }}
       ></DeleteModal>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <ModalSideGuessinfo
