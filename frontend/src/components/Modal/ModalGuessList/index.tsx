@@ -105,11 +105,10 @@ export function ModalGuestList({
   const addingGuestToGroup = async () => {
     await setShouldFetchGuestEmail(true); // Trigger the query
     await setShouldFetchGuestName(true); // Trigger the query
-
+    console.log(guestResult1);
+    console.log(guestResult2);
     // Wait for both guestResult1 and guestResult2 to be available
-    while (!guestResult1?.data?.quest && !guestResult2?.data?.quest) {
-      await new Promise((resolve) => setTimeout(resolve, 100)); // Check every 100ms
-    }
+    await Promise.all([guestResult1, guestResult2]);
 
     const guessData = (await guestResult1?.data?.quest) ||
       (await guestResult2?.data?.quest) || { id: null };
