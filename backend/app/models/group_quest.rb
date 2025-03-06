@@ -4,6 +4,6 @@ class GroupQuest < ApplicationRecord
     belongs_to :group
     belongs_to :quest
   
-    enum status: { pending: 0, accepted: 1, declined: 2 }
+    enum :status, { pending: 0, accepted: 1, declined: 2 }
   end
   
